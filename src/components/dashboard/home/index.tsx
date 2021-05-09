@@ -1,55 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView, Text, TextInput, View } from 'react-native';
-import { useQuery } from 'react-query';
-import useLocation from '../useLocation';
-import { initialData } from './initialData';
+import React, { useContext, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View
+} from 'react-native';
+import useVtFetch from '../../../services/useVtFetch';
+import { UserContext } from '../../../store/user';
 import { Center, Session, VaccineResponseModel } from './model';
 import useStyle from './styles';
 
 const Home = () => {
   const styles = useStyle();
-  const postalCode = useLocation();
-  const [pin, setPin] = useState('');
-  const [codeToFetch, setCodeToFetch] = useState('');
-  const {data, refetch, isFetching} = useQuery<VaccineResponseModel>(
-    [codeToFetch, 'Home'],
-    () =>
-      fetch(
-        `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${codeToFetch}&date=05-05-2021`,
-      ).then(res => res.json()),
-    {
-      onSuccess: data => {
-        console.log(JSON.stringify(data));
-      },
-      onError: e => {
-        console.log('Error', e);
-      },
-      initialData: initialData,
-      enabled: false,
-    },
+  const {
+    data: {postalCode},
+  } = useContext(UserContext);
+  const [pin, setPin] = useState(postalCode);
+  const [apiCode, setApiCode] = useState(postalCode);
+  const {
+    data,
+    error,
+    refetch,
+    isFetching,
+    isLoading,
+    isError,
+  } = useVtFetch<VaccineResponseModel>(
+    [apiCode, 'Home'],
+    `/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=05-05-2021`,
   );
-  useEffect(() => {
-    if (postalCode.length > 0 && pin.length === 0) setPin(postalCode);
-  }, [postalCode]);
-  const onEndEditing = () => {
-    setCodeToFetch(pin);
-  };
+
   const renderSessions = ({item}: {item: Session}) => {
     return (
-        <View style={styles.sessionParent}>
-          <Text style={styles.sessionDate}>{item.date}</Text>
+      <View style={styles.sessionParent}>
+        <Text style={styles.sessionDate}>{item.date}</Text>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text
-              style={
-                styles.sessionCapacity
-              }>{`Capacity: ${item.available_capacity}`}</Text>
-            <Text
-              style={
-                styles.sessionAgeLimit
-              }>{`>${item.min_age_limit} yr`}</Text>
-          </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text
+            style={
+              styles.sessionCapacity
+            }>{`Capacity: ${item.available_capacity}`}</Text>
+          <Text
+            style={styles.sessionAgeLimit}>{`>${item.min_age_limit} yr`}</Text>
         </View>
+      </View>
     );
   };
   const renderItem = ({item}: {item: Center}) => {
@@ -63,37 +59,60 @@ const Home = () => {
         </View>
         <Text style={styles.hospitalAddress}>{item.address}</Text>
         <Text style={styles.sessionsText}>Sessions: </Text>
-        <FlatList
-          data={item.sessions}
-          renderItem={renderSessions}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.session_id}
-          horizontal={true}
-          ItemSeparatorComponent={() => <View style={{width: 6}} />}
-        />
+        {item.sessions && (
+          <FlatList
+            data={item.sessions}
+            renderItem={renderSessions}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={item => item.session_id}
+            horizontal={true}
+            ItemSeparatorComponent={() => <View style={{width: 6}} />}
+          />
+        )}
       </View>
     );
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.parent}>
       <View style={styles.pinParent}>
         <TextInput
           style={styles.pinInput}
           value={pin}
           onChangeText={setPin}
           placeholder="000000"
-          onEndEditing={onEndEditing}
+          onEndEditing={() => {
+            setApiCode(pin);
+          }}
           keyboardType="numeric"
         />
       </View>
-      <FlatList
-        data={data.centers}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.center_id.toString()}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-        refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
-      />
+      {isLoading ? (
+        <View style={styles.noDataParent}>
+          <ActivityIndicator size={'large'} animating />
+        </View>
+      ): null}
+      {isError ? (
+        <View style={styles.noDataParent}>
+          <Text>Something went wrong</Text>
+          <Text>{error}</Text>
+        </View>
+      ): null}
+      {data?.centers?.length > 0 ? (
+        <FlatList
+          data={data.centers}
+          renderItem={renderItem}
+          keyExtractor={item => item.center_id.toString()}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={{height: 12}} />}
+          refreshControl={
+            <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+          }
+        />
+      ) : (
+        <View style={styles.noDataParent}>
+          <Text style={styles.noDataText}>No centers found</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

@@ -45,6 +45,17 @@ const useStyle = () => {
       color: colors.primary,
       fontSize: 18
     },
+    noDataParent: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    noDataText: {
+      fontSize: 18,
+      color: colors.text,
+      fontWeight: 'bold',
+      opacity: 0.3
+    },
     sessionCapacity: {
       color: colors.text
     },
