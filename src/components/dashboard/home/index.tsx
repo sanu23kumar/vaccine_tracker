@@ -1,37 +1,66 @@
-import React, { useContext, useState } from 'react';
+import { useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
+  Pressable,
   RefreshControl,
   SafeAreaView,
   Text,
   TextInput,
   View
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import strings from '../../../assets/strings';
+import {
+  Center,
+  CentersResponseModel,
+  Session
+} from '../../../services/centers/model';
+import { getDate } from '../../../services/date';
 import useVtFetch from '../../../services/useVtFetch';
 import { UserContext } from '../../../store/user';
-import { Center, Session, VaccineResponseModel } from './model';
+import ErrorView from '../../common/error';
+import VtHeader from '../../common/header';
+import NoDataView from '../../common/no-data';
 import useStyle from './styles';
 
 const Home = () => {
   const styles = useStyle();
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const ref = useRef<FlatList<any>>('');
+  const { navigate } = useNavigation();
   const {
     data: {postalCode},
   } = useContext(UserContext);
   const [pin, setPin] = useState(postalCode);
   const [apiCode, setApiCode] = useState(postalCode);
+
   const {
     data,
     error,
     refetch,
     isFetching,
+    isFetched,
     isLoading,
     isError,
-  } = useVtFetch<VaccineResponseModel>(
+  } = useVtFetch<CentersResponseModel>(
     [apiCode, 'Home'],
-    `/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=05-05-2021`,
+    `/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${getDate()}`,
   );
 
+  useEffect(() => {
+    if (isFetched && ref?.current?.scrollToOffset) {
+      setTimeout(() => {
+        ref.current?.scrollToOffset({offset: 80});
+      }, 500);
+    }
+  }, [isFetched]);
+
+  const onPressNotifications = () => {
+    navigate(strings.dashboard.notifications.NAME)
+  }
   const renderSessions = ({item}: {item: Session}) => {
     return (
       <View style={styles.sessionParent}>
@@ -50,15 +79,17 @@ const Home = () => {
   };
   const renderItem = ({item}: {item: Center}) => {
     return (
-      <View style={styles.hospitalParent}>
-        <View style={styles.hospitalHeader}>
-          <Text style={styles.hospitalName} numberOfLines={2}>
-            {item.name}
-          </Text>
-          <Text style={styles.hospitalFeeType}>{item.fee_type}</Text>
+      <View style={styles.card}>
+        <View style={styles.hospitalParent}>
+          <View style={styles.hospitalHeader}>
+            <Text style={styles.hospitalName} numberOfLines={2}>
+              {item.name}
+            </Text>
+            <Text style={styles.hospitalFeeType}>{item.fee_type}</Text>
+          </View>
+          <Text style={styles.hospitalAddress}>{item.address}</Text>
+          <Text style={styles.sessionsText}>Sessions: </Text>
         </View>
-        <Text style={styles.hospitalAddress}>{item.address}</Text>
-        <Text style={styles.sessionsText}>Sessions: </Text>
         {item.sessions && (
           <FlatList
             data={item.sessions}
@@ -66,7 +97,9 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.session_id}
             horizontal={true}
-            ItemSeparatorComponent={() => <View style={{width: 6}} />}
+            ItemSeparatorComponent={() => <View style={{width: 12}} />}
+            ListHeaderComponent={<View style={{width: 12}} />}
+            ListFooterComponent={<View style={{width: 12}} />}
           />
         )}
       </View>
@@ -74,7 +107,33 @@ const Home = () => {
   };
   return (
     <SafeAreaView style={styles.parent}>
-      <View style={styles.pinParent}>
+      <VtHeader title={strings.dashboard.home.header}>
+        <Pressable onPress={onPressNotifications}>
+          <Icon
+            name="notifications"
+            color="white"
+            size={24}
+            style={styles.iconStyle}
+          />
+        </Pressable>
+      </VtHeader>
+      <Animated.View
+        style={[
+          styles.pinParent,
+          {
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [0, 80],
+                  outputRange: [0, -80],
+                }),
+              },
+            ],
+          },
+        ]}>
+        <Text style={styles.differentLocationText}>
+          Search for a different location:
+        </Text>
         <TextInput
           style={styles.pinInput}
           value={pin}
@@ -85,33 +144,39 @@ const Home = () => {
           }}
           keyboardType="numeric"
         />
-      </View>
-      {isLoading ? (
-        <View style={styles.noDataParent}>
-          <ActivityIndicator size={'large'} animating />
-        </View>
-      ): null}
+      </Animated.View>
       {isError ? (
+        <ErrorView />
+      ) : isLoading ? (
         <View style={styles.noDataParent}>
-          <Text>Something went wrong</Text>
-          <Text>{error}</Text>
+          <ActivityIndicator
+            size={'large'}
+            animating
+            color={styles.noDataText.color}
+          />
         </View>
-      ): null}
-      {data?.centers?.length > 0 ? (
-        <FlatList
-          data={data.centers}
-          renderItem={renderItem}
-          keyExtractor={item => item.center_id.toString()}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{height: 12}} />}
-          refreshControl={
-            <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+      ) : data?.centers?.length > 0 ? (
+        <Animated.FlatList
+              data={data.centers}
+              ref={ref}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                { useNativeDriver: true },
+              )}
+              onScrollToIndexFailed={() => {
+                console.log('Failed to scroll to index');
+              }}
+              style={styles.list}
+              renderItem={renderItem}
+              keyExtractor={item => item.center_id.toString()}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+              refreshControl={
+                <RefreshControl refreshing={isFetching} onRefresh={refetch} progressViewOffset={80}/>
           }
         />
       ) : (
-        <View style={styles.noDataParent}>
-          <Text style={styles.noDataText}>No centers found</Text>
-        </View>
+        <NoDataView />
       )}
     </SafeAreaView>
   );

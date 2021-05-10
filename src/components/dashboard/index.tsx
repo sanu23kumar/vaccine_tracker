@@ -1,7 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import strings from '../../assets/strings';
+import useAppInitialize from '../../services/app/useAppInitialize';
 import Home from './home';
-import useAppInitialize from './useAppInitialize';
+import Notifications from './notifications';
 
 const Stack = createStackNavigator();
 const DashboardNavigator = () => {
@@ -9,7 +11,8 @@ const DashboardNavigator = () => {
   
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen component={Home} name="Home" />
+      <Stack.Screen component={Home} name={strings.dashboard.home.NAME} />
+      <Stack.Screen component={Notifications} name={strings.dashboard.notifications.NAME} />
     </Stack.Navigator>
   );
 };

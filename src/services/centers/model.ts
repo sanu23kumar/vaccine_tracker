@@ -24,6 +24,6 @@
       sessions: Session[];
   }
 
-  export interface VaccineResponseModel {
+  export interface CentersResponseModel {
       centers: Center[];
   }

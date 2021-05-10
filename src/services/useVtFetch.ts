@@ -32,7 +32,7 @@ const useVtFetch = <T>(key: QueryKey, URL: string, method?: string) => {
       }).then(res => res.json()),
     {
       onSuccess: data => {
-        console.log(JSON.stringify(data));
+        console.log(data);
       },
       onError: e => {
         console.log('Error', e);

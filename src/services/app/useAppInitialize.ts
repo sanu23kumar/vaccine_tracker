@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import SplashScreen from "react-native-splash-screen";
 import { UserContext } from "../../store/user";
-import useLocation from "./useLocation";
+import useLocation from "../location/useLocation";
 
 const useAppInitialize = () => {
   const postalCode = useLocation();
