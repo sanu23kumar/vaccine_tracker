@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/core';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import {useNavigation} from '@react-navigation/core';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -9,18 +9,20 @@ import {
   SafeAreaView,
   Text,
   TextInput,
-  View
+  View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
+import {useNotification} from '../../../notifications/createNotificationProvider';
 import {
   Center,
   CentersResponseModel,
-  Session
+  Session,
 } from '../../../services/centers/model';
-import { getDate } from '../../../services/date';
+import {getDate} from '../../../services/date';
+import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import useVtFetch from '../../../services/useVtFetch';
-import { UserContext } from '../../../store/user';
+import {UserContext} from '../../../store/user';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -30,7 +32,9 @@ const Home = () => {
   const styles = useStyle();
   const scrollY = useRef(new Animated.Value(0)).current;
   const ref = useRef<FlatList<any>>('');
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
+  const {createNotification} = useNotification();
+  useBackgroundFetch();
   const {
     data: {postalCode},
   } = useContext(UserContext);
@@ -57,10 +61,16 @@ const Home = () => {
       }, 500);
     }
   }, [isFetched]);
+  const showNotifications = () => {
+    createNotification('Hello', 'This is my message');
+    setTimeout(() => {
+      showNotifications();
+    }, 2000);
+  };
 
   const onPressNotifications = () => {
-    navigate(strings.dashboard.notifications.NAME)
-  }
+    navigate(strings.dashboard.notifications.NAME);
+  };
   const renderSessions = ({item}: {item: Session}) => {
     return (
       <View style={styles.sessionParent}>
@@ -111,7 +121,7 @@ const Home = () => {
         <Pressable onPress={onPressNotifications}>
           <Icon
             name="notifications"
-            color="white"
+            color={styles.iconStyle.color}
             size={24}
             style={styles.iconStyle}
           />
@@ -157,22 +167,26 @@ const Home = () => {
         </View>
       ) : data?.centers?.length > 0 ? (
         <Animated.FlatList
-              data={data.centers}
-              ref={ref}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                { useNativeDriver: true },
-              )}
-              onScrollToIndexFailed={() => {
-                console.log('Failed to scroll to index');
-              }}
-              style={styles.list}
-              renderItem={renderItem}
-              keyExtractor={item => item.center_id.toString()}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-              refreshControl={
-                <RefreshControl refreshing={isFetching} onRefresh={refetch} progressViewOffset={80}/>
+          data={data.centers}
+          ref={ref}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollY}}}],
+            {useNativeDriver: true},
+          )}
+          onScrollToIndexFailed={() => {
+            console.log('Failed to scroll to index');
+          }}
+          style={styles.list}
+          renderItem={renderItem}
+          keyExtractor={item => item.center_id.toString()}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={{height: 12}} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={refetch}
+              progressViewOffset={80}
+            />
           }
         />
       ) : (

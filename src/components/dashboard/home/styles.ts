@@ -31,7 +31,7 @@ const useStyle = () => {
       backgroundColor: colors.card,
       zIndex: 2,
     },
-    iconStyle: {alignSelf: 'center', paddingHorizontal: 16},
+    iconStyle: {alignSelf: 'center', paddingHorizontal: 16, color: colors.text},
     hospitalAddress: {
       color: colors.text,
       opacity: 0.5,

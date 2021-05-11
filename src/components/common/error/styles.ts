@@ -16,7 +16,6 @@ const useStyle = () => {
       fontWeight: 'bold',
       opacity: 0.3,
     },
-    Î,
   });
 };
 
