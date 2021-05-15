@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "185604658076",
-    "project_id": "vaccinetracker-14d05",
-    "storage_bucket": "vaccinetracker-14d05.appspot.com"
+    "project_number": "109367122400",
+    "project_id": "vaccine-tracker-saras",
+    "storage_bucket": "vaccine-tracker-saras.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:185604658076:android:9fed5ea9d5e49fe308ee59",
+        "mobilesdk_app_id": "1:109367122400:android:de5010e054fa79390e7385",
         "android_client_info": {
           "package_name": "com.vaccinetracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "185604658076-dpj77bm3fg51vdc9r68gr4er2paum7ar.apps.googleusercontent.com",
+          "client_id": "109367122400-sv7u0runl0lmalc55b5qg420omilhkom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vaccinetracker",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "109367122400-64bsvoe4v928qnt91rl402s97u9007di.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCWwq0AlbHoWQtqxnIIbX9vQIbwsiqmkhk"
+          "current_key": "AIzaSyCzbBBWfdDiNiVAOYASB1Kr9YmObHPA15c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "185604658076-dpj77bm3fg51vdc9r68gr4er2paum7ar.apps.googleusercontent.com",
+              "client_id": "109367122400-64bsvoe4v928qnt91rl402s97u9007di.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

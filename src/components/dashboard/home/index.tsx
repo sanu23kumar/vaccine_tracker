@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
-import {useNotification} from '../../../notifications/createNotificationProvider';
 import {
   Center,
   CentersResponseModel,
@@ -33,7 +32,6 @@ const Home = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const ref = useRef<FlatList<any>>('');
   const {navigate} = useNavigation();
-  const {createNotification} = useNotification();
   useBackgroundFetch();
   const {
     data: {postalCode},
@@ -51,7 +49,7 @@ const Home = () => {
     isError,
   } = useVtFetch<CentersResponseModel>(
     [apiCode, 'Home'],
-    `/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${getDate()}`,
+    `/v2/appointment/sessions/public/calendarByPin?pincode=${apiCode}&date=${getDate()}`,
   );
 
   useEffect(() => {
@@ -61,12 +59,11 @@ const Home = () => {
       }, 500);
     }
   }, [isFetched]);
-  const showNotifications = () => {
-    createNotification('Hello', 'This is my message');
-    setTimeout(() => {
-      showNotifications();
-    }, 2000);
-  };
+
+  useEffect(() => {
+    setPin(postalCode);
+    setApiCode(postalCode);
+  }, [postalCode]);
 
   const onPressNotifications = () => {
     navigate(strings.dashboard.notifications.NAME);

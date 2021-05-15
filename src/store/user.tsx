@@ -1,18 +1,18 @@
-import React, { createContext, useContext } from 'react';
-import { initialUser, UserModel } from '../services/user/model';
+import React, {createContext, useContext} from 'react';
+import {initialUser, UserModel} from '../services/user/model';
 import Store from './store';
 
-const USER_DATA_KEY = 'USER_DATA_KEY';
+export const USER_DATA_KEY = 'USER_DATA_KEY';
 
 export const UserContext = createContext({
   data: initialUser,
   setDataToStore: (data: UserModel) => {
     console.log(USER_DATA_KEY, data);
   },
-  removeData: () => {}
+  removeData: () => {},
 });
 
-const UserStore: React.FC = ({ children }) => (
+const UserStore: React.FC = ({children}) => (
   <Store storeKey={USER_DATA_KEY} initData={initialUser} context={UserContext}>
     {children}
   </Store>
