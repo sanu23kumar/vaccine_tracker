@@ -19,6 +19,7 @@ import { getDate } from '../../../services/date';
 import { Center, Session } from '../../../services/models/centers';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import { UserContext } from '../../../store/user';
+import FullBannerAd from '../../common/ad';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -183,6 +184,7 @@ const Home = () => {
       ) : (
         <NoDataView />
       )}
+      <FullBannerAd />
     </SafeAreaView>
   );
 };

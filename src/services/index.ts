@@ -25,10 +25,7 @@ export const cowinAPI = <T>(
         'VaccineTracker/1.6.7.42 Dalvik/2.1.0 (Linux; U; Android 5.1.1; Android SDK built for x86 Build/LMY48X)',
     },
     body: body ? JSON.stringify(body) : undefined,
-  }).then(response => {
-    console.log(response);
-    return response.json();
-  });
+  }).then(response => response.json());
 
 export const generateOTP = (mobileNumber: string) =>
   cowinAPI<GenerateOtpResponse>(GENERATE_OTP, 'POST', { mobile: mobileNumber });
