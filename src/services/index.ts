@@ -15,17 +15,20 @@ import { StatesResponse } from './models/states';
 export const cowinAPI = <T>(
   uri: string,
   method = 'GET',
-  body = {},
+  body = null,
 ): Promise<T> =>
   fetch(BASE_URL + uri, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent':
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36',
+      'user-agent':
+        'VaccineTracker/1.6.7.42 Dalvik/2.1.0 (Linux; U; Android 5.1.1; Android SDK built for x86 Build/LMY48X)',
     },
-    body: JSON.stringify(body),
-  }).then(response => response.json());
+    body: body ? JSON.stringify(body) : undefined,
+  }).then(response => {
+    console.log(response);
+    return response.json();
+  });
 
 export const generateOTP = (mobileNumber: string) =>
   cowinAPI<GenerateOtpResponse>(GENERATE_OTP, 'POST', { mobile: mobileNumber });

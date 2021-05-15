@@ -44,7 +44,7 @@ const Home = () => {
     isFetched,
     isLoading,
     isError,
-  } = useQuery([apiCode, 'Home'], () => findByPin(apiCode, getDate()));
+  } = useQuery([apiCode, 'Home'], () => findByPin(apiCode, getDate(), true));
 
   useEffect(() => {
     if (isFetched && ref?.current?.scrollToOffset) {
