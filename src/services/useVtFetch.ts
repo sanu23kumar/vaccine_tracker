@@ -1,5 +1,5 @@
 import {QueryKey, useQuery, useQueryClient} from 'react-query';
-export const baseUrl = 'https://cdn-api.co-vin.in/api';
+import {BASER_URL} from './endpoints';
 export const fetchConfig = {
   method: 'GET',
   headers: {
@@ -13,7 +13,7 @@ export const useVtPrefetch = <T>() => {
   const queryClient = useQueryClient();
   const prefetch = async (key: QueryKey, URL: string) => {
     await queryClient.prefetchQuery<T>(key, () =>
-      fetch(baseUrl + URL, fetchConfig).then(res => res.json()),
+      fetch(BASER_URL + URL, fetchConfig).then(res => res.json()),
     );
   };
   return prefetch;
@@ -22,7 +22,7 @@ export const useVtPrefetch = <T>() => {
 const useVtFetch = <T>(key: QueryKey, URL: string) => {
   return useQuery<T>(
     key,
-    () => fetch(baseUrl + URL, fetchConfig).then(res => res.json()),
+    () => fetch(BASER_URL + URL, fetchConfig).then(res => res.json()),
     {
       onSuccess: data => {
         console.log(data);

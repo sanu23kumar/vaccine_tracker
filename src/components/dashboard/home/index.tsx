@@ -19,6 +19,7 @@ import {
   Session,
 } from '../../../services/centers/model';
 import {getDate} from '../../../services/date';
+import {CENTERS_BY_PINCODE} from '../../../services/endpoints';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import useVtFetch from '../../../services/useVtFetch';
 import {UserContext} from '../../../store/user';
@@ -49,7 +50,7 @@ const Home = () => {
     isError,
   } = useVtFetch<CentersResponseModel>(
     [apiCode, 'Home'],
-    `/v2/appointment/sessions/public/calendarByPin?pincode=${apiCode}&date=${getDate()}`,
+    CENTERS_BY_PINCODE + `${apiCode}&date=${getDate()}`,
   );
 
   useEffect(() => {

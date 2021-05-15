@@ -5,7 +5,8 @@ import PushNotification from 'react-native-push-notification';
 import {USER_DATA_KEY} from '../store/user';
 import {CentersResponseModel} from './centers/model';
 import {getDate} from './date';
-import {baseUrl, fetchConfig} from './useVtFetch';
+import {BASER_URL, CENTERS_BY_PINCODE} from './endpoints';
+import {fetchConfig} from './useVtFetch';
 
 export const createLocalNotification = (title, message) => {
   PushNotification.localNotification({
@@ -37,12 +38,11 @@ const parseCentersAndNotify = (response: CentersResponseModel) => {
 
 const fetchCenters = async () => {
   const dataString = await AsyncStorage.getItem(USER_DATA_KEY);
-  const asyncData = dataString && (await JSON.parse(dataString));
+  const {postalCode} = dataString && (await JSON.parse(dataString));
   const response: CentersResponseModel = await fetch(
-    baseUrl +
-      `/v2/appointment/sessions/public/calendarByPin?pincode=${
-        asyncData.postalCode ?? '140603'
-      }&date=${getDate()}`,
+    BASER_URL +
+      CENTERS_BY_PINCODE +
+      `${postalCode ?? '140603'}&date=${getDate()}`,
     fetchConfig,
   ).then(res => res.json());
   return response;
