@@ -1,3 +1,4 @@
+import { getDate } from './date';
 import {
   BASE_URL,
   CONFIRM_OTP,
@@ -71,4 +72,4 @@ export const findAvailableSlots = (
   expandDates = false,
 ) => findByDistrict(district_id, date, true);
 
-export const testFn = async () => findAvailableSlots('650', '15-05-2021');
+export const testFn = () => findAvailableSlots('650', getDate());
