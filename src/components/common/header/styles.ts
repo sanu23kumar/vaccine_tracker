@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 
 const useStyle = () => {
   const { colors } = useTheme();

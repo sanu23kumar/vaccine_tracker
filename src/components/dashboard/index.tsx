@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import strings from '../../assets/strings';
 import useAppInitialize from '../../services/app/useAppInitialize';
@@ -11,7 +11,7 @@ const DashboardNavigator = () => {
   useAppInitialize();
   useBackgroundFetch();
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen component={Home} name={strings.dashboard.home.NAME} />
       <Stack.Screen
         component={Notifications}

@@ -1,11 +1,15 @@
-import {useTheme} from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 
 const useStyle = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return StyleSheet.create({
-    iconStyle: {alignSelf: 'center', paddingHorizontal: 16, color: colors.text},
+    iconStyle: {
+      alignSelf: 'center',
+      paddingHorizontal: 16,
+      color: colors.text,
+    },
   });
 };
 

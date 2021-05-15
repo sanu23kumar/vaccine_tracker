@@ -3,5 +3,5 @@ export interface UserModel {
 }
 
 export const initialUser: UserModel = {
-  postalCode: ''
-}
+  postalCode: '',
+};

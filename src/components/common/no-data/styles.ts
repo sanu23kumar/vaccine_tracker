@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 const useStyle = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return StyleSheet.create({
     noDataParent: {

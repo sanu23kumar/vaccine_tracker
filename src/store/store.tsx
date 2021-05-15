@@ -15,7 +15,7 @@ const CgStore = <T extends object>({
   storeKey,
   initData,
   context,
-  children
+  children,
 }: Props<T>) => {
   const [dataRetrieved, setDataRetrieved] = useState(false);
   const [data, setData] = useState<T>(initData);
@@ -68,8 +68,7 @@ const CgStore = <T extends object>({
 
   return (
     <context.Provider
-      value={{ data, removeData, setDataToStore, setAbsoluteDataToStore }}
-    >
+      value={{ data, removeData, setDataToStore, setAbsoluteDataToStore }}>
       {dataRetrieved && children}
     </context.Provider>
   );
