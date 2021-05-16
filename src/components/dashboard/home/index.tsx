@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
-import { findByPin } from '../../../services';
+import { findCalendarByPin } from '../../../services';
 import { getDate } from '../../../services/date';
 import { Center, Session } from '../../../services/models/centers';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
@@ -45,7 +45,9 @@ const Home = () => {
     isFetched,
     isLoading,
     isError,
-  } = useQuery([apiCode, 'Home'], () => findByPin(apiCode, getDate(), true));
+  } = useQuery([apiCode, 'Home'], () =>
+    findCalendarByPin(apiCode, getDate(), true),
+  );
 
   useEffect(() => {
     if (isFetched && ref?.current?.scrollToOffset) {

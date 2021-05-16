@@ -4,7 +4,8 @@ import {
   CONFIRM_OTP,
   GENERATE_OTP,
   GET_DISTRICTS,
-  GET_SESSIONS,
+  GET_SESSIONS_CALENDAR_BY_PIN,
+  GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
 import { CentersResponse } from './models/centers';
@@ -41,16 +42,14 @@ const getStates = () => cowinAPI<StatesResponse>(GET_STATES);
 export const getDistricts = (stateid: string) =>
   cowinAPI<DistrictsResponse>(GET_DISTRICTS + stateid);
 
-export const findByPin = (
-  pincode: string,
-  date: string,
-  showCalendar = false,
-) =>
+export const findCalendarByPin = (pincode: string, date: string) =>
   cowinAPI<CentersResponse>(
-    GET_SESSIONS +
-      `${
-        showCalendar ? 'calendarByPin' : 'findByPin'
-      }?pincode=${pincode}&date=${date}`,
+    GET_SESSIONS_CALENDAR_BY_PIN + `${pincode}&date=${date}`,
+  );
+
+export const findByPin = (pincode: string, date: string) =>
+  cowinAPI<CentersResponse>(
+    GET_SESSIONS_FIND_BY_PIN + `${pincode}&date=${date}`,
   );
 
 export const findByDistrict = (
