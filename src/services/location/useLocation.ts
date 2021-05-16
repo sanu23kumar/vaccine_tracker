@@ -22,7 +22,7 @@ const useLocation = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         const location = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
+          enableHighAccuracy: false,
           timeout: 15000,
         });
         const geocodedLocation = await Geocoder.geocodePosition({

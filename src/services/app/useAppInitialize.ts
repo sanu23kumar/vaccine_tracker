@@ -10,7 +10,6 @@ const useAppInitialize = () => {
   useEffect(() => {
     if (postalCode) {
       setDataToStore({ postalCode });
-      SplashScreen.hide();
     }
   }, [postalCode]);
 };

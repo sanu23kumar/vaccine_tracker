@@ -171,6 +171,7 @@ const Home = () => {
             console.log('Failed to scroll to index');
           }}
           style={styles.list}
+          contentContainerStyle={{ paddingBottom: 100 }}
           renderItem={renderItem}
           keyExtractor={item => item.center_id.toString()}
           showsVerticalScrollIndicator={false}
