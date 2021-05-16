@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/core';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import { useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -12,17 +12,14 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
-import {
-  Center,
-  CentersResponseModel,
-  Session,
-} from '../../../services/centers/model';
-import {getDate} from '../../../services/date';
-import {CENTERS_BY_PINCODE} from '../../../services/endpoints';
+import { findByPin } from '../../../services';
+import { getDate } from '../../../services/date';
+import { Center, Session } from '../../../services/models/centers';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
-import useVtFetch from '../../../services/useVtFetch';
-import {UserContext} from '../../../store/user';
+import { UserContext } from '../../../store/user';
+import FullBannerAd from '../../common/ad';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -32,10 +29,10 @@ const Home = () => {
   const styles = useStyle();
   const scrollY = useRef(new Animated.Value(0)).current;
   const ref = useRef<FlatList<any>>('');
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   useBackgroundFetch();
   const {
-    data: {postalCode},
+    data: { postalCode },
   } = useContext(UserContext);
   const [pin, setPin] = useState(postalCode);
   const [apiCode, setApiCode] = useState(postalCode);
@@ -48,15 +45,12 @@ const Home = () => {
     isFetched,
     isLoading,
     isError,
-  } = useVtFetch<CentersResponseModel>(
-    [apiCode, 'Home'],
-    CENTERS_BY_PINCODE + `${apiCode}&date=${getDate()}`,
-  );
+  } = useQuery([apiCode, 'Home'], () => findByPin(apiCode, getDate(), true));
 
   useEffect(() => {
     if (isFetched && ref?.current?.scrollToOffset) {
       setTimeout(() => {
-        ref.current?.scrollToOffset({offset: 80});
+        ref.current?.scrollToOffset({ offset: 80 });
       }, 500);
     }
   }, [isFetched]);
@@ -69,12 +63,12 @@ const Home = () => {
   const onPressNotifications = () => {
     navigate(strings.dashboard.notifications.NAME);
   };
-  const renderSessions = ({item}: {item: Session}) => {
+  const renderSessions = ({ item }: { item: Session }) => {
     return (
       <View style={styles.sessionParent}>
         <Text style={styles.sessionDate}>{item.date}</Text>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text
             style={
               styles.sessionCapacity
@@ -85,7 +79,7 @@ const Home = () => {
       </View>
     );
   };
-  const renderItem = ({item}: {item: Center}) => {
+  const renderItem = ({ item }: { item: Center }) => {
     return (
       <View style={styles.card}>
         <View style={styles.hospitalParent}>
@@ -105,9 +99,9 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.session_id}
             horizontal={true}
-            ItemSeparatorComponent={() => <View style={{width: 12}} />}
-            ListHeaderComponent={<View style={{width: 12}} />}
-            ListFooterComponent={<View style={{width: 12}} />}
+            ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+            ListHeaderComponent={<View style={{ width: 12 }} />}
+            ListFooterComponent={<View style={{ width: 12 }} />}
           />
         )}
       </View>
@@ -168,8 +162,8 @@ const Home = () => {
           data={data.centers}
           ref={ref}
           onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: true},
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true },
           )}
           onScrollToIndexFailed={() => {
             console.log('Failed to scroll to index');
@@ -178,7 +172,7 @@ const Home = () => {
           renderItem={renderItem}
           keyExtractor={item => item.center_id.toString()}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{height: 12}} />}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           refreshControl={
             <RefreshControl
               refreshing={isFetching}
@@ -190,6 +184,7 @@ const Home = () => {
       ) : (
         <NoDataView />
       )}
+      <FullBannerAd />
     </SafeAreaView>
   );
 };

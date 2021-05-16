@@ -1,4 +1,4 @@
-import React, {createContext, useContext} from 'react';
+import React, { createContext, useContext } from 'react';
 import NotifService from './NotifService';
 
 interface Params {
@@ -13,7 +13,7 @@ const initialParams: Params = {
 
 export const NotificationContext = createContext(initialParams);
 
-const CreateNotificationProvider: React.FC = ({children}) => {
+const CreateNotificationProvider: React.FC = ({ children }) => {
   console.log('Creating notification provider');
   const onRegister = token => {
     console.log('Setting the token on register ', token);
@@ -21,13 +21,13 @@ const CreateNotificationProvider: React.FC = ({children}) => {
   const onNotification = notification => {
     console.log('A new notification arrived', notification);
   };
-  const {createNotification, getToken} = new NotifService(
+  const { createNotification, getToken } = new NotifService(
     onRegister,
     onNotification,
   );
 
   return (
-    <NotificationContext.Provider value={{createNotification, getToken}}>
+    <NotificationContext.Provider value={{ createNotification, getToken }}>
       {children}
     </NotificationContext.Provider>
   );

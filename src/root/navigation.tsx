@@ -1,4 +1,8 @@
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { useColorScheme } from 'react-native';
@@ -10,7 +14,7 @@ const RootNavigator = () => {
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen component={DashboardNavigator} name={"Dashboard"}/>
+        <Stack.Screen component={DashboardNavigator} name={'Dashboard'} />
       </Stack.Navigator>
     </NavigationContainer>
   );

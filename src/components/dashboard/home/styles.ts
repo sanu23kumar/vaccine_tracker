@@ -1,8 +1,8 @@
-import {useTheme} from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 
 const useStyle = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return StyleSheet.create({
     differentLocationText: {
@@ -10,12 +10,12 @@ const useStyle = () => {
       color: colors.text,
       opacity: 0.6,
     },
-    parent: {flex: 1},
+    parent: { flex: 1 },
     pinInput: {
       color: colors.text,
       fontSize: 24,
     },
-    list: {paddingTop: 84},
+    list: { paddingTop: 84 },
     pinParent: {
       position: 'absolute',
       top: 66,
@@ -31,7 +31,11 @@ const useStyle = () => {
       backgroundColor: colors.card,
       zIndex: 2,
     },
-    iconStyle: {alignSelf: 'center', paddingHorizontal: 16, color: colors.text},
+    iconStyle: {
+      alignSelf: 'center',
+      paddingHorizontal: 16,
+      color: colors.text,
+    },
     hospitalAddress: {
       color: colors.text,
       opacity: 0.5,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
 import VtHeader from '../../common/header';

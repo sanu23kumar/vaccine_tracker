@@ -2,13 +2,13 @@ const strings = {
   dashboard: {
     home: {
       NAME: 'HOME_SCREEN',
-      header: 'Centers Nearby'
+      header: 'Centers Nearby',
     },
     notifications: {
       NAME: 'NOTIFICATION_SCREEN',
-      header: 'Notifications'
-    }
-  }
-}
+      header: 'Notifications',
+    },
+  },
+};
 
 export default strings;
