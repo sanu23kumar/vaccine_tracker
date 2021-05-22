@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
-import { findCalendarByPin } from '../../../services';
+import { findCalendarByPin, testFn } from '../../../services';
 import { getDate } from '../../../services/date';
 import { Center, Session } from '../../../services/models/centers';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
@@ -63,7 +63,8 @@ const Home = () => {
   }, [postalCode]);
 
   const onPressNotifications = () => {
-    navigate(strings.dashboard.notifications.NAME);
+    testFn();
+    // navigate(strings.dashboard.notifications.NAME);
   };
   const renderSessions = ({ item }: { item: Session }) => {
     return (

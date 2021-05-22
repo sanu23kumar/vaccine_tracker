@@ -5,6 +5,7 @@ import {
   GENERATE_OTP,
   GET_DISTRICTS,
   GET_SESSIONS_CALENDAR_BY_PIN,
+  GET_SESSIONS_CALENDAR,
   GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
@@ -37,10 +38,20 @@ export const confirmOTP = (otp: string, tnxId: string) =>
     tnxId: tnxId,
   });
 
-const getStates = () => cowinAPI<StatesResponse>(GET_STATES);
+export const getStates = () => cowinAPI<StatesResponse>(GET_STATES);
 
-export const getDistricts = (stateid: string) =>
+export const getDistrict = (stateid: number) =>
   cowinAPI<DistrictsResponse>(GET_DISTRICTS + stateid);
+
+export const getAllDistricts = async () => {
+  const { states } = await getStates();
+  for (let [index, state] of states.entries()) {
+    let { districts } = await getDistrict(state.state_id);
+    states[index].districts = districts;
+  }
+
+  return states;
+};
 
 export const findCalendarByPin = (pincode: string, date: string) =>
   cowinAPI<CentersResponse>(
@@ -58,17 +69,40 @@ export const findByDistrict = (
   showCalendar = false,
 ) =>
   cowinAPI<CentersResponse>(
-    GET_SESSIONS +
+    GET_SESSIONS_CALENDAR +
       `${
         showCalendar ? 'calendarByDistrict' : 'findByDistrict'
       }?district_id=${district_id}&date=${date}`,
   );
 
-export const findAvailableSlots = (
+export const findAvailableSlots = async (
   district_id: string,
   date: string,
-  filters = '',
   expandDates = false,
-) => findByDistrict(district_id, date, true);
+  filters = {},
+) => {
+  const centres = await findByDistrict(district_id, date, true);
+  let validCenters = centres.centers.filter(
+    center =>
+      center.sessions.filter(session => session.available_capacity > 0).length >
+      0,
+  );
 
-export const testFn = () => findAvailableSlots('650', getDate());
+  if (filters) {
+    for (let filter in filters) {
+      validCenters = validCenters.filter(
+        center =>
+          center.sessions.filter(session => session[filter] === filters[filter])
+            .length > 0,
+      );
+    }
+  }
+
+  return validCenters;
+};
+
+export const testFn = async () => {
+  const response = await getAllDistricts();
+  console.log(response);
+  console.log(JSON.stringify(response));
+};
