@@ -1,8 +1,4 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
@@ -16,7 +12,8 @@ const RootNavigator = () => {
     SplashScreen.hide();
   }, []);
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationContainer
+      theme={scheme === 'dark' ? DefaultTheme : DefaultTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen component={DashboardNavigator} name={'Dashboard'} />
       </Stack.Navigator>

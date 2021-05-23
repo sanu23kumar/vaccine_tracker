@@ -2,7 +2,7 @@ const strings = {
   dashboard: {
     home: {
       NAME: 'HOME_SCREEN',
-      header: 'Centers Nearby',
+      header: 'Centers',
     },
     notifications: {
       NAME: 'NOTIFICATION_SCREEN',
