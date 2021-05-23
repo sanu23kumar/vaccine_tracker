@@ -29,6 +29,7 @@ const useLocation = () => {
           lat: location.latitude,
           lng: location.longitude,
         });
+        console.log('The location is: ', geocodedLocation);
         setPostalCode(geocodedLocation[0]?.postalCode);
       } else {
         console.log('Location permission denied');

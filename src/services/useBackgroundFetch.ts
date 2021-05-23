@@ -2,10 +2,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { useEffect } from 'react';
 import WorkManager from 'react-native-background-worker';
 import PushNotification from 'react-native-push-notification';
-import { findCalendarByPin } from '.';
-import { USER_DATA_KEY } from '../store/user';
+import { findByDistrict } from '.';
+import { STORE_KEY } from '../root';
 import { getDate } from './date';
 import { CentersResponse } from './models/centers';
+import { UserModel } from './models/user';
+import { STORE_USER_KEY } from './stores';
 
 export const createLocalNotification = (title, message) => {
   PushNotification.localNotification({
@@ -36,9 +38,10 @@ const parseCentersAndNotify = (response: CentersResponse) => {
 };
 
 const fetchCenters = async () => {
-  const dataString = await AsyncStorage.getItem(USER_DATA_KEY);
+  const dataString = await AsyncStorage.getItem(STORE_KEY);
   const asyncData = dataString && (await JSON.parse(dataString));
-  const response = await findCalendarByPin(asyncData.postalCode, getDate());
+  const userData: UserModel = asyncData[STORE_USER_KEY];
+  const response = await findByDistrict(userData.district, getDate(), true);
   return response;
 };
 

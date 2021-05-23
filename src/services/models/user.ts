@@ -1,7 +1,7 @@
 export interface UserModel {
-  postalCode: string;
+  district: string;
 }
 
 export const initialUser: UserModel = {
-  postalCode: '',
+  district: '',
 };

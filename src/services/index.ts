@@ -1,15 +1,14 @@
-import { getDate } from './date';
 import {
   BASE_URL,
   CONFIRM_OTP,
   GENERATE_OTP,
   GET_DISTRICTS,
-  GET_SESSIONS_CALENDAR_BY_PIN,
   GET_SESSIONS_CALENDAR,
+  GET_SESSIONS_CALENDAR_BY_PIN,
   GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
-import { CentersResponse } from './models/centers';
+import { CentersResponse, SessionsResponse } from './models/centers';
 import { DistrictsResponse } from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
@@ -68,7 +67,7 @@ export const findByDistrict = (
   date: string,
   showCalendar = false,
 ) =>
-  cowinAPI<CentersResponse>(
+  cowinAPI<SessionsResponse>(
     GET_SESSIONS_CALENDAR +
       `${
         showCalendar ? 'calendarByDistrict' : 'findByDistrict'

@@ -1,4 +1,16 @@
 export interface Session {
+  center_id: number;
+  name: string;
+  address: string;
+  state_name: string;
+  district_name: string;
+  block_name: string;
+  pincode: number;
+  lat: number;
+  long: number;
+  from: string;
+  to: string;
+  fee_type: string;
   session_id: string;
   date: string;
   available_capacity: number;
@@ -6,7 +18,7 @@ export interface Session {
   vaccine: string;
   slots: string[];
   available_capacity_dose1: number;
-  available_capacity_dose2: number; 
+  available_capacity_dose2: number;
 }
 
 export interface Center {
@@ -27,4 +39,8 @@ export interface Center {
 
 export interface CentersResponse {
   centers: Center[];
+}
+
+export interface SessionsResponse {
+  sessions: Session[];
 }

@@ -1,41 +1,79 @@
-import { useNavigation } from '@react-navigation/core';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Animated,
   FlatList,
   Pressable,
-  RefreshControl,
   SafeAreaView,
   Text,
   TextInput,
+  ToastAndroid,
   View,
 } from 'react-native';
+import { WeekCalendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
+import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
-import { findCalendarByPin, testFn } from '../../../services';
-import { getDate } from '../../../services/date';
-import { Center, Session } from '../../../services/models/centers';
+import { findByDistrict } from '../../../services';
+import { getDate, getUsDateFromIn } from '../../../services/date';
+import { Session } from '../../../services/models/centers';
+import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
-import { UserContext } from '../../../store/user';
-import FullBannerAd from '../../common/ad';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
 import useStyle from './styles';
 
+const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
+  const styles = useStyle();
+
+  return (
+    <WeekCalendar
+      markedDates={{
+        [getUsDateFromIn(selectedDate)]: {
+          selected: true,
+        },
+      }}
+      onDayPress={date => {
+        console.log(date.dateString);
+        setSelectedDate(date.dateString);
+      }}
+      theme={{
+        selectedDayBackgroundColor: styles.parent.backgroundColor,
+        selectedDayTextColor: styles.selectedDayStyle.color,
+        dayTextColor: styles.placeholder.color,
+        textDayFontFamily: fonts.REGULAR,
+        textDayHeaderFontFamily: fonts.MEDIUM,
+        textMonthFontFamily: fonts.MEDIUM,
+        dotColor: styles.selectedDayStyle.color,
+        todayTextColor: styles.placeholder.color,
+        'stylesheet.expandable.main': {
+          containerShadow: styles.containerShadow,
+          dayHeader: styles.dayHeader,
+        },
+      }}
+    />
+  );
+};
+
+const HospitalCard = ({ hospital }: { hospital: Session }) => {
+  const styles = useStyle();
+  return (
+    <View>
+      <Text>{hospital.name}</Text>
+    </View>
+  );
+};
+
 const Home = () => {
   const styles = useStyle();
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const ref = useRef<FlatList<any>>('');
-  const { navigate } = useNavigation();
   useBackgroundFetch();
-  const {
-    data: { postalCode },
-  } = useContext(UserContext);
-  const [pin, setPin] = useState(postalCode);
-  const [apiCode, setApiCode] = useState(postalCode);
+  const [searchText, setSearchText] = useState('');
+  const [queryCode, setQueryCode] = useState({
+    district: 'New Delhi',
+    code: 140,
+  });
+  const [selectedDate, setSelectedDate] = useState(getDate());
 
   const {
     data,
@@ -45,150 +83,92 @@ const Home = () => {
     isFetched,
     isLoading,
     isError,
-  } = useQuery([apiCode, 'Home'], () =>
-    findCalendarByPin(apiCode, getDate(), true),
+  } = useQuery(
+    ['Home', queryCode.code, selectedDate],
+    () => findByDistrict(queryCode.code.toString(), selectedDate, false),
+    {
+      onSuccess: data => {
+        console.log('Data ', data);
+      },
+    },
   );
 
-  useEffect(() => {
-    if (isFetched && ref?.current?.scrollToOffset) {
-      setTimeout(() => {
-        ref.current?.scrollToOffset({ offset: 80 });
-      }, 500);
+  console.log('selectedDate', selectedDate);
+
+  const onPressFilter = () => {
+    // Make the filter dropdown
+  };
+
+  const findDistrictCodeByName = (name: string) => {
+    const states = STATES_WITH_DISTRICTS;
+    for (let i = 0; i < states.length; i++) {
+      const state = states[i];
+      for (let j = 0; j < state.districts.length; j++) {
+        const district = state.districts[j];
+        if (name.toLowerCase().includes(district.district_name.toLowerCase())) {
+          console.log('The state is:', state);
+          return district.district_id;
+        }
+      }
     }
-  }, [isFetched]);
-
-  useEffect(() => {
-    setPin(postalCode);
-    setApiCode(postalCode);
-  }, [postalCode]);
-
-  const onPressNotifications = () => {
-    testFn();
-    // navigate(strings.dashboard.notifications.NAME);
+    return -1;
   };
-  const renderSessions = ({ item }: { item: Session }) => {
-    return (
-      <View style={styles.sessionParent}>
-        <Text style={styles.sessionDate}>{item.date}</Text>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text
-            style={
-              styles.sessionCapacity
-            }>{`Capacity: ${item.available_capacity}`}</Text>
-          <Text
-            style={styles.sessionAgeLimit}>{`>${item.min_age_limit} yr`}</Text>
-        </View>
-      </View>
-    );
-  };
-  const renderItem = ({ item }: { item: Center }) => {
-    return (
-      <View style={styles.card}>
-        <View style={styles.hospitalParent}>
-          <View style={styles.hospitalHeader}>
-            <Text style={styles.hospitalName} numberOfLines={2}>
-              {item.name}
-            </Text>
-            <Text style={styles.hospitalFeeType}>{item.fee_type}</Text>
-          </View>
-          <Text style={styles.hospitalAddress}>{item.address}</Text>
-          <Text style={styles.sessionsText}>Sessions: </Text>
-        </View>
-        {item.sessions && (
-          <FlatList
-            data={item.sessions}
-            renderItem={renderSessions}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={item => item.session_id}
-            horizontal={true}
-            ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
-            ListHeaderComponent={<View style={{ width: 12 }} />}
-            ListFooterComponent={<View style={{ width: 12 }} />}
-          />
-        )}
-      </View>
-    );
+  const onEndEditing = () => {
+    const districtCode = findDistrictCodeByName(searchText);
+    if (districtCode !== -1) {
+      setQueryCode({ district: searchText, code: districtCode });
+    } else {
+      ToastAndroid.show(
+        'No districts found for name, please try again',
+        ToastAndroid.SHORT,
+      );
+    }
   };
   return (
     <SafeAreaView style={styles.parent}>
       <VtHeader title={strings.dashboard.home.header}>
-        <Pressable onPress={onPressNotifications}>
+        <Pressable onPress={onPressFilter}>
           <Icon
-            name="notifications"
+            name="options"
             color={styles.iconStyle.color}
             size={24}
             style={styles.iconStyle}
           />
         </Pressable>
       </VtHeader>
-      <Animated.View
-        style={[
-          styles.pinParent,
-          {
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [0, 80],
-                  outputRange: [0, -80],
-                }),
-              },
-            ],
-          },
-        ]}>
-        <Text style={styles.differentLocationText}>
-          Search for a different location:
-        </Text>
+      <View style={styles.searchParent}>
         <TextInput
-          style={styles.pinInput}
-          value={pin}
-          onChangeText={setPin}
-          placeholder="000000"
-          onEndEditing={() => {
-            setApiCode(pin);
-          }}
-          keyboardType="numeric"
+          value={searchText}
+          onChangeText={setSearchText}
+          style={styles.search}
+          placeholder={strings.dashboard.home.search}
+          placeholderTextColor={styles.placeholder.color}
+          onEndEditing={onEndEditing}
         />
-      </Animated.View>
+        <Icon
+          name="locate-outline"
+          color={styles.locationIconStyle.color}
+          size={18}
+          style={styles.locationIconStyle}
+        />
+      </View>
+      <CalendarWeek
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
       {isError ? (
         <ErrorView />
       ) : isLoading ? (
-        <View style={styles.noDataParent}>
-          <ActivityIndicator
-            size={'large'}
-            animating
-            color={styles.noDataText.color}
-          />
-        </View>
-      ) : data?.centers?.length > 0 ? (
-        <Animated.FlatList
-          data={data.centers}
-          ref={ref}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: true },
-          )}
-          onScrollToIndexFailed={() => {
-            console.log('Failed to scroll to index');
-          }}
-          style={styles.list}
-          contentContainerStyle={{ paddingBottom: 100 }}
-          renderItem={renderItem}
-          keyExtractor={item => item.center_id.toString()}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-          refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={refetch}
-              progressViewOffset={80}
-            />
-          }
-        />
-      ) : (
+        <ActivityIndicator color={styles.selectedDayStyle.color} />
+      ) : data?.sessions?.length < 1 ? (
         <NoDataView />
+      ) : (
+        <FlatList
+          data={data.sessions}
+          renderItem={({ item }) => <HospitalCard hospital={item} />}
+        />
       )}
-      <FullBannerAd />
     </SafeAreaView>
   );
 };
