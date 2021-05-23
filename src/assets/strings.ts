@@ -9,6 +9,10 @@ const strings = {
       NAME: 'NOTIFICATION_SCREEN',
       header: 'Notifications',
     },
+    settings: {
+      NAME: 'SETTINGS_SCREEN',
+      header: 'Settings',
+    },
   },
 };
 
