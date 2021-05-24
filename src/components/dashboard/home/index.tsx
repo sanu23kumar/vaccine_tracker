@@ -4,6 +4,7 @@ import {
   FlatList,
   Pressable,
   SafeAreaView,
+  StatusBar,
   Text,
   TextInput,
   ToastAndroid,
@@ -14,6 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
 import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
+import useVtTheme from '../../../assets/theme/useVtTheme';
 import { findByDistrict } from '../../../services';
 import { getDate, getUsDateFromIn } from '../../../services/date';
 import { Session } from '../../../services/models/centers';
@@ -36,11 +38,10 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
       }}
       onDayPress={date => {
         console.log(date.dateString);
-        setSelectedDate(date.dateString);
+        setSelectedDate(getUsDateFromIn(date.dateString));
       }}
       theme={{
         selectedDayBackgroundColor: styles.parent.backgroundColor,
-        selectedDayTextColor: styles.selectedDayStyle.color,
         dayTextColor: styles.placeholder.color,
         textDayFontFamily: fonts.REGULAR,
         textDayHeaderFontFamily: fonts.MEDIUM,
@@ -51,6 +52,9 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
           containerShadow: styles.containerShadow,
           dayHeader: styles.dayHeader,
         },
+        'stylesheet.day.basic': {
+          selectedText: styles.selectedDayStyle,
+        },
       }}
     />
   );
@@ -58,9 +62,59 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
 
 const HospitalCard = ({ hospital }: { hospital: Session }) => {
   const styles = useStyle();
+  const { colors } = useVtTheme();
+
+  const bookable = hospital.available_capacity > 0;
+  const disabledStyle = bookable ? undefined : { color: colors.TEXT_DISABLED };
   return (
-    <View>
-      <Text>{hospital.name}</Text>
+    <View style={styles.hospitalCard}>
+      <View style={styles.hospitalContent}>
+        <Text style={[styles.hospitalName, disabledStyle]}>
+          {hospital.name}
+          <Text
+            style={[
+              styles.hospitalFeeType,
+              {
+                color: hospital.fee_type.toLowerCase().includes('free')
+                  ? colors.PRIMARY
+                  : colors.SECONDARY,
+              },
+              disabledStyle,
+            ]}>
+            {`  ${hospital.fee_type}`}
+          </Text>
+        </Text>
+        <Text style={[styles.hospitalAddress, disabledStyle]}>
+          {hospital.address}
+        </Text>
+        <Text
+          style={[
+            styles.hospitalMinAge,
+            disabledStyle,
+          ]}>{`>${hospital.min_age_limit} yrs`}</Text>
+        <Text style={[styles.hospitalVaccine, disabledStyle]}>
+          {hospital.vaccine}
+        </Text>
+      </View>
+      <View style={styles.hospitalActionParent}>
+        <Text style={styles.hospitalAvailable}>
+          {hospital.available_capacity}
+          <Text style={styles.hospitalAvailableText}>{` available`}</Text>
+        </Text>
+        <Pressable
+          style={[
+            styles.actionParent,
+            { borderColor: bookable ? colors.PRIMARY : colors.SECONDARY },
+          ]}>
+          <Text
+            style={[
+              styles.actionText,
+              { color: bookable ? colors.PRIMARY : colors.SECONDARY },
+            ]}>
+            {bookable ? 'Book Now!' : 'Notify Me!'}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -92,8 +146,6 @@ const Home = () => {
       },
     },
   );
-
-  console.log('selectedDate', selectedDate);
 
   const onPressFilter = () => {
     // Make the filter dropdown
@@ -127,6 +179,10 @@ const Home = () => {
   };
   return (
     <SafeAreaView style={styles.parent}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={styles.parent.backgroundColor}
+      />
       <VtHeader title={strings.dashboard.home.header}>
         <Pressable onPress={onPressFilter}>
           <Icon
@@ -146,12 +202,6 @@ const Home = () => {
           placeholderTextColor={styles.placeholder.color}
           onEndEditing={onEndEditing}
         />
-        <Icon
-          name="locate-outline"
-          color={styles.locationIconStyle.color}
-          size={18}
-          style={styles.locationIconStyle}
-        />
       </View>
       <CalendarWeek
         selectedDate={selectedDate}
@@ -165,7 +215,14 @@ const Home = () => {
         <NoDataView />
       ) : (
         <FlatList
-          data={data.sessions}
+          data={data.sessions.sort(
+            (a, b) => b.available_capacity - a.available_capacity,
+          )}
+          ListHeaderComponent={() => (
+            <Text style={styles.district}>{queryCode.district}</Text>
+          )}
+          contentContainerStyle={{ paddingTop: 16 }}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <HospitalCard hospital={item} />}
         />
       )}

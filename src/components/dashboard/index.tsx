@@ -9,6 +9,7 @@ import useAppInitialize from '../../services/app/useAppInitialize';
 import useBackgroundFetch from '../../services/useBackgroundFetch';
 import Home from './home';
 import Notifications from './notifications';
+import Settings from './settings';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,10 +55,7 @@ const TabNavigator = () => {
         name={strings.dashboard.notifications.NAME}
         component={Notifications}
       />
-      <Tab.Screen
-        name={strings.dashboard.settings.NAME}
-        component={Notifications}
-      />
+      <Tab.Screen name={strings.dashboard.settings.NAME} component={Settings} />
     </Tab.Navigator>
   );
 };

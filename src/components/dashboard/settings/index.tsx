@@ -5,11 +5,11 @@ import strings from '../../../assets/strings';
 import VtHeader from '../../common/header';
 import useStyle from './styles';
 
-const Notifications = () => {
+const Settings = () => {
   const styles = useStyle();
   return (
     <SafeAreaView style={styles.parent}>
-      <VtHeader title={strings.dashboard.notifications.header}>
+      <VtHeader title={strings.dashboard.settings.header}>
         <Icon
           name="add"
           color={styles.iconStyle.color}
@@ -21,4 +21,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default Settings;

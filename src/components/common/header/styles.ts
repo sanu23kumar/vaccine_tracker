@@ -7,8 +7,8 @@ const useStyle = () => {
 
   return StyleSheet.create({
     headerParent: {
-      paddingHorizontal: 16,
-      paddingTop: 24,
+      paddingLeft: 20,
+      paddingTop: 20,
       paddingBottom: 16,
       flexDirection: 'row',
       justifyContent: 'space-between',

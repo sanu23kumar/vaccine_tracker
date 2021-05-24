@@ -17,7 +17,7 @@ export const LightTheme: VtTheme = {
   PRIMARY: '#22CC88',
   PRIMARY_LIGHT: '#EFFFEF',
   SECONDARY: '#CC9922',
-  TERTIARY: '#22CC88',
+  TERTIARY: '#2288CC',
 };
 
 export const DarkTheme: VtTheme = {
@@ -28,5 +28,5 @@ export const DarkTheme: VtTheme = {
   PRIMARY: '#22CC88',
   PRIMARY_LIGHT: '#EFFFEF',
   SECONDARY: '#CC9922',
-  TERTIARY: '#22CC88',
+  TERTIARY: '#2288CC',
 };

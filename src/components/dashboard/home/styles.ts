@@ -17,6 +17,77 @@ const useStyle = () => {
       color: colors.TEXT_DISABLED,
       textTransform: 'lowercase',
     },
+    hospitalActionParent: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    hospitalCard: {
+      marginBottom: 40,
+      marginHorizontal: 20,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    hospitalContent: {
+      width: '70%',
+    },
+    hospitalName: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 18,
+      paddingBottom: 2,
+    },
+    hospitalFeeType: {
+      fontFamily: fonts.MEDIUM,
+      color: colors.SECONDARY,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      paddingLeft: 6,
+    },
+    hospitalAddress: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 12,
+      paddingBottom: 8,
+      color: colors.TEXT_DISABLED,
+    },
+    hospitalMinAge: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      paddingBottom: 4,
+      color: colors.TEXT_LIGHT,
+    },
+    hospitalVaccine: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TERTIARY,
+    },
+    hospitalAvailable: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 12,
+      paddingBottom: 4,
+      color: colors.TEXT_LIGHT,
+    },
+    hospitalAvailableText: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 8,
+      color: colors.TEXT_LIGHT,
+    },
+    actionParent: {
+      borderWidth: 0.5,
+      borderRadius: 24,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+    },
+    actionText: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+    },
+    district: {
+      paddingHorizontal: 20,
+      fontFamily: fonts.MEDIUM,
+      textTransform: 'uppercase',
+      fontSize: 10,
+      color: colors.TEXT_DISABLED,
+      paddingBottom: 12,
+    },
     parent: {
       flex: 1,
       backgroundColor: colors.BACKGROUND,
@@ -31,12 +102,13 @@ const useStyle = () => {
     },
     selectedDayStyle: {
       color: colors.PRIMARY,
+      fontFamily: fonts.MEDIUM,
     },
     searchParent: {
       backgroundColor: colors.PRIMARY_LIGHT,
       borderRadius: 8,
       height: 42,
-      marginHorizontal: 16,
+      marginHorizontal: 20,
       marginBottom: 12,
       alignItems: 'center',
       flexDirection: 'row',
@@ -50,7 +122,7 @@ const useStyle = () => {
     },
     iconStyle: {
       alignSelf: 'center',
-      paddingHorizontal: 16,
+      paddingHorizontal: 20,
       color: colors.TEXT,
     },
   });
