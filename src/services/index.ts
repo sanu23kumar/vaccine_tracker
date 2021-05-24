@@ -9,7 +9,7 @@ import {
   GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
-import { CentersResponse } from './models/centers';
+import { CentersResponse, Center } from './models/centers';
 import { DistrictsResponse } from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
@@ -45,9 +45,25 @@ export const getDistrict = (stateid: number) =>
 
 export const getAllDistricts = async () => {
   const { states } = await getStates();
+
   for (let [index, state] of states.entries()) {
     let { districts } = await getDistrict(state.state_id);
     states[index].districts = districts;
+  }
+
+  return states;
+};
+
+export const getAllCentres = async (date: string, sleep: number = 5000) => {
+  const states = await getAllDistricts();
+  for (let [s_index, state] of states.entries()) {
+    for (let [d_index, district] of state.districts.entries()) {
+      var { centers } = await findByDistrict(district.district_id, date, false);
+      centers.forEach(function (center) {
+        delete center.sessions;
+      });
+      states[s_index].districts[d_index].centers = centers;
+    }
   }
 
   return states;
@@ -64,7 +80,7 @@ export const findByPin = (pincode: string, date: string) =>
   );
 
 export const findByDistrict = (
-  district_id: string,
+  district_id: number,
   date: string,
   showCalendar = false,
 ) =>
@@ -75,28 +91,57 @@ export const findByDistrict = (
       }?district_id=${district_id}&date=${date}`,
   );
 
-export const findAvailableSlots = async (
-  district_id: string,
-  date: string,
-  expandDates = false,
-  filters = {},
+export const filterCenters = async (
+  centers: Center[],
+  filters = { center: {}, session: {} },
 ) => {
-  const centres = await findByDistrict(district_id, date, true);
-  let validCenters = centres.centers.filter(
+  let validCenters = centers.filter(
     center =>
       center.sessions.filter(session => session.available_capacity > 0).length >
       0,
   );
 
-  if (filters) {
-    for (let filter in filters) {
+  if (filters.center) {
+    for (let filter in filters.center) {
       validCenters = validCenters.filter(
-        center =>
-          center.sessions.filter(session => session[filter] === filters[filter])
-            .length > 0,
+        center => !center[filter] || filters[filter].includes(center[filter]),
       );
     }
   }
+
+  if (filters.session) {
+    for (let filter in filters.session) {
+      validCenters = validCenters.filter(
+        center =>
+          center.sessions.filter(
+            session =>
+              !session[filter] || filters[filter].includes(session[filter]),
+          ).length > 0,
+      );
+    }
+  }
+
+  return validCenters;
+};
+
+export const findAvailableSlots = async (
+  district_id: number,
+  date: string,
+  expandDates = false,
+  filters = { center: {}, session: {} },
+) => {
+  const validCenters = [];
+  var requestCounter = 0;
+  do {
+    const { centers } = await findByDistrict(district_id, date, true);
+    requestCounter++;
+    if (centers) {
+      validCenters.push(filterCenters(centers, filters));
+      // date = add 7 days to date
+    } else {
+      expandDates = false;
+    }
+  } while (expandDates || requestCounter === 15);
 
   return validCenters;
 };
