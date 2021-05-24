@@ -82,7 +82,7 @@ export const findByPin = (pincode: string, date: string) =>
 export const findByDistrict = (
   district_id: number,
   date: string,
-  showCalendar = false,
+  showCalendar = true,
 ) =>
   cowinAPI<CentersResponse>(
     GET_SESSIONS_CALENDAR +
