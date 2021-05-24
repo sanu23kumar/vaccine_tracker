@@ -6,7 +6,7 @@ export interface Session {
   vaccine: string;
   slots: string[];
   available_capacity_dose1: number;
-  available_capacity_dose2: number; 
+  available_capacity_dose2: number;
 }
 
 export interface Center {
