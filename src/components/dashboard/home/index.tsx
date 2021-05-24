@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  FlatList,
+  Animated,
   Pressable,
   RefreshControl,
   SafeAreaView,
@@ -124,6 +124,12 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
 const Home = () => {
   const styles = useStyle();
   useBackgroundFetch();
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const clampedScroll = Animated.diffClamp(
+    scrollY.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, 1] }),
+    0,
+    140,
+  );
   const { getPersistedData, setPersistedData } = useQueryStore('Home');
   const [searchText, setSearchText] = useState('');
   const [queryCode, setQueryCode] = useState({
@@ -198,20 +204,37 @@ const Home = () => {
           />
         </Pressable>
       </VtHeader>
-      <View style={styles.searchParent}>
-        <TextInput
-          value={searchText}
-          onChangeText={setSearchText}
-          style={styles.search}
-          placeholder={strings.dashboard.home.search}
-          placeholderTextColor={styles.placeholder.color}
-          onEndEditing={onEndEditing}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          backgroundColor: 'white',
+          marginTop: 79,
+          zIndex: 2,
+          transform: [
+            {
+              translateY: clampedScroll.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0],
+              }),
+            },
+          ],
+        }}>
+        <View style={styles.searchParent}>
+          <TextInput
+            value={searchText}
+            onChangeText={setSearchText}
+            style={styles.search}
+            placeholder={strings.dashboard.home.search}
+            placeholderTextColor={styles.placeholder.color}
+            onEndEditing={onEndEditing}
+          />
+        </View>
+        <CalendarWeek
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
         />
-      </View>
-      <CalendarWeek
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
+      </Animated.View>
+
       {isError ? (
         <ErrorView />
       ) : isLoading ? (
@@ -219,14 +242,18 @@ const Home = () => {
       ) : data?.sessions?.length < 1 ? (
         <NoDataView />
       ) : (
-        <FlatList
+        <Animated.FlatList
+          bounces={false}
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { y: scrollY } } },
+          ])}
           data={data.sessions.sort(
             (a, b) => b.available_capacity - a.available_capacity,
           )}
           ListHeaderComponent={() => (
             <Text style={styles.district}>{queryCode.district}</Text>
           )}
-          contentContainerStyle={{ paddingTop: 16 }}
+          contentContainerStyle={{ paddingTop: 150 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <HospitalCard hospital={item} />}
           refreshControl={
