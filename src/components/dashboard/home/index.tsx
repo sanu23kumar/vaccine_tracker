@@ -243,10 +243,10 @@ const Home = () => {
         <NoDataView />
       ) : (
         <Animated.FlatList
-          bounces={false}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: scrollY } } },
-          ])}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true },
+          )}
           data={data.sessions.sort(
             (a, b) => b.available_capacity - a.available_capacity,
           )}
