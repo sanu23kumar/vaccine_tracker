@@ -11,7 +11,7 @@ export interface VtTheme {
 
 export const LightTheme: VtTheme = {
   TEXT: '#333333',
-  TEXT_LIGHT: '#666666',
+  TEXT_LIGHT: '#888888',
   TEXT_DISABLED: '#BBBBBB',
   BACKGROUND: '#FFFFFF',
   PRIMARY: '#22CC88',
@@ -22,7 +22,7 @@ export const LightTheme: VtTheme = {
 
 export const DarkTheme: VtTheme = {
   TEXT: '#333333',
-  TEXT_LIGHT: '#666666',
+  TEXT_LIGHT: '#888888',
   TEXT_DISABLED: '#BBBBBB',
   BACKGROUND: '#FFFFFF',
   PRIMARY: '#22CC88',

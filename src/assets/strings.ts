@@ -3,7 +3,7 @@ const strings = {
     home: {
       NAME: 'HOME_SCREEN',
       header: 'Centers',
-      search: 'Search by district',
+      search: 'Search by district or pin',
     },
     notifications: {
       NAME: 'NOTIFICATION_SCREEN',

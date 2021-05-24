@@ -21,6 +21,11 @@ export interface Session {
   available_capacity_dose2: number;
 }
 
+export interface VaccineFee {
+  vaccine: string;
+  fee: string;
+}
+
 export interface Center {
   center_id: number;
   name: string;
@@ -34,6 +39,7 @@ export interface Center {
   from: string;
   to: string;
   fee_type: string;
+  vaccine_fees: VaccineFee[];
   sessions: Session[];
 }
 

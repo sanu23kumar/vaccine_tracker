@@ -16,7 +16,7 @@ export const getUsDateFromIn = (date: string) => {
 
 export const getQueryDate = (date: string) => {
   const dd = parseInt(date.substr(0, 2));
-  const newDD = Math.floor(dd / 7) * 7;
-  const newDate = newDD + date.substr(2);
+  const newDD = Math.floor(dd / 7) * 7 + 1;
+  const newDate = String(newDD).padStart(2, '0') + date.substr(2);
   return newDate;
 };

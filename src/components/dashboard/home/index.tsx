@@ -1,7 +1,9 @@
+import { useNavigation } from '@react-navigation/core';
 import React, { useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Linking,
   Pressable,
   RefreshControl,
   SafeAreaView,
@@ -38,7 +40,6 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
         },
       }}
       onDayPress={date => {
-        console.log(date.dateString);
         setSelectedDate(getUsDateFromIn(date.dateString));
       }}
       theme={{
@@ -70,8 +71,17 @@ const HospitalCard = ({
 }) => {
   const styles = useStyle();
   const { colors } = useVtTheme();
+  const { navigate } = useNavigation();
 
   const bookable = session.available_capacity > 0;
+
+  const onPress = () => {
+    if (bookable) {
+      Linking.openURL('https://selfregistration.cowin.gov.in/');
+    } else {
+      navigate(strings.dashboard.notifications.NAME);
+    }
+  };
   return (
     <View style={styles.hospitalCard}>
       <View style={styles.hospitalContent}>
@@ -89,50 +99,70 @@ const HospitalCard = ({
           ]}>
           {hospital.address}
         </Text>
-        <Text
-          style={[
-            styles.hospitalMinAge,
-            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
-          ]}>{`>${session.min_age_limit} yrs`}</Text>
-        <Text
-          style={[
-            styles.hospitalVaccine,
-            { color: !bookable ? colors.TEXT_DISABLED : colors.TERTIARY },
-          ]}>
-          {session.vaccine}
-        </Text>
-      </View>
-      <View style={styles.hospitalActionParent}>
-        <Text style={styles.hospitalAvailable}>
-          {session.available_capacity}
-          <Text style={styles.hospitalAvailableText}>{` available`}</Text>
-        </Text>
-        <Pressable
-          style={[
-            styles.actionParent,
-            { borderColor: bookable ? colors.PRIMARY : colors.SECONDARY },
-          ]}>
+        <View style={styles.hospitalVaccineDetailsParent}>
+          <View style={styles.hospitalAgeParent}>
+            <Text
+              style={[
+                styles.hospitalAvailable,
+                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+              ]}>
+              {session.available_capacity}
+            </Text>
+            <Text
+              style={[
+                styles.hospitalAvailableText,
+                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+              ]}>
+              available
+            </Text>
+            <Text
+              style={styles.hospitalMinAge}>{`>${session.min_age_limit}`}</Text>
+            <Text style={styles.hospitalYrsText}>yrs</Text>
+          </View>
           <Text
+            numberOfLines={1}
             style={[
-              styles.actionText,
-              { color: bookable ? colors.PRIMARY : colors.SECONDARY },
+              styles.hospitalVaccine,
+              { color: !bookable ? colors.TEXT_DISABLED : colors.TERTIARY },
             ]}>
-            {bookable ? 'Book Now!' : 'Notify Me!'}
+            {session.vaccine}
           </Text>
-        </Pressable>
-        {!bookable ? null : (
-          <Text
+        </View>
+        <View style={styles.hospitalActionParent}>
+          <Pressable
+            onPress={onPress}
             style={[
-              styles.hospitalFeeType,
-              {
-                color: hospital.fee_type.toLowerCase().includes('free')
-                  ? colors.PRIMARY
-                  : colors.SECONDARY,
-              },
+              styles.actionParent,
+              { borderColor: bookable ? colors.PRIMARY : colors.SECONDARY },
             ]}>
-            {hospital.fee_type}
-          </Text>
-        )}
+            <Text
+              style={[
+                styles.actionText,
+                { color: bookable ? colors.PRIMARY : colors.SECONDARY },
+              ]}>
+              {bookable
+                ? `Book now for ${
+                    hospital.fee_type.toLowerCase().includes('free')
+                      ? 'free'
+                      : '₹' + hospital.vaccine_fees[0]?.fee ?? 0
+                  }`
+                : 'Notify Me'}
+            </Text>
+          </Pressable>
+          {/* {!bookable ? null : (
+            <Text
+              style={[
+                styles.hospitalFeeType,
+                {
+                  color: hospital.fee_type.toLowerCase().includes('free')
+                    ? colors.PRIMARY
+                    : colors.SECONDARY,
+                },
+              ]}>
+              {hospital.fee_type}
+            </Text>
+          )} */}
+        </View>
       </View>
     </View>
   );
