@@ -13,3 +13,10 @@ export const getUsDateFromIn = (date: string) => {
   const dateString = dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
   return dateString;
 };
+
+export const getQueryDate = (date: string) => {
+  const dd = parseInt(date.substr(0, 2));
+  const newDD = Math.floor(dd / 7) * 7;
+  const newDate = newDD + date.substr(2);
+  return newDate;
+};

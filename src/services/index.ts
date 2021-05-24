@@ -67,7 +67,7 @@ export const findByDistrict = (
   date: string,
   showCalendar = false,
 ) =>
-  cowinAPI<SessionsResponse>(
+  cowinAPI<CentersResponse>(
     GET_SESSIONS_CALENDAR +
       `${
         showCalendar ? 'calendarByDistrict' : 'findByDistrict'

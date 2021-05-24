@@ -18,8 +18,8 @@ import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import { findByDistrict } from '../../../services';
-import { getDate, getUsDateFromIn } from '../../../services/date';
-import { Session } from '../../../services/models/centers';
+import { getDate, getQueryDate, getUsDateFromIn } from '../../../services/date';
+import { Center, Session } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
@@ -61,11 +61,17 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
   );
 };
 
-const HospitalCard = ({ hospital }: { hospital: Session }) => {
+const HospitalCard = ({
+  hospital,
+  session,
+}: {
+  hospital: Center;
+  session: Session;
+}) => {
   const styles = useStyle();
   const { colors } = useVtTheme();
 
-  const bookable = hospital.available_capacity > 0;
+  const bookable = session.available_capacity > 0;
   return (
     <View style={styles.hospitalCard}>
       <View style={styles.hospitalContent}>
@@ -75,19 +81,6 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
             { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
           ]}>
           {hospital.name}
-          <Text
-            style={[
-              styles.hospitalFeeType,
-              {
-                color: !bookable
-                  ? colors.TEXT_DISABLED
-                  : hospital.fee_type.toLowerCase().includes('free')
-                  ? colors.PRIMARY
-                  : colors.SECONDARY,
-              },
-            ]}>
-            {`  ${hospital.fee_type}`}
-          </Text>
         </Text>
         <Text
           style={[
@@ -100,18 +93,18 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
           style={[
             styles.hospitalMinAge,
             { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
-          ]}>{`>${hospital.min_age_limit} yrs`}</Text>
+          ]}>{`>${session.min_age_limit} yrs`}</Text>
         <Text
           style={[
             styles.hospitalVaccine,
             { color: !bookable ? colors.TEXT_DISABLED : colors.TERTIARY },
           ]}>
-          {hospital.vaccine}
+          {session.vaccine}
         </Text>
       </View>
       <View style={styles.hospitalActionParent}>
         <Text style={styles.hospitalAvailable}>
-          {hospital.available_capacity}
+          {session.available_capacity}
           <Text style={styles.hospitalAvailableText}>{` available`}</Text>
         </Text>
         <Pressable
@@ -127,8 +120,65 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
             {bookable ? 'Book Now!' : 'Notify Me!'}
           </Text>
         </Pressable>
+        {!bookable ? null : (
+          <Text
+            style={[
+              styles.hospitalFeeType,
+              {
+                color: hospital.fee_type.toLowerCase().includes('free')
+                  ? colors.PRIMARY
+                  : colors.SECONDARY,
+              },
+            ]}>
+            {hospital.fee_type}
+          </Text>
+        )}
       </View>
     </View>
+  );
+};
+
+const List = ({
+  centersForSelectedDate,
+  district,
+  refetch,
+  scrollY,
+}: {
+  centersForSelectedDate: Center[];
+  district: string;
+  refetch: () => void;
+  scrollY: Animated.Value;
+}) => {
+  const styles = useStyle();
+  const listData = centersForSelectedDate.sort(
+    (a, b) =>
+      b.sessions[0].available_capacity - a.sessions[0].available_capacity,
+  );
+  const renderItem = ({ item }: { item: Center }) => (
+    <HospitalCard hospital={item} session={item.sessions[0]} />
+  );
+  return (
+    <Animated.FlatList
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: true },
+      )}
+      data={listData}
+      ListHeaderComponent={() => (
+        <Text style={styles.district}>{district}</Text>
+      )}
+      keyExtractor={(item, index) => index.toString()}
+      contentContainerStyle={{ paddingTop: 150 }}
+      showsVerticalScrollIndicator={false}
+      renderItem={renderItem}
+      refreshControl={
+        <RefreshControl
+          onRefresh={refetch}
+          refreshing={false}
+          progressViewOffset={150}
+        />
+      }
+    />
   );
 };
 
@@ -143,6 +193,7 @@ const Home = () => {
     code: 140,
   });
   const [selectedDate, setSelectedDate] = useState(getDate());
+  const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
 
   const {
     data,
@@ -153,17 +204,21 @@ const Home = () => {
     isLoading,
     isError,
   } = useQuery(
-    ['Home', queryCode.code, selectedDate],
-    () => findByDistrict(queryCode.code.toString(), selectedDate, false),
+    ['Home', queryCode.code, queryDate],
+    () => findByDistrict(queryCode.code.toString(), queryDate, true),
     {
       onSuccess: data => {
-        console.log('Data ', data);
         // setPersistedData(['Home', queryCode.code, selectedDate], data);
       },
       // initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
     },
   );
 
+  const centersForSelectedDate = data?.centers?.filter(
+    center =>
+      center.sessions.filter(session => session.date === selectedDate).length >
+      0,
+  );
   const onPressFilter = () => {
     // Make the filter dropdown
   };
@@ -175,7 +230,6 @@ const Home = () => {
       for (let j = 0; j < state.districts.length; j++) {
         const district = state.districts[j];
         if (name.toLowerCase().includes(district.district_name.toLowerCase())) {
-          console.log('The state is:', state);
           return district.district_id;
         }
       }
@@ -194,6 +248,12 @@ const Home = () => {
       );
     }
   };
+
+  const setDate = (date: string) => {
+    setSelectedDate(date);
+    setQueryDate(getQueryDate(date));
+  };
+
   return (
     <SafeAreaView style={styles.parent}>
       <StatusBar
@@ -235,10 +295,7 @@ const Home = () => {
             onEndEditing={onEndEditing}
           />
         </View>
-        <CalendarWeek
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
+        <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
       </Animated.View>
 
       {isError ? (
@@ -248,31 +305,14 @@ const Home = () => {
           color={styles.selectedDayStyle.color}
           style={{ alignSelf: 'center', flex: 1 }}
         />
-      ) : data?.sessions?.length < 1 ? (
+      ) : centersForSelectedDate?.length < 1 ? (
         <NoDataView />
       ) : (
-        <Animated.FlatList
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: true },
-          )}
-          data={data.sessions.sort(
-            (a, b) => b.available_capacity - a.available_capacity,
-          )}
-          ListHeaderComponent={() => (
-            <Text style={styles.district}>{queryCode.district}</Text>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingTop: 150 }}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <HospitalCard hospital={item} />}
-          refreshControl={
-            <RefreshControl
-              onRefresh={refetch}
-              refreshing={false}
-              progressViewOffset={150}
-            />
-          }
+        <List
+          centersForSelectedDate={centersForSelectedDate}
+          district={queryCode.district}
+          refetch={refetch}
+          scrollY={scrollY}
         />
       )}
     </SafeAreaView>
