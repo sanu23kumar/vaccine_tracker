@@ -21,7 +21,6 @@ import { findByDistrict } from '../../../services';
 import { getDate, getUsDateFromIn } from '../../../services/date';
 import { Session } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
-import { useQueryStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
@@ -67,36 +66,46 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
   const { colors } = useVtTheme();
 
   const bookable = hospital.available_capacity > 0;
-  const disabledStyle = {
-    color: bookable ? colors.TEXT : colors.TEXT_DISABLED,
-  };
   return (
     <View style={styles.hospitalCard}>
       <View style={styles.hospitalContent}>
-        <Text style={[styles.hospitalName, disabledStyle]}>
+        <Text
+          style={[
+            styles.hospitalName,
+            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
+          ]}>
           {hospital.name}
           <Text
             style={[
               styles.hospitalFeeType,
               {
-                color: hospital.fee_type.toLowerCase().includes('free')
+                color: !bookable
+                  ? colors.TEXT_DISABLED
+                  : hospital.fee_type.toLowerCase().includes('free')
                   ? colors.PRIMARY
                   : colors.SECONDARY,
               },
-              disabledStyle,
             ]}>
             {`  ${hospital.fee_type}`}
           </Text>
         </Text>
-        <Text style={[styles.hospitalAddress, disabledStyle]}>
+        <Text
+          style={[
+            styles.hospitalAddress,
+            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+          ]}>
           {hospital.address}
         </Text>
         <Text
           style={[
             styles.hospitalMinAge,
-            disabledStyle,
+            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
           ]}>{`>${hospital.min_age_limit} yrs`}</Text>
-        <Text style={[styles.hospitalVaccine, disabledStyle]}>
+        <Text
+          style={[
+            styles.hospitalVaccine,
+            { color: !bookable ? colors.TEXT_DISABLED : colors.TERTIARY },
+          ]}>
           {hospital.vaccine}
         </Text>
       </View>
@@ -127,12 +136,7 @@ const Home = () => {
   const styles = useStyle();
   useBackgroundFetch();
   const scrollY = useRef(new Animated.Value(0)).current;
-  const clampedScroll = Animated.diffClamp(
-    scrollY.interpolate({ inputRange: [-1, 0, 1], outputRange: [0, 0, 1] }),
-    0,
-    140,
-  );
-  const { getPersistedData, setPersistedData } = useQueryStore('Home');
+  // const { getPersistedData, setPersistedData } = useQueryStore();
   const [searchText, setSearchText] = useState('');
   const [queryCode, setQueryCode] = useState({
     district: 'New Delhi',
@@ -154,9 +158,9 @@ const Home = () => {
     {
       onSuccess: data => {
         console.log('Data ', data);
-        setPersistedData(['Home', queryCode.code, selectedDate], data);
+        // setPersistedData(['Home', queryCode.code, selectedDate], data);
       },
-      initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
+      // initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
     },
   );
 
@@ -214,7 +218,7 @@ const Home = () => {
           zIndex: 2,
           transform: [
             {
-              translateY: clampedScroll.interpolate({
+              translateY: scrollY.interpolate({
                 inputRange: [0, 1],
                 outputRange: [1, 0],
               }),
@@ -240,7 +244,10 @@ const Home = () => {
       {isError ? (
         <ErrorView />
       ) : isLoading ? (
-        <ActivityIndicator color={styles.selectedDayStyle.color} />
+        <ActivityIndicator
+          color={styles.selectedDayStyle.color}
+          style={{ alignSelf: 'center', flex: 1 }}
+        />
       ) : data?.sessions?.length < 1 ? (
         <NoDataView />
       ) : (
