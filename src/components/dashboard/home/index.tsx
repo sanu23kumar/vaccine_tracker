@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  RefreshControl,
   SafeAreaView,
   StatusBar,
   Text,
@@ -20,6 +21,7 @@ import { findByDistrict } from '../../../services';
 import { getDate, getUsDateFromIn } from '../../../services/date';
 import { Session } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
+import { useQueryStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
@@ -122,6 +124,7 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
 const Home = () => {
   const styles = useStyle();
   useBackgroundFetch();
+  const { getPersistedData, setPersistedData } = useQueryStore('Home');
   const [searchText, setSearchText] = useState('');
   const [queryCode, setQueryCode] = useState({
     district: 'New Delhi',
@@ -143,7 +146,9 @@ const Home = () => {
     {
       onSuccess: data => {
         console.log('Data ', data);
+        setPersistedData(['Home', queryCode.code, selectedDate], data);
       },
+      initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
     },
   );
 
@@ -224,6 +229,9 @@ const Home = () => {
           contentContainerStyle={{ paddingTop: 16 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <HospitalCard hospital={item} />}
+          refreshControl={
+            <RefreshControl onRefresh={refetch} refreshing={false} />
+          }
         />
       )}
     </SafeAreaView>
