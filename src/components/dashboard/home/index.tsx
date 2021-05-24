@@ -67,7 +67,9 @@ const HospitalCard = ({ hospital }: { hospital: Session }) => {
   const { colors } = useVtTheme();
 
   const bookable = hospital.available_capacity > 0;
-  const disabledStyle = bookable ? undefined : { color: colors.TEXT_DISABLED };
+  const disabledStyle = {
+    color: bookable ? colors.TEXT : colors.TEXT_DISABLED,
+  };
   return (
     <View style={styles.hospitalCard}>
       <View style={styles.hospitalContent}>
@@ -253,11 +255,16 @@ const Home = () => {
           ListHeaderComponent={() => (
             <Text style={styles.district}>{queryCode.district}</Text>
           )}
+          keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingTop: 150 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <HospitalCard hospital={item} />}
           refreshControl={
-            <RefreshControl onRefresh={refetch} refreshing={false} />
+            <RefreshControl
+              onRefresh={refetch}
+              refreshing={false}
+              progressViewOffset={150}
+            />
           }
         />
       )}
