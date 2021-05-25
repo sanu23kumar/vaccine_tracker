@@ -68,7 +68,7 @@ export const getAllCentres = async (date: string, sleep: number = 5000) => {
   return states;
 };
 
-export const findCalendarByPin = (pincode: string, date: string) =>
+export const findCalendarByPin = (pincode: number, date: string) =>
   cowinAPI<CentersResponse>(
     GET_SESSIONS_CALENDAR_BY_PIN + `${pincode}&date=${date}`,
   );

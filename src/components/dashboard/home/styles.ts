@@ -75,14 +75,14 @@ const useStyle = () => {
       fontFamily: fonts.REGULAR,
       fontSize: 10,
       paddingLeft: 3,
-      paddingBottom: 1,
+      paddingBottom: 1.5,
       color: colors.TEXT_LIGHT,
     },
     hospitalYrsText: {
       fontFamily: fonts.REGULAR,
       fontSize: 10,
       paddingLeft: 3,
-      paddingBottom: 1,
+      paddingBottom: 1.5,
       color: colors.TEXT_DISABLED,
     },
     actionParent: {

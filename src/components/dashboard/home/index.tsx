@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -19,8 +19,9 @@ import { useQuery } from 'react-query';
 import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
-import { findByDistrict } from '../../../services';
+import { findByDistrict, findCalendarByPin } from '../../../services';
 import { getDate, getQueryDate, getUsDateFromIn } from '../../../services/date';
+import useLocation from '../../../services/location/useLocation';
 import { Center, Session } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
@@ -29,6 +30,9 @@ import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
 import useStyle from './styles';
 
+function isNumeric(value: string) {
+  return /^-?\d+$/.test(value);
+}
 const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
   const styles = useStyle();
 
@@ -104,14 +108,14 @@ const HospitalCard = ({
             <Text
               style={[
                 styles.hospitalAvailable,
-                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
               ]}>
               {session.available_capacity}
             </Text>
             <Text
               style={[
                 styles.hospitalAvailableText,
-                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+                { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
               ]}>
               available
             </Text>
@@ -206,6 +210,8 @@ const List = ({
           onRefresh={refetch}
           refreshing={false}
           progressViewOffset={150}
+          progressBackgroundColor={styles.parent.backgroundColor}
+          colors={[styles.selectedDayStyle.color]}
         />
       }
     />
@@ -215,12 +221,18 @@ const List = ({
 const Home = () => {
   const styles = useStyle();
   useBackgroundFetch();
+  const {
+    postalCode,
+    isLoading: isLocationLoading,
+    getLocation,
+  } = useLocation();
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const [searchText, setSearchText] = useState('');
   const [queryCode, setQueryCode] = useState({
     district: 'New Delhi',
     code: 140,
+    type: 'district',
   });
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
@@ -235,7 +247,10 @@ const Home = () => {
     isError,
   } = useQuery(
     ['Home', queryCode.code, queryDate],
-    () => findByDistrict(queryCode.code.toString(), queryDate, true),
+    () =>
+      queryCode.type === 'district'
+        ? findByDistrict(queryCode.code, queryDate)
+        : findCalendarByPin(queryCode.code, queryDate),
     {
       onSuccess: data => {
         // setPersistedData(['Home', queryCode.code, selectedDate], data);
@@ -243,6 +258,17 @@ const Home = () => {
       // initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
     },
   );
+
+  useEffect(() => {
+    if (!isLocationLoading && postalCode) {
+      setQueryCode({
+        district: postalCode,
+        code: parseInt(postalCode),
+        type: 'pin',
+      });
+      setSearchText(postalCode);
+    }
+  }, [isLocationLoading, postalCode]);
 
   const centersForSelectedDate = data?.centers?.filter(
     center =>
@@ -268,14 +294,30 @@ const Home = () => {
   };
 
   const onEndEditing = () => {
-    const districtCode = findDistrictCodeByName(searchText);
-    if (districtCode !== -1) {
-      setQueryCode({ district: searchText, code: districtCode });
+    if (isNumeric(searchText)) {
+      if (searchText.length !== 6) {
+        ToastAndroid.show('Not a valid OTP', ToastAndroid.SHORT);
+        return;
+      }
+      setQueryCode({
+        district: searchText,
+        code: parseInt(searchText),
+        type: 'pin',
+      });
     } else {
-      ToastAndroid.show(
-        'No districts found for name, please try again',
-        ToastAndroid.SHORT,
-      );
+      const districtCode = findDistrictCodeByName(searchText);
+      if (districtCode === -1) {
+        ToastAndroid.show(
+          'No districts found for name, please try again',
+          ToastAndroid.SHORT,
+        );
+        return;
+      }
+      setQueryCode({
+        district: searchText,
+        code: districtCode,
+        type: 'district',
+      });
     }
   };
 
@@ -284,22 +326,17 @@ const Home = () => {
     setQueryDate(getQueryDate(date));
   };
 
+  const onPressLocation = () => {
+    getLocation();
+  };
+
   return (
     <SafeAreaView style={styles.parent}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor={styles.parent.backgroundColor}
       />
-      <VtHeader title={strings.dashboard.home.header}>
-        <Pressable onPress={onPressFilter}>
-          <Icon
-            name="options"
-            color={styles.iconStyle.color}
-            size={24}
-            style={styles.iconStyle}
-          />
-        </Pressable>
-      </VtHeader>
+      <VtHeader title={strings.dashboard.home.header} />
       <Animated.View
         style={{
           position: 'absolute',
@@ -324,6 +361,13 @@ const Home = () => {
             placeholderTextColor={styles.placeholder.color}
             onEndEditing={onEndEditing}
           />
+          <Pressable onPress={onPressLocation}>
+            <Icon
+              name="locate-outline"
+              size={18}
+              style={styles.locationIconStyle}
+            />
+          </Pressable>
         </View>
         <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
       </Animated.View>
