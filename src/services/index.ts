@@ -8,7 +8,7 @@ import {
   GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
-import { Center, CentersResponse } from './models/centers';
+import { Center, CentersResponse, Session } from './models/centers';
 import { DistrictsResponse, STATES_WITH_DISTRICTS } from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
@@ -120,43 +120,24 @@ export const findByDistrict = (
 
 export const filterCenters = (
   centers: Center[],
-  filters = { center: {}, session: {}, availability: '' },
+  filters = { session: {}, availability: '' },
 ) => {
-  let validCenters = [];
-  if (filters.availability) {
-    validCenters = centers.filter(
-      center =>
-        center.sessions.filter(session => session[filters.availability] > 0)
-          .length > 0,
-    );
-  }
+  const checkIfValidSession = (session: Session) => {
+    const isAvailable =
+      !filters.availability || session[filters.availability] > 0;
 
-  if (filters.center) {
-    for (let filter in filters.center) {
-      validCenters = validCenters.filter(
-        center =>
-          !center[filter] ||
-          !filters[filter] ||
-          filters[filter].includes(center[filter]),
-      );
-    }
-  }
-
-  if (filters.session) {
+    let isFilterable = true;
     for (let filter in filters.session) {
-      validCenters = validCenters.filter(
-        center =>
-          center.sessions.filter(
-            session =>
-              !session[filter] ||
-              !filters[filter] ||
-              filters[filter].includes(session[filter]),
-          ).length > 0,
-      );
+      isFilterable &&=
+        !session[filter] ||
+        !filters.session[filter] ||
+        filters.session[filter].includes(session[filter]);
     }
-  }
-
-  return validCenters;
+    return isAvailable && isFilterable;
+  };
+  return centers.filter(
+    center => center.sessions.filter(checkIfValidSession).length > 0,
+  );
 };
 
 export const findAvailableSlots = async (

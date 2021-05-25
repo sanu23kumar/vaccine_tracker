@@ -239,7 +239,6 @@ const Home = () => {
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
 
-  console.log('User data in home', userData, queryCode);
   const { data, refetch, isLoading, isError } = useQuery(
     ['Home', queryCode.code, queryDate],
     () =>
@@ -270,7 +269,7 @@ const Home = () => {
   if (data?.centers) {
     centersForSelectedDate = filterCenters(data.centers, {
       session: filter,
-      center: undefined,
+      availability: '',
     }).filter(
       center =>
         center.sessions.filter(session => session.date === selectedDate)
@@ -415,7 +414,7 @@ const Home = () => {
                 onPress={() => {
                   setFilter({
                     ...filter,
-                    vaccine: filter?.vaccine === 'sputnik' ? '' : 'sputnik',
+                    vaccine: filter?.vaccine === 'SPUTNIK' ? '' : 'SPUTNIK',
                   });
                 }}>
                 <Text
@@ -423,7 +422,7 @@ const Home = () => {
                     styles.filterText,
                     {
                       color:
-                        filter?.vaccine === 'sputnik'
+                        filter?.vaccine === 'SPUTNIK'
                           ? styles.hospitalVaccine.color
                           : styles.filterText.color,
                     },
@@ -437,7 +436,7 @@ const Home = () => {
                   setFilter({
                     ...filter,
                     vaccine:
-                      filter?.vaccine === 'covishield' ? '' : 'covishield',
+                      filter?.vaccine === 'COVISHIELD' ? '' : 'COVISHIELD',
                   });
                 }}>
                 <Text
@@ -445,7 +444,7 @@ const Home = () => {
                     styles.filterText,
                     {
                       color:
-                        filter?.vaccine === 'covishield'
+                        filter?.vaccine === 'COVISHIELD'
                           ? styles.hospitalVaccine.color
                           : styles.filterText.color,
                     },
@@ -459,7 +458,7 @@ const Home = () => {
                   setFilter({
                     ...filter,
                     vaccine:
-                      filter?.vaccine === 'covaxine' ? undefined : 'covaxine',
+                      filter?.vaccine === 'COVAXIN' ? undefined : 'COVAXIN',
                   });
                 }}>
                 <Text
@@ -467,7 +466,7 @@ const Home = () => {
                     styles.filterText,
                     {
                       color:
-                        filter?.vaccine === 'covaxine'
+                        filter?.vaccine === 'COVAXIN'
                           ? styles.hospitalVaccine.color
                           : styles.filterText.color,
                     },
