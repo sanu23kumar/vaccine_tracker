@@ -8,7 +8,7 @@ import {
   GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
-import { CentersResponse, Center } from './models/centers';
+import { Center, CentersResponse } from './models/centers';
 import { DistrictsResponse } from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
@@ -90,7 +90,7 @@ export const findByDistrict = (
       }?district_id=${district_id}&date=${date}`,
   );
 
-export const filterCenters = async (
+export const filterCenters = (
   centers: Center[],
   filters = { center: {}, session: {} },
 ) => {
@@ -103,7 +103,10 @@ export const filterCenters = async (
   if (filters.center) {
     for (let filter in filters.center) {
       validCenters = validCenters.filter(
-        center => !center[filter] || filters[filter].includes(center[filter]),
+        center =>
+          !center[filter] ||
+          !filters[filter] ||
+          filters[filter].includes(center[filter]),
       );
     }
   }
@@ -114,7 +117,9 @@ export const filterCenters = async (
         center =>
           center.sessions.filter(
             session =>
-              !session[filter] || filters[filter].includes(session[filter]),
+              !session[filter] ||
+              !filters[filter] ||
+              filters[filter].includes(session[filter]),
           ).length > 0,
       );
     }

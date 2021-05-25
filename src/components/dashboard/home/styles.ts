@@ -130,6 +130,32 @@ const useStyle = () => {
       alignItems: 'center',
       flexDirection: 'row',
     },
+    filterAge: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    filterVaccine: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    filterParent: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20,
+      paddingBottom: 16,
+    },
+    filterText: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 13,
+      color: colors.TEXT_DISABLED,
+    },
+    filterSeparator: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TEXT_DISABLED,
+    },
     locationIconStyle: {
       color: colors.TEXT_DISABLED,
       paddingHorizontal: 12,

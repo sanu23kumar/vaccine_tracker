@@ -19,7 +19,11 @@ import { useQuery } from 'react-query';
 import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
-import { findByDistrict, findCalendarByPin } from '../../../services';
+import {
+  filterCenters,
+  findByDistrict,
+  findCalendarByPin,
+} from '../../../services';
 import { getDate, getQueryDate, getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import { Center, Session } from '../../../services/models/centers';
@@ -120,8 +124,7 @@ const HospitalCard = ({
               available
             </Text>
             <Text
-              style={styles.hospitalMinAge}>{`>${session.min_age_limit}`}</Text>
-            <Text style={styles.hospitalYrsText}>yrs</Text>
+              style={styles.hospitalMinAge}>{`${session.min_age_limit}+`}</Text>
           </View>
           <Text
             numberOfLines={1}
@@ -198,11 +201,8 @@ const List = ({
         { useNativeDriver: true },
       )}
       data={listData}
-      ListHeaderComponent={() => (
-        <Text style={styles.district}>{district}</Text>
-      )}
       keyExtractor={(item, index) => index.toString()}
-      contentContainerStyle={{ paddingTop: 150 }}
+      contentContainerStyle={{ paddingTop: 180 }}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       refreshControl={
@@ -228,7 +228,8 @@ const Home = () => {
   } = useLocation();
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
-  const [searchText, setSearchText] = useState('');
+  const [filter, setFilter] = useState({ vaccine: '', min_age_limit: '' });
+  const [searchText, setSearchText] = useState('New Delhi');
   const [queryCode, setQueryCode] = useState({
     district: 'New Delhi',
     code: 140,
@@ -270,14 +271,18 @@ const Home = () => {
     }
   }, [isLocationLoading, postalCode]);
 
-  const centersForSelectedDate = data?.centers?.filter(
-    center =>
-      center.sessions.filter(session => session.date === selectedDate).length >
-      0,
-  );
-  const onPressFilter = () => {
-    // Make the filter dropdown
-  };
+  console.log(filter);
+  let centersForSelectedDate: Center[];
+  if (data?.centers) {
+    centersForSelectedDate = filterCenters(data.centers, {
+      session: filter,
+      center: undefined,
+    }).filter(
+      center =>
+        center.sessions.filter(session => session.date === selectedDate)
+          .length > 0,
+    );
+  }
 
   const findDistrictCodeByName = (name: string) => {
     const states = STATES_WITH_DISTRICTS;
@@ -352,23 +357,136 @@ const Home = () => {
             },
           ],
         }}>
-        <View style={styles.searchParent}>
-          <TextInput
-            value={searchText}
-            onChangeText={setSearchText}
-            style={styles.search}
-            placeholder={strings.dashboard.home.search}
-            placeholderTextColor={styles.placeholder.color}
-            onEndEditing={onEndEditing}
-          />
-          <Pressable onPress={onPressLocation}>
-            <Icon
-              name="locate-outline"
-              size={18}
-              style={styles.locationIconStyle}
+        <View>
+          <View style={styles.filterParent}>
+            <View style={styles.filterAge}>
+              <Pressable
+                onPress={() => {
+                  setFilter({
+                    ...filter,
+                    min_age_limit: filter?.min_age_limit === '18' ? '' : '18',
+                  });
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    {
+                      color:
+                        filter?.min_age_limit === '18'
+                          ? styles.selectedDayStyle.color
+                          : styles.filterText.color,
+                    },
+                  ]}>
+                  18+
+                </Text>
+              </Pressable>
+              <Text style={styles.filterSeparator}> / </Text>
+              <Pressable
+                onPress={() => {
+                  setFilter({
+                    ...filter,
+                    min_age_limit: filter?.min_age_limit === '45' ? '' : '45',
+                  });
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    {
+                      color:
+                        filter?.min_age_limit === '45'
+                          ? styles.selectedDayStyle.color
+                          : styles.filterText.color,
+                    },
+                  ]}>
+                  45+
+                </Text>
+              </Pressable>
+            </View>
+            <View style={styles.filterVaccine}>
+              <Pressable
+                onPress={() => {
+                  setFilter({
+                    ...filter,
+                    vaccine: filter?.vaccine === 'sputnik' ? '' : 'sputnik',
+                  });
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    {
+                      color:
+                        filter?.vaccine === 'sputnik'
+                          ? styles.hospitalVaccine.color
+                          : styles.filterText.color,
+                    },
+                  ]}>
+                  SPUTNIK
+                </Text>
+              </Pressable>
+              <Text style={styles.filterSeparator}> / </Text>
+              <Pressable
+                onPress={() => {
+                  setFilter({
+                    ...filter,
+                    vaccine:
+                      filter?.vaccine === 'covishield' ? '' : 'covishield',
+                  });
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    {
+                      color:
+                        filter?.vaccine === 'covishield'
+                          ? styles.hospitalVaccine.color
+                          : styles.filterText.color,
+                    },
+                  ]}>
+                  COVISHIELD
+                </Text>
+              </Pressable>
+              <Text style={styles.filterSeparator}> / </Text>
+              <Pressable
+                onPress={() => {
+                  setFilter({
+                    vaccine:
+                      filter?.vaccine === 'covaxine' ? undefined : 'covaxine',
+                  });
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    {
+                      color:
+                        filter?.vaccine === 'covaxine'
+                          ? styles.hospitalVaccine.color
+                          : styles.filterText.color,
+                    },
+                  ]}>
+                  COVAXINE
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={styles.searchParent}>
+            <TextInput
+              value={searchText}
+              onChangeText={setSearchText}
+              style={styles.search}
+              placeholder={strings.dashboard.home.search}
+              placeholderTextColor={styles.placeholder.color}
+              onEndEditing={onEndEditing}
             />
-          </Pressable>
+            <Pressable onPress={onPressLocation}>
+              <Icon
+                name="locate-outline"
+                size={18}
+                style={styles.locationIconStyle}
+              />
+            </Pressable>
+          </View>
         </View>
+
         <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
       </Animated.View>
 
