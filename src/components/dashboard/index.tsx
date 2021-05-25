@@ -61,9 +61,11 @@ const TabNavigator = () => {
 };
 
 const DashboardNavigator = () => {
-  useAppInitialize();
+  const initialized = useAppInitialize();
   useBackgroundFetch();
   useAdmob();
+
+  if (!initialized) return null;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

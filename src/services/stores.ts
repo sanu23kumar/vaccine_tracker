@@ -1,10 +1,11 @@
 import useStore from 'potli/useStore';
 import { QueryKey } from 'react-query';
+import { UserModel } from './models/user';
 
 export const STORE_USER_KEY = 'user';
 
 export const useUserStore = () => {
-  const { data, setData } = useStore(STORE_USER_KEY);
+  const { data, setData } = useStore<UserModel>(STORE_USER_KEY);
   return { data, setData };
 };
 

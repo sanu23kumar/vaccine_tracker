@@ -28,6 +28,11 @@ import { getDate, getQueryDate, getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import { Center, Session } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
+import {
+  LOCATION_TYPE_DISTRICT,
+  LOCATION_TYPE_PIN,
+} from '../../../services/models/user';
+import { useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
@@ -177,7 +182,6 @@ const HospitalCard = ({
 
 const List = ({
   centersForSelectedDate,
-  district,
   refetch,
   scrollY,
 }: {
@@ -229,49 +233,39 @@ const Home = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const [filter, setFilter] = useState({ vaccine: '', min_age_limit: '' });
-  const [searchText, setSearchText] = useState('New Delhi');
-  const [queryCode, setQueryCode] = useState({
-    district: 'New Delhi',
-    code: 140,
-    type: 'district',
-  });
+  const { data: userData, setData: setUserData } = useUserStore();
+  const [searchText, setSearchText] = useState(userData.location.name);
+  const [queryCode, setQueryCode] = useState(userData.location);
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
 
-  const {
-    data,
-    error,
-    refetch,
-    isFetching,
-    isFetched,
-    isLoading,
-    isError,
-  } = useQuery(
+  console.log('User data in home', userData, queryCode);
+  const { data, refetch, isLoading, isError } = useQuery(
     ['Home', queryCode.code, queryDate],
     () =>
-      queryCode.type === 'district'
+      queryCode.type === LOCATION_TYPE_DISTRICT
         ? findByDistrict(queryCode.code, queryDate)
         : findCalendarByPin(queryCode.code, queryDate),
-    {
-      onSuccess: data => {
-        // setPersistedData(['Home', queryCode.code, selectedDate], data);
-      },
-      // initialData: getPersistedData(['Home', queryCode.code, selectedDate]),
-    },
   );
 
   useEffect(() => {
-    if (!isLocationLoading && postalCode) {
+    if (isLocationLoading === 0 && postalCode) {
       setQueryCode({
-        district: postalCode,
+        name: postalCode,
         code: parseInt(postalCode),
-        type: 'pin',
+        type: LOCATION_TYPE_PIN,
       });
       setSearchText(postalCode);
+      setUserData({
+        location: {
+          name: postalCode,
+          code: parseInt(postalCode),
+          type: LOCATION_TYPE_PIN,
+        },
+      });
     }
   }, [isLocationLoading, postalCode]);
 
-  console.log(filter);
   let centersForSelectedDate: Center[];
   if (data?.centers) {
     centersForSelectedDate = filterCenters(data.centers, {
@@ -305,9 +299,16 @@ const Home = () => {
         return;
       }
       setQueryCode({
-        district: searchText,
+        name: searchText,
         code: parseInt(searchText),
-        type: 'pin',
+        type: LOCATION_TYPE_PIN,
+      });
+      setUserData({
+        location: {
+          name: postalCode,
+          code: parseInt(postalCode),
+          type: LOCATION_TYPE_PIN,
+        },
       });
     } else {
       const districtCode = findDistrictCodeByName(searchText);
@@ -319,9 +320,16 @@ const Home = () => {
         return;
       }
       setQueryCode({
-        district: searchText,
+        name: searchText,
         code: districtCode,
-        type: 'district',
+        type: LOCATION_TYPE_DISTRICT,
+      });
+      setUserData({
+        location: {
+          name: searchText,
+          code: districtCode,
+          type: LOCATION_TYPE_DISTRICT,
+        },
       });
     }
   };
@@ -449,6 +457,7 @@ const Home = () => {
               <Pressable
                 onPress={() => {
                   setFilter({
+                    ...filter,
                     vaccine:
                       filter?.vaccine === 'covaxine' ? undefined : 'covaxine',
                   });
@@ -502,7 +511,6 @@ const Home = () => {
       ) : (
         <List
           centersForSelectedDate={centersForSelectedDate}
-          district={queryCode.district}
           refetch={refetch}
           scrollY={scrollY}
         />

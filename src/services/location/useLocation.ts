@@ -5,10 +5,8 @@ import GetLocation from 'react-native-get-location';
 
 const useLocation = () => {
   const [postalCode, setPostalCode] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(-1);
   const getLocation = async () => {
-    setIsLoading(true);
-    ToastAndroid.show('Fetching your current location', ToastAndroid.SHORT);
     let granted;
     try {
       granted = await PermissionsAndroid.request(
@@ -24,6 +22,8 @@ const useLocation = () => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        setIsLoading(1);
+        ToastAndroid.show('Fetching your current location', ToastAndroid.SHORT);
         const location = await GetLocation.getCurrentPosition({
           enableHighAccuracy: false,
           timeout: 15000,
@@ -42,7 +42,7 @@ const useLocation = () => {
       console.warn(err);
       ToastAndroid.show('Could not get your location', ToastAndroid.SHORT);
     }
-    setIsLoading(false);
+    setIsLoading(0);
   };
   return { postalCode, isLoading, getLocation };
 };

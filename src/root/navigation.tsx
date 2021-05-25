@@ -8,9 +8,6 @@ import DashboardNavigator from '../components/dashboard';
 const Stack = createStackNavigator();
 const RootNavigator = () => {
   const scheme = useColorScheme();
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
   return (
     <NavigationContainer
       theme={scheme === 'dark' ? DefaultTheme : DefaultTheme}>
