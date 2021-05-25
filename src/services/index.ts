@@ -9,9 +9,37 @@ import {
   GET_STATES,
 } from './endpoints';
 import { Center, CentersResponse } from './models/centers';
-import { DistrictsResponse } from './models/districts';
+import { DistrictsResponse, STATES_WITH_DISTRICTS } from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
+
+export const suggestDistricts = (prefix: string) => {
+  let beginMatch = [];
+  let wordMatch = [];
+  let beginMatchRegex = new RegExp('^' + prefix, 'gi');
+  let wordMatchRegex = new RegExp('\\b' + prefix, 'gi');
+  for (let state in STATES_WITH_DISTRICTS) {
+    for (let district in state.districts) {
+      if (beginMatchRegex.test(district.district_name)) {
+        beginMatch.push({
+          district_name: district.district_name,
+          district_id: district.district_id,
+          state_name: state.state_name,
+          state_id: state.state_id,
+        });
+      } else if (wordMatchRegex.test(district.district_name)) {
+        wordMatch.push({
+          district_name: district.district_name,
+          district_id: district.district_id,
+          state_name: state.state_name,
+          state_id: state.state_id,
+        });
+      }
+    }
+  }
+
+  return [...beginMatch, ...wordMatch];
+};
 
 export const cowinAPI = <T>(
   uri: string,
@@ -92,13 +120,16 @@ export const findByDistrict = (
 
 export const filterCenters = (
   centers: Center[],
-  filters = { center: {}, session: {} },
+  filters = { center: {}, session: {}, availability: '' },
 ) => {
-  let validCenters = centers.filter(
-    center =>
-      center.sessions.filter(session => session.available_capacity > 0).length >
-      0,
-  );
+  let validCenters = [];
+  if (filters.availability) {
+    validCenters = centers.filter(
+      center =>
+        center.sessions.filter(session => session[filters.availability] > 0)
+          .length > 0,
+    );
+  }
 
   if (filters.center) {
     for (let filter in filters.center) {
