@@ -9,31 +9,25 @@ import {
   GET_STATES,
 } from './endpoints';
 import { Center, CentersResponse, Session } from './models/centers';
-import { DistrictsResponse, STATES_WITH_DISTRICTS } from './models/districts';
+import {
+  DistrictsResponse,
+  STATES_WITH_DISTRICTS,
+  SuggestDistrictResponse,
+} from './models/districts';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
 
-export const suggestDistricts = (prefix: string) => {
+export const suggestDistricts = (prefix: string): SuggestDistrictResponse[] => {
   let beginMatch = [];
   let wordMatch = [];
   let beginMatchRegex = new RegExp('^' + prefix, 'gi');
   let wordMatchRegex = new RegExp('\\b' + prefix, 'gi');
-  for (let state in STATES_WITH_DISTRICTS) {
-    for (let district in state.districts) {
+  for (const state of STATES_WITH_DISTRICTS) {
+    for (const district of state.districts) {
       if (beginMatchRegex.test(district.district_name)) {
-        beginMatch.push({
-          district_name: district.district_name,
-          district_id: district.district_id,
-          state_name: state.state_name,
-          state_id: state.state_id,
-        });
+        beginMatch.push({ ...district, ...state, districts: undefined });
       } else if (wordMatchRegex.test(district.district_name)) {
-        wordMatch.push({
-          district_name: district.district_name,
-          district_id: district.district_id,
-          state_name: state.state_name,
-          state_id: state.state_id,
-        });
+        wordMatch.push({ ...district, ...state, districts: undefined });
       }
     }
   }

@@ -1,4 +1,3 @@
-import { useTheme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 import fonts from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
@@ -16,7 +15,6 @@ const useStyle = () => {
       fontSize: 18,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
-      fontWeight: 'bold',
       opacity: 0.3,
     },
   });

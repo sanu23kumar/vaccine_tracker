@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  FlatList,
   Linking,
   Pressable,
   RefreshControl,
@@ -23,11 +24,15 @@ import {
   filterCenters,
   findByDistrict,
   findCalendarByPin,
+  suggestDistricts,
 } from '../../../services';
 import { getDate, getQueryDate, getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import { Center, Session } from '../../../services/models/centers';
-import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
+import {
+  STATES_WITH_DISTRICTS,
+  SuggestDistrictResponse,
+} from '../../../services/models/districts';
 import {
   LOCATION_TYPE_DISTRICT,
   LOCATION_TYPE_PIN,
@@ -186,7 +191,6 @@ const List = ({
   scrollY,
 }: {
   centersForSelectedDate: Center[];
-  district: string;
   refetch: () => void;
   scrollY: Animated.Value;
 }) => {
@@ -220,6 +224,26 @@ const List = ({
       }
     />
   );
+};
+
+const AutocompleteHelper = ({
+  suggestions,
+  onPress,
+}: {
+  suggestions: SuggestDistrictResponse[];
+  onPress: ({ code, name }) => void;
+}) => {
+  const renderItem = ({ item }: { item: SuggestDistrictResponse }) => {
+    const onItemPress = () => {
+      onPress({ code: item.district_id, name: item.district_name });
+    };
+    return (
+      <Pressable onPress={onItemPress}>
+        <Text>{item.district_name}</Text>
+      </Pressable>
+    );
+  };
+  return <FlatList data={suggestions.slice(0, 5)} renderItem={renderItem} />;
 };
 
 const Home = () => {
@@ -342,6 +366,16 @@ const Home = () => {
     getLocation();
   };
 
+  const onPressAutocompleteItem = ({ code, name }) => {
+    setSearchText(name);
+    setQueryCode({
+      name,
+      code,
+      type: LOCATION_TYPE_DISTRICT,
+    });
+  };
+  const isSearching = queryCode.name !== searchText;
+
   return (
     <SafeAreaView style={styles.parent}>
       <StatusBar
@@ -352,7 +386,9 @@ const Home = () => {
       <Animated.View
         style={{
           position: 'absolute',
-          backgroundColor: 'white',
+          backgroundColor: styles.parent.backgroundColor,
+          left: 0,
+          right: 0,
           marginTop: 79,
           zIndex: 2,
           transform: [
@@ -495,10 +531,17 @@ const Home = () => {
           </View>
         </View>
 
-        <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
+        {isSearching ? (
+          <AutocompleteHelper
+            suggestions={suggestDistricts(searchText)}
+            onPress={onPressAutocompleteItem}
+          />
+        ) : (
+          <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
+        )}
       </Animated.View>
 
-      {isError ? (
+      {isSearching ? null : isError ? (
         <ErrorView />
       ) : isLoading ? (
         <ActivityIndicator
