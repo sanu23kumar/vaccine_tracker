@@ -6,6 +6,9 @@ const useStyle = () => {
   const { colors } = useVtTheme();
 
   return StyleSheet.create({
+    autocompleteParent: {
+      paddingHorizontal: 32,
+    },
     containerShadow: {
       elevation: 0,
     },
@@ -21,6 +24,12 @@ const useStyle = () => {
     hospitalAgeParent: {
       flexDirection: 'row',
       alignItems: 'flex-end',
+    },
+    suggestionText: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 16,
+      color: colors.TEXT,
+      paddingVertical: 8,
     },
     hospitalVaccineDetailsParent: {
       flexDirection: 'row',
@@ -135,25 +144,58 @@ const useStyle = () => {
       justifyContent: 'flex-start',
       alignItems: 'center',
     },
-    filterVaccine: {
+    filterCountParent: {
+      position: 'absolute',
+      top: -4,
+      right: -4,
+      width: 16,
+      height: 16,
+      borderRadius: 10,
+      backgroundColor: colors.SECONDARY,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    filterCountText: {
+      fontFamily: fonts.MEDIUM,
+      color: colors.BACKGROUND,
+      fontSize: 10,
+    },
+    filterHeaderParent: {
       flexDirection: 'row',
       justifyContent: 'flex-end',
       alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingTop: 4,
+    },
+    filterHeaderText: {
+      fontFamily: fonts.MEDIUM,
+      color: colors.TEXT_LIGHT,
+      paddingHorizontal: 6,
+      fontSize: 14,
+    },
+    filterSection: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TEXT_DISABLED,
+    },
+    filterVaccine: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     filterParent: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
       paddingHorizontal: 20,
-      paddingBottom: 16,
+      paddingVertical: 16,
     },
     filterText: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 13,
+      fontSize: 16,
+      marginBottom: 16,
       color: colors.TEXT_DISABLED,
     },
     filterSeparator: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: 16,
+      marginBottom: 16,
       color: colors.TEXT_DISABLED,
     },
     locationIconStyle: {
