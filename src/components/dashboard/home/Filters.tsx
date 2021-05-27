@@ -11,11 +11,11 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         styles.filterParent,
         {
           position: 'absolute',
-          top: -120,
+          top: -140,
           left: 0,
           right: 0,
-          zIndex: 2,
-          height: 200,
+          zIndex: 3,
+          height: 220,
           backgroundColor: styles.parent.backgroundColor,
           transform: [
             {
@@ -175,13 +175,13 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
           </Text>
         </Pressable>
       </View>
-      <Text style={styles.filterSection}>DOSE</Text>
+      <Text style={styles.filterSection}>DOSE AVAILABILITY</Text>
       <View style={styles.filterAge}>
         <Pressable
           onPress={() => {
             setFilter({
               ...filter,
-              availability: '',
+              availability: 'available_capacity',
             });
           }}>
           <Text
@@ -189,12 +189,12 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.availability === ''
+                  filter?.availability === 'available_capacity'
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
             ]}>
-            All
+            Hide 0 available
           </Text>
         </Pressable>
         <Text style={styles.filterSeparator}> / </Text>
@@ -240,6 +240,16 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
           </Text>
         </Pressable>
       </View>
+      <Pressable
+        onPress={() => {
+          setFilter({
+            vaccine: '',
+            min_age_limit: '',
+            availability: '',
+          });
+        }}>
+        <Text style={styles.filterReset}>RESET</Text>
+      </Pressable>
     </Animated.View>
   );
 };

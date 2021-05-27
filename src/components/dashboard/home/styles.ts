@@ -186,6 +186,11 @@ const useStyle = () => {
       paddingHorizontal: 20,
       paddingVertical: 16,
     },
+    filterReset: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TERTIARY,
+    },
     filterText: {
       fontFamily: fonts.MEDIUM,
       fontSize: 16,

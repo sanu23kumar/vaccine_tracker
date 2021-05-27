@@ -17,6 +17,7 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
       onDayPress={date => {
         setSelectedDate(getUsDateFromIn(date.dateString));
       }}
+      style={{ backgroundColor: styles.parent.backgroundColor }}
       theme={{
         selectedDayBackgroundColor: styles.parent.backgroundColor,
         dayTextColor: styles.placeholder.color,
@@ -28,6 +29,7 @@ const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
         'stylesheet.expandable.main': {
           containerShadow: styles.containerShadow,
           dayHeader: styles.dayHeader,
+          container: { backgroundColor: styles.parent.backgroundColor },
         },
         'stylesheet.day.basic': {
           selectedText: styles.selectedDayStyle,

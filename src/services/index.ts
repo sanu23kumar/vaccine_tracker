@@ -122,10 +122,11 @@ export const filterCenters = (
 
     let isFilterable = true;
     for (let filter in filters.session) {
-      isFilterable &&=
-        !session[filter] ||
-        !filters.session[filter] ||
-        filters.session[filter].includes(session[filter]);
+      isFilterable =
+        isFilterable &&
+        (!session[filter] ||
+          !filters.session[filter] ||
+          filters.session[filter].includes(session[filter]));
     }
     return isAvailable && isFilterable;
   };

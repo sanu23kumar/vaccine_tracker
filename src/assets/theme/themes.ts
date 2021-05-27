@@ -21,12 +21,12 @@ export const LightTheme: VtTheme = {
 };
 
 export const DarkTheme: VtTheme = {
-  TEXT: '#333333',
-  TEXT_LIGHT: '#888888',
-  TEXT_DISABLED: '#BBBBBB',
-  BACKGROUND: '#FFFFFF',
+  TEXT: '#DDDDDD',
+  TEXT_LIGHT: '#AAAAAA',
+  TEXT_DISABLED: '#888888',
+  BACKGROUND: '#000000',
   PRIMARY: '#22CC88',
-  PRIMARY_LIGHT: '#EFFFEF',
+  PRIMARY_LIGHT: '#000f00',
   SECONDARY: '#CC9922',
   TERTIARY: '#2288CC',
 };

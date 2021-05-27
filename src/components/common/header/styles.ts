@@ -13,7 +13,7 @@ const useStyle = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      zIndex: 3,
+      zIndex: 4,
       backgroundColor: colors.BACKGROUND,
     },
     headerText: {

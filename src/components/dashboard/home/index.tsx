@@ -29,6 +29,7 @@ import {
 } from '../../../services/models/user';
 import { useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
+import FullBannerAd from '../../common/ad';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -99,7 +100,7 @@ const Home = () => {
     );
     centersForSelectedDate = filterCenters(centersForSelectedDate, {
       session: filter,
-      availability: '',
+      availability: filter.availability,
     });
   }
 
@@ -179,7 +180,7 @@ const Home = () => {
 
   const onPressFilter = () => {
     Animated.spring(filterAnim, {
-      toValue: isFilterPressed ? 0 : 200,
+      toValue: isFilterPressed ? 0 : 220,
       useNativeDriver: true,
     }).start();
 
@@ -300,6 +301,7 @@ const Home = () => {
           <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
         )}
       </Animated.View>
+      <FullBannerAd />
     </SafeAreaView>
   );
 };
