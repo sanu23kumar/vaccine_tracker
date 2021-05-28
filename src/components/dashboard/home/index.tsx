@@ -35,9 +35,9 @@ import Filters from './Filters';
 import List from './List';
 import useStyle from './styles';
 
-function isNumeric(value: string) {
+const isNumeric = (value: string) => {
   return /^-?\d+$/.test(value);
-}
+};
 const Home = () => {
   const styles = useStyle();
   useBackgroundFetch();
@@ -61,15 +61,11 @@ const Home = () => {
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const filterAnim = useRef(new Animated.Value(0)).current;
 
-  const {
-    data: { [queryDate]: data },
-    refetch,
-    isLoading,
-    isError,
-  } = useQuery(['Home', queryCode.code, queryDate], () =>
-    findAvailableSlots(queryCode.code, queryDate, queryCode.type),
+  const { data: queryData, refetch, isLoading, isError } = useQuery(
+    ['Home', queryCode.code, queryDate],
+    () => findAvailableSlots(queryCode.code, queryDate, queryCode.type),
   );
-
+  const data = queryData ? queryData[queryDate] : null;
   const suggestions = suggestDistricts(searchText);
 
   const setUser = (name: string, code: number, type: LOCATION) => {
@@ -140,9 +136,9 @@ const Home = () => {
   };
   const isSearching = queryCode.name !== searchText;
   const filterCount =
-    (filter.min_age_limit.length > 0 ? 1 : 0) +
-    (filter.vaccine.length > 0 ? 1 : 0) +
-    (filter.availability.length > 0 ? 1 : 0);
+    (filter.min_age_limit ? 1 : 0) +
+    (filter.vaccine ? 1 : 0) +
+    (filter.availability ? 1 : 0);
   return (
     <SafeAreaView style={styles.parent}>
       <StatusBar

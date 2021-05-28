@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import fonts from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
-import styles from '../notifications/styles';
 
 const useStyle = () => {
   const { colors } = useVtTheme();
@@ -140,6 +139,30 @@ const useStyle = () => {
       alignItems: 'center',
       flexDirection: 'row',
     },
+    filterAction: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    filterActionButtonApply: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+      borderWidth: 1,
+      marginLeft: 6,
+      paddingVertical: 8,
+      borderColor: colors.PRIMARY,
+    },
+    filterActionButtonReset: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+      borderWidth: 1,
+      marginRight: 6,
+      paddingVertical: 8,
+      borderColor: colors.TERTIARY,
+    },
     filterCountParent: {
       position: 'absolute',
       top: -4,
@@ -183,12 +206,17 @@ const useStyle = () => {
       paddingHorizontal: 20,
       paddingVertical: 16,
       position: 'absolute',
-      top: -140,
+      top: -150,
       left: 0,
       right: 0,
       zIndex: 3,
-      height: 220,
+      height: 230,
       backgroundColor: colors.BACKGROUND,
+    },
+    filterApply: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.PRIMARY,
     },
     filterReset: {
       fontFamily: fonts.MEDIUM,
@@ -201,6 +229,7 @@ const useStyle = () => {
       marginBottom: 16,
       color: colors.TEXT_DISABLED,
     },
+    filterType: { flexDirection: 'row' },
     filterSeparator: {
       fontFamily: fonts.MEDIUM,
       fontSize: 16,

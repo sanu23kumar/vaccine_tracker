@@ -1,4 +1,4 @@
-import { default as React, default as React, useState } from 'react';
+import React, { useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import {
   AGE_LIMIT,
@@ -28,30 +28,12 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
     });
   };
 
-  const filterStyle = (selected: boolean) => ({
-    color: selected ? styles.selectedDayStyle.color : styles.filterText.color,
-  });
-
-  const onPressAllVaccine = () => {
-    setLocalFilterHelper({ vaccine: undefined });
-  };
-
-  const onPressCovaxin = () => {
-    setLocalFilterHelper({ vaccine: VACCINE.COVAXIN });
-  };
-
-  const onPressSputnik = () => {
-    setLocalFilterHelper({ vaccine: VACCINE.SPUTNIK });
-  };
-
-  const onPressCovishield = () => {
-    setFilterLocal({
-      ...filterLocal,
-      vaccine: VACCINE.COVISHIELD,
-    });
-  };
-
   const onPressReset = () => {
+    setFilter({
+      vaccine: undefined,
+      min_age_limit: undefined,
+      availability: undefined,
+    });
     setFilterLocal({
       vaccine: undefined,
       min_age_limit: undefined,
@@ -79,7 +61,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
     };
     const selected = filterLocal[type] === filter;
     return (
-      <View>
+      <View style={styles.filterType}>
         <Pressable onPress={onPressFilter}>
           <Text
             style={[
@@ -141,7 +123,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           filter={AGE_LIMIT.MIN_18}
           separator
         />
-        <FilterType name="45+" type="min_age_limit" filter={AGE_LIMIT.MIN_18} />
+        <FilterType name="45+" type="min_age_limit" filter={AGE_LIMIT.MIN_45} />
       </View>
       <Text style={styles.filterSectionTitle}>DOSE AVAILABILITY</Text>
       <View style={styles.filterSection}>
@@ -161,15 +143,20 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           name="2nd"
           type="availability"
           filter={AVAILABILITY.DOSE_2}
-          separator
         />
       </View>
-      <Pressable onPress={onPressReset}>
-        <Text style={styles.filterReset}>RESET</Text>
-      </Pressable>
-      <Pressable onPress={onPressApply}>
-        <Text style={styles.filterReset}>APPLY</Text>
-      </Pressable>
+      <View style={styles.filterAction}>
+        <Pressable
+          style={styles.filterActionButtonReset}
+          onPress={onPressReset}>
+          <Text style={styles.filterReset}>RESET</Text>
+        </Pressable>
+        <Pressable
+          style={styles.filterActionButtonApply}
+          onPress={onPressApply}>
+          <Text style={styles.filterApply}>APPLY</Text>
+        </Pressable>
+      </View>
     </Animated.View>
   );
 };
