@@ -47,6 +47,6 @@ export interface CentersResponse {
   centers: Center[];
 }
 
-export interface SessionsResponse {
-  sessions: Session[];
+export interface CentersResponseByDate {
+  [date: string]: CentersResponse;
 }

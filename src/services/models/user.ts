@@ -1,15 +1,17 @@
-export const LOCATION_TYPE_PIN = 'pin';
-export const LOCATION_TYPE_DISTRICT = 'district';
+export enum LOCATION {
+  PIN = 'pin',
+  DISTRICT = 'district',
+}
 export interface Location {
   name: string;
   code: number;
-  type: string;
+  type: LOCATION;
 }
 
 export const initialLocation: Location = {
   name: 'New Delhi',
   code: 140,
-  type: 'district',
+  type: LOCATION.DISTRICT,
 };
 
 export interface UserModel {

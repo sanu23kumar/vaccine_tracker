@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import useLocation from '../location/useLocation';
-import { initialLocation, LOCATION_TYPE_PIN } from '../models/user';
+import { initialLocation, LOCATION } from '../models/user';
 import { useUserStore } from '../stores';
 
 const useAppInitialize = () => {
@@ -22,7 +22,7 @@ const useAppInitialize = () => {
             location: {
               name: postalCode,
               code: parseInt(postalCode),
-              type: LOCATION_TYPE_PIN,
+              type: LOCATION.PIN,
             },
           });
         } else {

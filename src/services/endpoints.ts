@@ -7,5 +7,7 @@ export const GET_DISTRICTS = '/admin/location/districts/';
 export const GET_SESSIONS_CALENDAR = '/appointment/sessions/public/';
 export const GET_SESSIONS_CALENDAR_BY_PIN =
   '/appointment/sessions/public/calendarByPin?pincode=';
+export const GET_SESSIONS_CALENDAR_BY_DISTRICT =
+  '/appointment/sessions/public/calendarByDistrict?district_id=';
 export const GET_SESSIONS_FIND_BY_PIN =
   '/appointment/sessions/public/findByPin?pincode=';

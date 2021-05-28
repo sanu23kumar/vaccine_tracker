@@ -15,18 +15,14 @@ import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
 import {
   filterCenters,
-  findByDistrict,
-  findCalendarByPin,
+  findAvailableSlots,
   suggestDistricts,
 } from '../../../services';
 import { getDate, getQueryDate } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import { Center } from '../../../services/models/centers';
 import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
-import {
-  LOCATION_TYPE_DISTRICT,
-  LOCATION_TYPE_PIN,
-} from '../../../services/models/user';
+import { LOCATION } from '../../../services/models/user';
 import { useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import FullBannerAd from '../../common/ad';
@@ -65,12 +61,13 @@ const Home = () => {
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const filterAnim = useRef(new Animated.Value(0)).current;
 
-  const { data, refetch, isLoading, isError } = useQuery(
-    ['Home', queryCode.code, queryDate],
-    () =>
-      queryCode.type === LOCATION_TYPE_DISTRICT
-        ? findByDistrict(queryCode.code, queryDate)
-        : findCalendarByPin(queryCode.code, queryDate),
+  const {
+    data: { [queryDate]: data },
+    refetch,
+    isLoading,
+    isError,
+  } = useQuery(['Home', queryCode.code, queryDate], () =>
+    findAvailableSlots(queryCode.code, queryDate, queryCode.type),
   );
 
   useEffect(() => {
@@ -78,14 +75,14 @@ const Home = () => {
       setQueryCode({
         name: postalCode,
         code: parseInt(postalCode),
-        type: LOCATION_TYPE_PIN,
+        type: LOCATION.PIN,
       });
       setSearchText(postalCode);
       setUserData({
         location: {
           name: postalCode,
           code: parseInt(postalCode),
-          type: LOCATION_TYPE_PIN,
+          type: LOCATION.PIN,
         },
       });
     }
@@ -98,10 +95,12 @@ const Home = () => {
         center.sessions.filter(session => session.date === selectedDate)
           .length > 0,
     );
-    centersForSelectedDate = filterCenters(centersForSelectedDate, {
-      session: filter,
-      availability: filter.availability,
-    });
+    centersForSelectedDate = filterCenters(centersForSelectedDate, [
+      {
+        session: filter,
+        availability: filter.availability,
+      },
+    ])[0];
   }
 
   const findDistrictCodeByName = (name: string) => {
@@ -127,13 +126,13 @@ const Home = () => {
       setQueryCode({
         name: searchText,
         code: parseInt(searchText),
-        type: LOCATION_TYPE_PIN,
+        type: LOCATION.PIN,
       });
       setUserData({
         location: {
           name: postalCode,
           code: parseInt(postalCode),
-          type: LOCATION_TYPE_PIN,
+          type: LOCATION.PIN,
         },
       });
     } else {
@@ -148,13 +147,13 @@ const Home = () => {
       setQueryCode({
         name: searchText,
         code: districtCode,
-        type: LOCATION_TYPE_DISTRICT,
+        type: LOCATION.DISTRICT,
       });
       setUserData({
         location: {
           name: searchText,
           code: districtCode,
-          type: LOCATION_TYPE_DISTRICT,
+          type: LOCATION.DISTRICT,
         },
       });
     }
@@ -171,10 +170,17 @@ const Home = () => {
 
   const onPressAutocompleteItem = ({ code, name }) => {
     setSearchText(name);
+    setUserData({
+      location: {
+        name,
+        code,
+        type: LOCATION.DISTRICT,
+      },
+    });
     setQueryCode({
       name,
       code,
-      type: LOCATION_TYPE_DISTRICT,
+      type: LOCATION.DISTRICT,
     });
   };
 
