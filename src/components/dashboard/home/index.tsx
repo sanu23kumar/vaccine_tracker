@@ -21,7 +21,7 @@ import {
 import { getDate, getQueryDate } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import { Center } from '../../../services/models/centers';
-import { STATES_WITH_DISTRICTS } from '../../../services/models/districts';
+import { Filter } from '../../../services/models/filters';
 import { LOCATION } from '../../../services/models/user';
 import { useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
@@ -48,10 +48,10 @@ const Home = () => {
   } = useLocation();
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
-  const [filter, setFilter] = useState({
-    vaccine: '',
-    min_age_limit: '',
-    availability: '',
+  const [filter, setFilter] = useState<Filter>({
+    vaccine: undefined,
+    min_age_limit: undefined,
+    availability: undefined,
   });
   const { data: userData, setData: setUserData } = useUserStore();
   const [searchText, setSearchText] = useState(userData.location.name);
@@ -70,21 +70,16 @@ const Home = () => {
     findAvailableSlots(queryCode.code, queryDate, queryCode.type),
   );
 
+  const suggestions = suggestDistricts(searchText);
+
+  const setUser = (name: string, code: number, type: LOCATION) => {
+    setQueryCode({ name, code, type });
+    setUserData({ location: { name, code, type } });
+  };
   useEffect(() => {
     if (isLocationLoading === 0 && postalCode) {
-      setQueryCode({
-        name: postalCode,
-        code: parseInt(postalCode),
-        type: LOCATION.PIN,
-      });
       setSearchText(postalCode);
-      setUserData({
-        location: {
-          name: postalCode,
-          code: parseInt(postalCode),
-          type: LOCATION.PIN,
-        },
-      });
+      setUser(postalCode, parseInt(postalCode), LOCATION.PIN);
     }
   }, [isLocationLoading, postalCode]);
 
@@ -103,59 +98,25 @@ const Home = () => {
     ])[0];
   }
 
-  const findDistrictCodeByName = (name: string) => {
-    const states = STATES_WITH_DISTRICTS;
-    for (let i = 0; i < states.length; i++) {
-      const state = states[i];
-      for (let j = 0; j < state.districts.length; j++) {
-        const district = state.districts[j];
-        if (name.toLowerCase().includes(district.district_name.toLowerCase())) {
-          return district.district_id;
-        }
-      }
-    }
-    return -1;
-  };
-
   const onEndEditing = () => {
     if (isNumeric(searchText)) {
       if (searchText.length !== 6) {
         ToastAndroid.show('Not a valid OTP', ToastAndroid.SHORT);
         return;
       }
-      setQueryCode({
-        name: searchText,
-        code: parseInt(searchText),
-        type: LOCATION.PIN,
-      });
-      setUserData({
-        location: {
-          name: postalCode,
-          code: parseInt(postalCode),
-          type: LOCATION.PIN,
-        },
-      });
+      setUser(searchText, parseInt(searchText), LOCATION.PIN);
     } else {
-      const districtCode = findDistrictCodeByName(searchText);
-      if (districtCode === -1) {
+      const location = suggestions.find(
+        location => location.district_name === searchText,
+      );
+      if (!location) {
         ToastAndroid.show(
-          'No districts found for name, please try again',
+          'No districts found for name\nPlease choose from suggestions',
           ToastAndroid.SHORT,
         );
         return;
       }
-      setQueryCode({
-        name: searchText,
-        code: districtCode,
-        type: LOCATION.DISTRICT,
-      });
-      setUserData({
-        location: {
-          name: searchText,
-          code: districtCode,
-          type: LOCATION.DISTRICT,
-        },
-      });
+      setUser(location.district_name, location.district_id, LOCATION.DISTRICT);
     }
   };
 
@@ -164,24 +125,9 @@ const Home = () => {
     setQueryDate(getQueryDate(date));
   };
 
-  const onPressLocation = () => {
-    getLocation();
-  };
-
   const onPressAutocompleteItem = ({ code, name }) => {
     setSearchText(name);
-    setUserData({
-      location: {
-        name,
-        code,
-        type: LOCATION.DISTRICT,
-      },
-    });
-    setQueryCode({
-      name,
-      code,
-      type: LOCATION.DISTRICT,
-    });
+    setUser(name, code, LOCATION.DISTRICT);
   };
 
   const onPressFilter = () => {
@@ -193,7 +139,7 @@ const Home = () => {
     setIsFilterPressed(!isFilterPressed);
   };
 
-  const setFilterAndCloseSection = filter => {
+  const setFilterAndCloseSection = (filter: Filter) => {
     setFilter(filter);
     onPressFilter();
   };
@@ -289,7 +235,7 @@ const Home = () => {
             placeholderTextColor={styles.placeholder.color}
             onSubmitEditing={onEndEditing}
           />
-          <Pressable onPress={onPressLocation}>
+          <Pressable onPress={getLocation}>
             <Icon
               name="locate-outline"
               size={18}
@@ -300,7 +246,7 @@ const Home = () => {
 
         {isSearching ? (
           <AutocompleteHelper
-            suggestions={suggestDistricts(searchText)}
+            suggestions={suggestions}
             onPress={onPressAutocompleteItem}
           />
         ) : (

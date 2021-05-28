@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
+import {
+  AGE_LIMIT,
+  AVAILABILITY,
+  Filter,
+  VACCINE,
+} from '../../../services/models/filters';
 import useStyle from './styles';
 
-const Filters = ({ filter, setFilter, filterAnim }) => {
+interface Props {
+  filter: Filter;
+  setFilter: (arg1: Filter) => void;
+  filterAnim: Animated.Value;
+}
+const Filters = ({ filter, setFilter, filterAnim }: Props) => {
   const styles = useStyle();
-
+  const [filterLocal, setFilterLocal] = useState<Filter>(filter);
   return (
     <Animated.View
       style={[
@@ -28,19 +39,18 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
       <View style={styles.filterVaccine}>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              vaccine: '',
+            setFilterLocal({
+              ...filterLocal,
+              vaccine: undefined,
             });
           }}>
           <Text
             style={[
               styles.filterText,
               {
-                color:
-                  filter?.vaccine === ''
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
+                color: filter?.vaccine
+                  ? styles.filterText.color
+                  : styles.selectedDayStyle.color,
               },
             ]}>
             All
@@ -49,9 +59,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              vaccine: 'SPUTNIK',
+            setFilterLocal({
+              ...filterLocal,
+              vaccine: VACCINE.SPUTNIK,
             });
           }}>
           <Text
@@ -59,7 +69,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.vaccine === 'SPUTNIK'
+                  filter?.vaccine === VACCINE.SPUTNIK
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -70,9 +80,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              vaccine: 'COVISHIELD',
+            setFilterLocal({
+              ...filterLocal,
+              vaccine: VACCINE.COVISHIELD,
             });
           }}>
           <Text
@@ -80,7 +90,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.vaccine === 'COVISHIELD'
+                  filter?.vaccine === VACCINE.COVISHIELD
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -91,9 +101,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              vaccine: 'COVAXIN',
+            setFilterLocal({
+              ...filterLocal,
+              vaccine: VACCINE.COVAXIN,
             });
           }}>
           <Text
@@ -101,7 +111,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.vaccine === 'COVAXIN'
+                  filter?.vaccine === VACCINE.COVAXIN
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -114,9 +124,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
       <View style={styles.filterAge}>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              min_age_limit: '',
+            setFilterLocal({
+              ...filterLocal,
+              min_age_limit: undefined,
             });
           }}>
           <Text
@@ -124,7 +134,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.min_age_limit === ''
+                  filter?.min_age_limit === undefined
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -135,9 +145,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              min_age_limit: '18',
+            setFilterLocal({
+              ...filterLocal,
+              min_age_limit: AGE_LIMIT.MIN_18,
             });
           }}>
           <Text
@@ -145,7 +155,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.min_age_limit === '18'
+                  filter?.min_age_limit === AGE_LIMIT.MIN_18
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -156,9 +166,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              min_age_limit: '45',
+            setFilterLocal({
+              ...filterLocal,
+              min_age_limit: AGE_LIMIT.MIN_45,
             });
           }}>
           <Text
@@ -166,7 +176,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.min_age_limit === '45'
+                  filter?.min_age_limit === AGE_LIMIT.MIN_45
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -179,9 +189,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
       <View style={styles.filterAge}>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              availability: 'available_capacity',
+            setFilterLocal({
+              ...filterLocal,
+              availability: AVAILABILITY.AVAILABLE,
             });
           }}>
           <Text
@@ -189,7 +199,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.availability === 'available_capacity'
+                  filter?.availability === AVAILABILITY.AVAILABLE
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -200,9 +210,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              availability: 'available_capacity_dose1',
+            setFilterLocal({
+              ...filterLocal,
+              availability: AVAILABILITY.DOSE_1,
             });
           }}>
           <Text
@@ -210,7 +220,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.availability === 'available_capacity_dose1'
+                  filter?.availability === AVAILABILITY.DOSE_1
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -221,9 +231,9 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
         <Text style={styles.filterSeparator}> / </Text>
         <Pressable
           onPress={() => {
-            setFilter({
-              ...filter,
-              availability: 'available_capacity_dose2',
+            setFilterLocal({
+              ...filterLocal,
+              availability: AVAILABILITY.DOSE_2,
             });
           }}>
           <Text
@@ -231,7 +241,7 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
               styles.filterText,
               {
                 color:
-                  filter?.availability === 'available_capacity_dose2'
+                  filter?.availability === AVAILABILITY.DOSE_2
                     ? styles.selectedDayStyle.color
                     : styles.filterText.color,
               },
@@ -242,13 +252,23 @@ const Filters = ({ filter, setFilter, filterAnim }) => {
       </View>
       <Pressable
         onPress={() => {
-          setFilter({
-            vaccine: '',
-            min_age_limit: '',
-            availability: '',
+          setFilterLocal({
+            vaccine: undefined,
+            min_age_limit: undefined,
+            availability: undefined,
           });
         }}>
         <Text style={styles.filterReset}>RESET</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          setFilterLocal({
+            vaccine: undefined,
+            min_age_limit: undefined,
+            availability: undefined,
+          });
+        }}>
+        <Text style={styles.filterReset}>APPLY</Text>
       </Pressable>
     </Animated.View>
   );
