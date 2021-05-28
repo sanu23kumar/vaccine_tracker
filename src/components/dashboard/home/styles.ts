@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import fonts from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
+import styles from '../notifications/styles';
 
 const useStyle = () => {
   const { colors } = useVtTheme();
@@ -139,11 +140,6 @@ const useStyle = () => {
       alignItems: 'center',
       flexDirection: 'row',
     },
-    filterAge: {
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    },
     filterCountParent: {
       position: 'absolute',
       top: -4,
@@ -174,17 +170,25 @@ const useStyle = () => {
       fontSize: 14,
     },
     filterSection: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    filterSectionTitle: {
       fontFamily: fonts.MEDIUM,
       fontSize: 12,
       color: colors.TEXT_DISABLED,
     },
-    filterVaccine: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
     filterParent: {
       paddingHorizontal: 20,
       paddingVertical: 16,
+      position: 'absolute',
+      top: -140,
+      left: 0,
+      right: 0,
+      zIndex: 3,
+      height: 220,
+      backgroundColor: colors.BACKGROUND,
     },
     filterReset: {
       fontFamily: fonts.MEDIUM,

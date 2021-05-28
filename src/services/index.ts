@@ -18,6 +18,7 @@ import {
   STATES_WITH_DISTRICTS,
   SuggestDistrictResponse,
 } from './models/districts';
+import { Filter } from './models/filters';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
 import { LOCATION } from './models/user';
@@ -105,10 +106,7 @@ const findByDistrict = (district_id: number, date: string) =>
     GET_SESSIONS_CALENDAR_BY_DISTRICT + `${district_id}&date=${date}`,
   );
 
-export const filterCenters = (
-  centers: Center[],
-  filters = [{ session: {}, availability: '' }],
-) => {
+export const filterCenters = (centers: Center[], filters: Filter[]) => {
   // Populate filteredCetners with all centers for each filter
   const filteredCenters = new Array<Center[]>(filters.length).fill(centers);
   centers.forEach((center, centerIndex) =>
@@ -116,17 +114,12 @@ export const filterCenters = (
       filters.forEach((filter, filterIndex) => {
         const isAvailable =
           !filter.availability || session[filter.availability] > 0;
-        let isFilterable = true;
-        for (let temp in filter.session) {
-          isFilterable =
-            isFilterable &&
-            (!session[temp] ||
-              !filter.session[temp] ||
-              filter.session[temp].includes(session[temp]));
-        }
-
-        // Is the session available and literable
-        const isValid = isAvailable && isFilterable;
+        const isAgeCompliant =
+          !filter.min_age_limit ||
+          session.min_age_limit === filter.min_age_limit;
+        const isVaccineCompliant =
+          !filter.vaccine || session.vaccine === filter.vaccine;
+        const isValid = isAvailable && isAgeCompliant && isVaccineCompliant;
 
         // Remove a session if it's not valid
         if (!isValid)

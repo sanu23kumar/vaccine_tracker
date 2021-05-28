@@ -1,3 +1,19 @@
+export enum AGE_LIMIT {
+  MIN_18 = 18,
+  MIN_45 = 45,
+}
+
+export enum VACCINE {
+  COVAXIN = 'COVAXIN',
+  COVISHIELD = 'COVISHIELD',
+  SPUTNIK = 'SPUTNIK',
+}
+
+export enum AVAILABILITY {
+  AVAILABLE = 'available_capacity',
+  DOSE_1 = 'available_capacity_dose1',
+  DOSE_2 = 'available_capacity_dose2',
+}
 export interface Session {
   center_id: number;
   name: string;
@@ -13,12 +29,12 @@ export interface Session {
   fee_type: string;
   session_id: string;
   date: string;
-  available_capacity: number;
+  [AVAILABILITY.AVAILABLE]: number;
   min_age_limit: number;
-  vaccine: string;
+  vaccine: VACCINE;
   slots: string[];
-  available_capacity_dose1: number;
-  available_capacity_dose2: number;
+  [AVAILABILITY.DOSE_1]: number;
+  [AVAILABILITY.DOSE_2]: number;
 }
 
 export interface VaccineFee {

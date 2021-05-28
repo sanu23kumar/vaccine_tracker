@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import { default as React, default as React, useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import {
   AGE_LIMIT,
   AVAILABILITY,
-  Filter,
   VACCINE,
-} from '../../../services/models/filters';
+} from '../../../services/models/centers';
+import { Filter } from '../../../services/models/filters';
 import useStyle from './styles';
 
+const Separator = () => {
+  const styles = useStyle();
+  return <Text style={styles.filterSeparator}> / </Text>;
+};
 interface Props {
   filter: Filter;
   setFilter: (arg1: Filter) => void;
@@ -16,18 +20,89 @@ interface Props {
 const Filters = ({ filter, setFilter, filterAnim }: Props) => {
   const styles = useStyle();
   const [filterLocal, setFilterLocal] = useState<Filter>(filter);
+
+  const setLocalFilterHelper = (filter: Filter) => {
+    setFilterLocal({
+      ...filterLocal,
+      ...filter,
+    });
+  };
+
+  const filterStyle = (selected: boolean) => ({
+    color: selected ? styles.selectedDayStyle.color : styles.filterText.color,
+  });
+
+  const onPressAllVaccine = () => {
+    setLocalFilterHelper({ vaccine: undefined });
+  };
+
+  const onPressCovaxin = () => {
+    setLocalFilterHelper({ vaccine: VACCINE.COVAXIN });
+  };
+
+  const onPressSputnik = () => {
+    setLocalFilterHelper({ vaccine: VACCINE.SPUTNIK });
+  };
+
+  const onPressCovishield = () => {
+    setFilterLocal({
+      ...filterLocal,
+      vaccine: VACCINE.COVISHIELD,
+    });
+  };
+
+  const onPressReset = () => {
+    setFilterLocal({
+      vaccine: undefined,
+      min_age_limit: undefined,
+      availability: undefined,
+    });
+  };
+
+  const onPressApply = () => {
+    setFilter(filterLocal);
+  };
+
+  const FilterType = ({
+    name,
+    type,
+    filter,
+    separator,
+  }: {
+    name: string;
+    type: string;
+    filter: VACCINE | AVAILABILITY | AGE_LIMIT | undefined;
+    separator?: boolean;
+  }) => {
+    const onPressFilter = () => {
+      setLocalFilterHelper({ [type]: filter });
+    };
+    const selected = filterLocal[type] === filter;
+    return (
+      <View>
+        <Pressable onPress={onPressFilter}>
+          <Text
+            style={[
+              styles.filterText,
+              {
+                color: selected
+                  ? styles.selectedDayStyle.color
+                  : styles.filterText.color,
+              },
+            ]}>
+            {name}
+          </Text>
+        </Pressable>
+        {!separator ? null : <Separator />}
+      </View>
+    );
+  };
+
   return (
     <Animated.View
       style={[
         styles.filterParent,
         {
-          position: 'absolute',
-          top: -140,
-          left: 0,
-          right: 0,
-          zIndex: 3,
-          height: 220,
-          backgroundColor: styles.parent.backgroundColor,
           transform: [
             {
               translateY: filterAnim,
@@ -35,239 +110,64 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           ],
         },
       ]}>
-      <Text style={styles.filterSection}>VACCINE</Text>
-      <View style={styles.filterVaccine}>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              vaccine: undefined,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color: filter?.vaccine
-                  ? styles.filterText.color
-                  : styles.selectedDayStyle.color,
-              },
-            ]}>
-            All
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              vaccine: VACCINE.SPUTNIK,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.vaccine === VACCINE.SPUTNIK
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            SPUTNIK
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              vaccine: VACCINE.COVISHIELD,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.vaccine === VACCINE.COVISHIELD
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            COVISHIELD
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              vaccine: VACCINE.COVAXIN,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.vaccine === VACCINE.COVAXIN
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            COVAXINE
-          </Text>
-        </Pressable>
+      <Text style={styles.filterSectionTitle}>VACCINE</Text>
+      <View style={styles.filterSection}>
+        <FilterType name="All" type="vaccine" filter={undefined} separator />
+        <FilterType
+          name="SPUTNIK"
+          type="vaccine"
+          filter={VACCINE.SPUTNIK}
+          separator
+        />
+        <FilterType
+          name="COVISHIELD"
+          type="vaccine"
+          filter={VACCINE.COVISHIELD}
+          separator
+        />
+        <FilterType name="COVAXIN" type="vaccine" filter={VACCINE.COVAXIN} />
       </View>
-      <Text style={styles.filterSection}>AGE</Text>
-      <View style={styles.filterAge}>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              min_age_limit: undefined,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.min_age_limit === undefined
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            All
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              min_age_limit: AGE_LIMIT.MIN_18,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.min_age_limit === AGE_LIMIT.MIN_18
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            18+
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              min_age_limit: AGE_LIMIT.MIN_45,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.min_age_limit === AGE_LIMIT.MIN_45
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            45+
-          </Text>
-        </Pressable>
+      <Text style={styles.filterSectionTitle}>AGE</Text>
+      <View style={styles.filterSection}>
+        <FilterType
+          name="All"
+          type="min_age_limit"
+          filter={undefined}
+          separator
+        />
+        <FilterType
+          name="18+"
+          type="min_age_limit"
+          filter={AGE_LIMIT.MIN_18}
+          separator
+        />
+        <FilterType name="45+" type="min_age_limit" filter={AGE_LIMIT.MIN_18} />
       </View>
-      <Text style={styles.filterSection}>DOSE AVAILABILITY</Text>
-      <View style={styles.filterAge}>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              availability: AVAILABILITY.AVAILABLE,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.availability === AVAILABILITY.AVAILABLE
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            Hide 0 available
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              availability: AVAILABILITY.DOSE_1,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.availability === AVAILABILITY.DOSE_1
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            1st
-          </Text>
-        </Pressable>
-        <Text style={styles.filterSeparator}> / </Text>
-        <Pressable
-          onPress={() => {
-            setFilterLocal({
-              ...filterLocal,
-              availability: AVAILABILITY.DOSE_2,
-            });
-          }}>
-          <Text
-            style={[
-              styles.filterText,
-              {
-                color:
-                  filter?.availability === AVAILABILITY.DOSE_2
-                    ? styles.selectedDayStyle.color
-                    : styles.filterText.color,
-              },
-            ]}>
-            2nd
-          </Text>
-        </Pressable>
+      <Text style={styles.filterSectionTitle}>DOSE AVAILABILITY</Text>
+      <View style={styles.filterSection}>
+        <FilterType
+          name="Any"
+          type="availability"
+          filter={AVAILABILITY.AVAILABLE}
+          separator
+        />
+        <FilterType
+          name="1st"
+          type="availability"
+          filter={AVAILABILITY.DOSE_1}
+          separator
+        />
+        <FilterType
+          name="2nd"
+          type="availability"
+          filter={AVAILABILITY.DOSE_2}
+          separator
+        />
       </View>
-      <Pressable
-        onPress={() => {
-          setFilterLocal({
-            vaccine: undefined,
-            min_age_limit: undefined,
-            availability: undefined,
-          });
-        }}>
+      <Pressable onPress={onPressReset}>
         <Text style={styles.filterReset}>RESET</Text>
       </Pressable>
-      <Pressable
-        onPress={() => {
-          setFilterLocal({
-            vaccine: undefined,
-            min_age_limit: undefined,
-            availability: undefined,
-          });
-        }}>
+      <Pressable onPress={onPressApply}>
         <Text style={styles.filterReset}>APPLY</Text>
       </Pressable>
     </Animated.View>

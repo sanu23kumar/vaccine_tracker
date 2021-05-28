@@ -90,12 +90,7 @@ const Home = () => {
         center.sessions.filter(session => session.date === selectedDate)
           .length > 0,
     );
-    centersForSelectedDate = filterCenters(centersForSelectedDate, [
-      {
-        session: filter,
-        availability: filter.availability,
-      },
-    ])[0];
+    centersForSelectedDate = filterCenters(centersForSelectedDate, [filter])[0];
   }
 
   const onEndEditing = () => {
