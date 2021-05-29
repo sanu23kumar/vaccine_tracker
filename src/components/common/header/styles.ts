@@ -1,24 +1,25 @@
-import { useTheme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
+import fonts from '../../../assets/fonts';
+import useVtTheme from '../../../assets/theme/useVtTheme';
 
 const useStyle = () => {
-  const { colors } = useTheme();
+  const { colors } = useVtTheme();
 
   return StyleSheet.create({
     headerParent: {
-      paddingHorizontal: 16,
-      paddingTop: 24,
+      paddingLeft: 20,
+      paddingTop: 20,
       paddingBottom: 16,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      zIndex: 3,
-      backgroundColor: colors.background,
+      zIndex: 4,
+      backgroundColor: colors.BACKGROUND,
     },
     headerText: {
-      fontWeight: 'bold',
+      fontFamily: fonts.BOLD,
       fontSize: 32,
-      color: colors.text,
+      color: colors.TEXT,
     },
   });
 };

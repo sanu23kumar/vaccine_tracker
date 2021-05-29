@@ -1,18 +1,22 @@
+import Store from 'potli/Store';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import ThemeProvider from '../assets/theme';
 import CreateNotificationProvider from '../notifications/createNotificationProvider';
-import Store from '../store';
 import RootNavigator from './navigation';
 
+export const STORE_KEY = 'VACCINE_TRACKER_STORE';
 const queryClient = new QueryClient();
 const Root = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Store>
+      <Store storeKey={STORE_KEY}>
         <CreateNotificationProvider>
           <SafeAreaProvider>
-            <RootNavigator />
+            <ThemeProvider>
+              <RootNavigator />
+            </ThemeProvider>
           </SafeAreaProvider>
         </CreateNotificationProvider>
       </Store>

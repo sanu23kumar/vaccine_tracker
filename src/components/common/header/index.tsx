@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import useStyle from './styles';
 
-const VtHeader = ({ children, title }) => {
+const VtHeader = ({ children = undefined, title }) => {
   const styles = useStyle();
   return (
     <View style={styles.headerParent}>

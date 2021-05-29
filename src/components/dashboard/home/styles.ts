@@ -1,108 +1,252 @@
-import { useTheme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
+import fonts from '../../../assets/fonts';
+import useVtTheme from '../../../assets/theme/useVtTheme';
 
 const useStyle = () => {
-  const { colors } = useTheme();
+  const { colors } = useVtTheme();
 
   return StyleSheet.create({
-    differentLocationText: {
-      fontSize: 16,
-      color: colors.text,
-      opacity: 0.6,
+    autocompleteParent: {
+      paddingHorizontal: 32,
     },
-    parent: { flex: 1 },
-    pinInput: {
-      color: colors.text,
-      fontSize: 24,
+    containerShadow: {
+      elevation: 0,
     },
-    list: { paddingTop: 84 },
-    pinParent: {
-      position: 'absolute',
-      top: 66,
-      left: 0,
-      right: 0,
+    dayHeader: {
+      width: 32,
+      textAlign: 'center',
+      fontSize: 12,
+      fontFamily: fonts.MEDIUM,
+      color: colors.TEXT_DISABLED,
+      textTransform: 'lowercase',
+    },
+    hospitalActionParent: {},
+    hospitalAgeParent: {
       flexDirection: 'row',
-      paddingHorizontal: 16,
+      alignItems: 'flex-end',
+    },
+    suggestionText: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 16,
+      color: colors.TEXT,
       paddingVertical: 8,
-      margin: 16,
-      borderRadius: 12,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: colors.card,
-      zIndex: 2,
     },
-    iconStyle: {
-      alignSelf: 'center',
-      paddingHorizontal: 16,
-      color: colors.text,
-    },
-    hospitalAddress: {
-      color: colors.text,
-      opacity: 0.5,
-      fontSize: 16,
-      width: '60%',
-    },
-    hospitalName: {
-      color: colors.text,
-      fontSize: 20,
-      width: '60%',
-    },
-    hospitalHeader: {
+    hospitalVaccineDetailsParent: {
       flexDirection: 'row',
-      alignItems: 'baseline',
+      alignItems: 'flex-end',
       justifyContent: 'space-between',
-      paddingTop: 16,
+      paddingBottom: 8,
     },
-    card: {
-      marginBottom: 4,
-      marginHorizontal: 16,
-      backgroundColor: colors.card,
-      borderRadius: 12,
-      elevation: 4,
+    hospitalCard: {
+      marginBottom: 40,
+      marginHorizontal: 20,
+      flexDirection: 'column',
+      alignItems: 'stretch',
     },
-    hospitalParent: {
-      paddingHorizontal: 16,
+    hospitalContent: {},
+    hospitalName: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 18,
+      paddingBottom: 2,
     },
     hospitalFeeType: {
-      color: colors.primary,
-      fontSize: 18,
+      fontFamily: fonts.MEDIUM,
+      color: colors.SECONDARY,
+      fontSize: 14,
+      textTransform: 'uppercase',
+      paddingLeft: 6,
     },
-    noDataParent: {
+    hospitalAddress: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 14,
+      paddingBottom: 12,
+      color: colors.TEXT_DISABLED,
+    },
+    hospitalMinAge: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 14,
+      paddingLeft: 12,
+      color: colors.TEXT_DISABLED,
+    },
+    hospitalVaccine: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      flexWrap: 'wrap',
+      color: colors.TERTIARY,
+      paddingLeft: 24,
+    },
+    hospitalAvailable: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 14,
+      color: colors.TEXT_LIGHT,
+    },
+    hospitalAvailableText: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 10,
+      paddingLeft: 3,
+      paddingBottom: 1.5,
+      color: colors.TEXT_LIGHT,
+    },
+    hospitalYrsText: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 10,
+      paddingLeft: 3,
+      paddingBottom: 1.5,
+      color: colors.TEXT_DISABLED,
+    },
+    actionParent: {
+      borderWidth: 0.5,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      marginBottom: 4,
+      alignItems: 'center',
+    },
+    actionText: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 14,
+    },
+    district: {
+      paddingHorizontal: 20,
+      fontFamily: fonts.MEDIUM,
+      textTransform: 'uppercase',
+      fontSize: 12,
+      color: colors.TEXT_DISABLED,
+      paddingBottom: 6,
+    },
+    parent: {
+      flex: 1,
+      backgroundColor: colors.BACKGROUND,
+      alignItems: 'stretch',
+    },
+    search: {
+      fontFamily: fonts.REGULAR,
+      paddingHorizontal: 12,
+      flex: 1,
+      fontSize: 16,
+      color: colors.TEXT,
+    },
+    selectedDayStyle: {
+      color: colors.PRIMARY,
+      fontFamily: fonts.MEDIUM,
+    },
+    searchParent: {
+      backgroundColor: colors.PRIMARY_LIGHT,
+      borderRadius: 8,
+      height: 42,
+      marginHorizontal: 20,
+      marginBottom: 12,
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    filterAction: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    filterActionButtonApply: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      borderRadius: 8,
+      borderWidth: 1,
+      marginLeft: 6,
+      paddingVertical: 8,
+      borderColor: colors.PRIMARY,
     },
-    noDataText: {
-      fontSize: 18,
-      color: colors.text,
-      fontWeight: 'bold',
-      opacity: 0.3,
+    filterActionButtonReset: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+      borderWidth: 1,
+      marginRight: 6,
+      paddingVertical: 8,
+      borderColor: colors.TERTIARY,
     },
-    sessionCapacity: {
-      color: colors.text,
+    filterCountParent: {
+      position: 'absolute',
+      top: -4,
+      right: -4,
+      width: 16,
+      height: 16,
+      borderRadius: 10,
+      backgroundColor: colors.SECONDARY,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    sessionDate: {
-      color: colors.text,
-      opacity: 0.4,
+    filterCountText: {
+      fontFamily: fonts.MEDIUM,
+      color: colors.BACKGROUND,
+      fontSize: 10,
+    },
+    filterHeaderParent: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingTop: 4,
+    },
+    filterHeaderText: {
+      fontFamily: fonts.MEDIUM,
+      color: colors.TEXT_LIGHT,
+      paddingHorizontal: 6,
+      fontSize: 14,
+    },
+    filterSection: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    filterSectionTitle: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TEXT_DISABLED,
+    },
+    filterParent: {
+      paddingHorizontal: 20,
+      paddingVertical: 16,
+      position: 'absolute',
+      top: -150,
+      left: 0,
+      right: 0,
+      zIndex: 3,
+      height: 230,
+      backgroundColor: colors.BACKGROUND,
+    },
+    filterApply: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.PRIMARY,
+    },
+    filterReset: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 12,
+      color: colors.TERTIARY,
+    },
+    filterText: {
+      fontFamily: fonts.MEDIUM,
       fontSize: 16,
-      paddingBottom: 12,
-    },
-    sessionAgeLimit: {
-      color: colors.text,
-    },
-    sessionsText: {
-      color: colors.text,
-      fontWeight: 'bold',
-      fontSize: 16,
-      marginTop: 12,
-      marginBottom: 6,
-    },
-    sessionParent: {
-      padding: 8,
-      backgroundColor: colors.border,
-      borderRadius: 12,
-      width: 160,
       marginBottom: 16,
+      color: colors.TEXT_DISABLED,
+    },
+    filterType: { flexDirection: 'row' },
+    filterSeparator: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 16,
+      marginBottom: 16,
+      color: colors.TEXT_DISABLED,
+    },
+    locationIconStyle: {
+      color: colors.TEXT_DISABLED,
+      paddingHorizontal: 12,
+    },
+    placeholder: {
+      color: colors.TEXT_DISABLED,
+    },
+    iconStyle: {
+      alignSelf: 'center',
+      paddingHorizontal: 20,
+      color: colors.TEXT,
     },
   });
 };

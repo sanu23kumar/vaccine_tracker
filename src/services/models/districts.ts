@@ -13,6 +13,13 @@ export interface DistrictsResponse {
   ttl: number;
 }
 
+export interface SuggestDistrictResponse {
+  district_id: number,
+  district_name: string,
+  state_id: number,
+  state_name: string;
+}
+
 export const STATES_WITH_DISTRICTS = [
   {
     state_id: 1,

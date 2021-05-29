@@ -1,8 +1,9 @@
-import { useTheme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
+import fonts from '../../../assets/fonts';
+import useVtTheme from '../../../assets/theme/useVtTheme';
 
 const useStyle = () => {
-  const { colors } = useTheme();
+  const { colors } = useVtTheme();
 
   return StyleSheet.create({
     noDataParent: {
@@ -12,8 +13,8 @@ const useStyle = () => {
     },
     noDataText: {
       fontSize: 18,
-      color: colors.text,
-      fontWeight: 'bold',
+      fontFamily: fonts.MEDIUM,
+      color: colors.TEXT_DISABLED,
       opacity: 0.3,
     },
   });

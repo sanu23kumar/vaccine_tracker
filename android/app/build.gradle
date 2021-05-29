@@ -136,8 +136,8 @@ android {
         applicationId "com.vaccinetracker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 9
+        versionName "1.0.9"
     }
     splits {
         abi {

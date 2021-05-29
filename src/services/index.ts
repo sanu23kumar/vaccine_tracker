@@ -1,18 +1,46 @@
-import { getDate } from './date';
+import { addDays } from './date';
 import {
   BASE_URL,
   CONFIRM_OTP,
   GENERATE_OTP,
   GET_DISTRICTS,
+  GET_SESSIONS_CALENDAR_BY_DISTRICT,
   GET_SESSIONS_CALENDAR_BY_PIN,
-  GET_SESSIONS_CALENDAR,
-  GET_SESSIONS_FIND_BY_PIN,
   GET_STATES,
 } from './endpoints';
-import { CentersResponse, Center } from './models/centers';
-import { DistrictsResponse } from './models/districts';
+import {
+  Center,
+  CentersResponse,
+  CentersResponseByDate,
+  Session,
+} from './models/centers';
+import {
+  DistrictsResponse,
+  STATES_WITH_DISTRICTS,
+  SuggestDistrictResponse,
+} from './models/districts';
+import { Filter } from './models/filters';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
+import { LOCATION } from './models/user';
+
+export const suggestDistricts = (prefix: string): SuggestDistrictResponse[] => {
+  let beginMatch = [];
+  let wordMatch = [];
+  let beginMatchRegex = new RegExp('^' + prefix, 'gi');
+  let wordMatchRegex = new RegExp('\\b' + prefix, 'gi');
+  for (const state of STATES_WITH_DISTRICTS) {
+    for (const district of state.districts) {
+      if (beginMatchRegex.test(district.district_name)) {
+        beginMatch.push({ ...district, ...state, districts: undefined });
+      } else if (wordMatchRegex.test(district.district_name)) {
+        wordMatch.push({ ...district, ...state, districts: undefined });
+      }
+    }
+  }
+
+  return [...beginMatch, ...wordMatch];
+};
 
 export const cowinAPI = <T>(
   uri: string,
@@ -58,7 +86,7 @@ export const getAllCentres = async (date: string, sleep: number = 5000) => {
   const states = await getAllDistricts();
   for (let [s_index, state] of states.entries()) {
     for (let [d_index, district] of state.districts.entries()) {
-      var { centers } = await findByDistrict(district.district_id, date, false);
+      var { centers } = await findByDistrict(district.district_id, date);
       centers.forEach(function (center) {
         delete center.sessions;
       });
@@ -69,75 +97,51 @@ export const getAllCentres = async (date: string, sleep: number = 5000) => {
   return states;
 };
 
-export const findCalendarByPin = (pincode: string, date: string) =>
+const findByPin = (pincode: number, date: string) =>
   cowinAPI<CentersResponse>(
     GET_SESSIONS_CALENDAR_BY_PIN + `${pincode}&date=${date}`,
   );
 
-export const findByPin = (pincode: string, date: string) =>
+const findByDistrict = (district_id: number, date: string) =>
   cowinAPI<CentersResponse>(
-    GET_SESSIONS_FIND_BY_PIN + `${pincode}&date=${date}`,
+    GET_SESSIONS_CALENDAR_BY_DISTRICT + `${district_id}&date=${date}`,
   );
 
-export const findByDistrict = (
-  district_id: number,
-  date: string,
-  showCalendar = true,
-) =>
-  cowinAPI<CentersResponse>(
-    GET_SESSIONS_CALENDAR +
-      `${
-        showCalendar ? 'calendarByDistrict' : 'findByDistrict'
-      }?district_id=${district_id}&date=${date}`,
+export const filterCenters = (centers: Center[], filters: Filter) => {
+  const checkIfValidSession = (session: Session) => {
+    const isAvailable =
+      !filters.availability || session[filters.availability] > 0;
+
+    const isAgeCompatible =
+      !filters.min_age_limit || filters.min_age_limit === session.min_age_limit;
+
+    const isVaccineCompatible =
+      !filters.vaccine || filters.vaccine === session.vaccine;
+
+    return isAvailable && isAgeCompatible && isVaccineCompatible;
+  };
+  const validCenters = centers.filter(
+    center => center.sessions.filter(checkIfValidSession).length > 0,
   );
-
-export const filterCenters = async (
-  centers: Center[],
-  filters = { center: {}, session: {} },
-) => {
-  let validCenters = centers.filter(
-    center =>
-      center.sessions.filter(session => session.available_capacity > 0).length >
-      0,
-  );
-
-  if (filters.center) {
-    for (let filter in filters.center) {
-      validCenters = validCenters.filter(
-        center => !center[filter] || filters[filter].includes(center[filter]),
-      );
-    }
-  }
-
-  if (filters.session) {
-    for (let filter in filters.session) {
-      validCenters = validCenters.filter(
-        center =>
-          center.sessions.filter(
-            session =>
-              !session[filter] || filters[filter].includes(session[filter]),
-          ).length > 0,
-      );
-    }
-  }
-
+  console.log('Filter', filters, 'Valid centers: ', validCenters);
   return validCenters;
 };
 
 export const findAvailableSlots = async (
-  district_id: number,
+  code: number,
   date: string,
+  type: LOCATION,
   expandDates = false,
-  filters = { center: {}, session: {} },
 ) => {
-  const validCenters = [];
+  const validCenters: CentersResponseByDate = {};
   var requestCounter = 0;
+  const findBy = type === LOCATION.DISTRICT ? findByDistrict : findByPin;
   do {
-    const { centers } = await findByDistrict(district_id, date, true);
+    const { centers } = await findBy(code, date);
     requestCounter++;
     if (centers) {
-      validCenters.push(filterCenters(centers, filters));
-      // date = add 7 days to date
+      validCenters[date] = { centers };
+      date = addDays(date, 7);
     } else {
       expandDates = false;
     }
