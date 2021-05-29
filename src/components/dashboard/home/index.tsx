@@ -31,7 +31,7 @@ import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
 import AutocompleteHelper from './AutocompleteHelper';
 import CalendarWeek from './CalendarWeek';
-import Filters from './Filters';
+import Filters, { FILTER_COMPONENT_SIZE } from './Filters';
 import List from './List';
 import useStyle from './styles';
 
@@ -123,7 +123,7 @@ const Home = () => {
 
   const onPressFilter = () => {
     Animated.spring(filterAnim, {
-      toValue: isFilterPressed ? 0 : 230,
+      toValue: isFilterPressed ? 0 : FILTER_COMPONENT_SIZE,
       useNativeDriver: true,
     }).start();
 
@@ -135,10 +135,10 @@ const Home = () => {
     onPressFilter();
   };
   const isSearching = queryCode.name !== searchText;
-  const filterCount =
-    (filter.min_age_limit ? 1 : 0) +
-    (filter.vaccine ? 1 : 0) +
-    (filter.availability ? 1 : 0);
+  let filterCount = 0;
+  for (const f in filter) {
+    filterCount += filter[f] ? 1 : 0;
+  }
   return (
     <SafeAreaView style={styles.parent}>
       <StatusBar
@@ -194,6 +194,7 @@ const Home = () => {
         <List
           centersForSelectedDate={centersForSelectedDate}
           refetch={refetch}
+          filterAnim={filterAnim}
           scrollY={scrollY}
         />
       )}

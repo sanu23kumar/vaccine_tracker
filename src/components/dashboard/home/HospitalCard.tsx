@@ -87,7 +87,7 @@ const HospitalCard = ({
                 ? `Book now for ${
                     hospital.fee_type.toLowerCase().includes('free')
                       ? 'free'
-                      : (hospital.vaccine_fees[0]?.fee ?? 0) + '₹'
+                      : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0)
                   }`
                 : 'Notify Me'}
             </Text>
