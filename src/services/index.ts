@@ -129,7 +129,9 @@ export const filterCenters = (centers: Center[], filters: Filter) => {
       isAvailable && isAgeCompatible && isVaccineCompatible && isFeeCompatible
     );
   };
-  const validCenters = centers.filter(center => {
+  let validCenters: Center[] = JSON.parse(JSON.stringify(centers));
+  // Don't modify the original centers list
+  validCenters = validCenters.filter(center => {
     center.sessions = center.sessions.filter(session =>
       checkIfValidSession(session, center),
     );
