@@ -12,6 +12,7 @@ import {
   Center,
   CentersResponse,
   CentersResponseByDate,
+  Session,
 } from './models/centers';
 import {
   DistrictsResponse,
@@ -106,37 +107,24 @@ const findByDistrict = (district_id: number, date: string) =>
     GET_SESSIONS_CALENDAR_BY_DISTRICT + `${district_id}&date=${date}`,
   );
 
-export const filterCenters = (centers: Center[], filters: Filter[]) => {
-  // Populate filteredCetners with all centers for each filter
-  const filteredCenters = new Array<Center[]>(filters.length).fill(centers);
-  centers.forEach((center, centerIndex) =>
-    center.sessions.forEach((session, sessionIndex) => {
-      filters.forEach((filter, filterIndex) => {
-        const isAvailable =
-          !filter.availability || session[filter.availability] > 0;
-        const isAgeCompliant =
-          !filter.min_age_limit ||
-          session.min_age_limit === filter.min_age_limit;
-        const isVaccineCompliant =
-          !filter.vaccine || session.vaccine === filter.vaccine;
-        const isValid = isAvailable && isAgeCompliant && isVaccineCompliant;
+export const filterCenters = (centers: Center[], filters: Filter) => {
+  const checkIfValidSession = (session: Session) => {
+    const isAvailable =
+      !filters.availability || session[filters.availability] > 0;
 
-        // Remove a session if it's not valid
-        if (!isValid)
-          filteredCenters[filterIndex][centerIndex].sessions.splice(
-            sessionIndex,
-            1,
-          );
+    const isAgeCompatible =
+      !filters.min_age_limit || filters.min_age_limit === session.min_age_limit;
 
-        // This is the last filter so remove centers with no sessions
-        if (filterIndex === filters.length - 1)
-          filteredCenters[filterIndex].filter(
-            center => center.sessions.length > 0,
-          );
-      });
-    }),
+    const isVaccineCompatible =
+      !filters.vaccine || filters.vaccine === session.vaccine;
+
+    return isAvailable && isAgeCompatible && isVaccineCompatible;
+  };
+  const validCenters = centers.filter(
+    center => center.sessions.filter(checkIfValidSession).length > 0,
   );
-  return filteredCenters;
+  console.log('Filter', filters, 'Valid centers: ', validCenters);
+  return validCenters;
 };
 
 export const findAvailableSlots = async (

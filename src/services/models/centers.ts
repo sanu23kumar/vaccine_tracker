@@ -30,7 +30,7 @@ export interface Session {
   session_id: string;
   date: string;
   [AVAILABILITY.AVAILABLE]: number;
-  min_age_limit: number;
+  min_age_limit: AGE_LIMIT;
   vaccine: VACCINE;
   slots: string[];
   [AVAILABILITY.DOSE_1]: number;

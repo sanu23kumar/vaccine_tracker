@@ -86,7 +86,7 @@ const Home = () => {
         center.sessions.filter(session => session.date === selectedDate)
           .length > 0,
     );
-    centersForSelectedDate = filterCenters(centersForSelectedDate, [filter])[0];
+    centersForSelectedDate = filterCenters(centersForSelectedDate, filter);
   }
 
   const onEndEditing = () => {
@@ -123,7 +123,7 @@ const Home = () => {
 
   const onPressFilter = () => {
     Animated.spring(filterAnim, {
-      toValue: isFilterPressed ? 0 : 220,
+      toValue: isFilterPressed ? 0 : 230,
       useNativeDriver: true,
     }).start();
 
