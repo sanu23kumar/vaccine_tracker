@@ -19,7 +19,7 @@ import {
   STATES_WITH_DISTRICTS,
   SuggestDistrictResponse,
 } from './models/districts';
-import { Filter } from './models/filters';
+import { Filter, FILTER_KEYS } from './models/filters';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
 import { LOCATION } from './models/user';
@@ -108,21 +108,33 @@ const findByDistrict = (district_id: number, date: string) =>
   );
 
 export const filterCenters = (centers: Center[], filters: Filter) => {
-  const checkIfValidSession = (session: Session) => {
+  const checkIfValidSession = (session: Session, center: Center) => {
     const isAvailable =
-      !filters.availability || session[filters.availability] > 0;
+      !filters[FILTER_KEYS.AVAILABILITY] ||
+      session[filters[FILTER_KEYS.AVAILABILITY]] > 0;
 
     const isAgeCompatible =
-      !filters.min_age_limit || filters.min_age_limit === session.min_age_limit;
+      !filters[FILTER_KEYS.MIN_AGE_LIMIT] ||
+      filters[FILTER_KEYS.MIN_AGE_LIMIT] === session[FILTER_KEYS.MIN_AGE_LIMIT];
 
     const isVaccineCompatible =
-      !filters.vaccine || filters.vaccine === session.vaccine;
+      !filters[FILTER_KEYS.VACCINE] ||
+      filters[FILTER_KEYS.VACCINE] === session[FILTER_KEYS.VACCINE];
 
-    return isAvailable && isAgeCompatible && isVaccineCompatible;
+    const isFeeCompatible =
+      !filters[FILTER_KEYS.FEE_TYPE] ||
+      filters[FILTER_KEYS.FEE_TYPE] === center[FILTER_KEYS.FEE_TYPE];
+
+    return (
+      isAvailable && isAgeCompatible && isVaccineCompatible && isFeeCompatible
+    );
   };
-  const validCenters = centers.filter(
-    center => center.sessions.filter(checkIfValidSession).length > 0,
-  );
+  const validCenters = centers.filter(center => {
+    center.sessions = center.sessions.filter(session =>
+      checkIfValidSession(session, center),
+    );
+    return center.sessions.length > 0;
+  });
   console.log('Filter', filters, 'Valid centers: ', validCenters);
   return validCenters;
 };

@@ -3,10 +3,13 @@ import { Animated, Pressable, Text, View } from 'react-native';
 import {
   AGE_LIMIT,
   AVAILABILITY,
+  FEE_TYPE,
   VACCINE,
 } from '../../../services/models/centers';
-import { Filter } from '../../../services/models/filters';
+import { Filter, FILTER_KEYS } from '../../../services/models/filters';
 import useStyle from './styles';
+
+export const FILTER_COMPONENT_SIZE = 285;
 
 const Separator = () => {
   const styles = useStyle();
@@ -53,7 +56,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
   }: {
     name: string;
     type: string;
-    filter: VACCINE | AVAILABILITY | AGE_LIMIT | undefined;
+    filter: VACCINE | AVAILABILITY | AGE_LIMIT | FEE_TYPE | undefined;
     separator?: boolean;
   }) => {
     const onPressFilter = () => {
@@ -94,67 +97,100 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
       ]}>
       <Text style={styles.filterSectionTitle}>VACCINE</Text>
       <View style={styles.filterSection}>
-        <FilterType name="All" type="vaccine" filter={undefined} separator />
+        <FilterType
+          name="All"
+          type={FILTER_KEYS.VACCINE}
+          filter={undefined}
+          separator
+        />
         <FilterType
           name="SPUTNIK"
-          type="vaccine"
+          type={FILTER_KEYS.VACCINE}
           filter={VACCINE.SPUTNIK}
           separator
         />
         <FilterType
           name="COVISHIELD"
-          type="vaccine"
+          type={FILTER_KEYS.VACCINE}
           filter={VACCINE.COVISHIELD}
           separator
         />
-        <FilterType name="COVAXIN" type="vaccine" filter={VACCINE.COVAXIN} />
+        <FilterType
+          name="COVAXIN"
+          type={FILTER_KEYS.VACCINE}
+          filter={VACCINE.COVAXIN}
+        />
       </View>
       <Text style={styles.filterSectionTitle}>AGE</Text>
       <View style={styles.filterSection}>
         <FilterType
           name="All"
-          type="min_age_limit"
+          type={FILTER_KEYS.MIN_AGE_LIMIT}
           filter={undefined}
           separator
         />
         <FilterType
           name="18+"
-          type="min_age_limit"
+          type={FILTER_KEYS.MIN_AGE_LIMIT}
           filter={AGE_LIMIT.MIN_18}
           separator
         />
-        <FilterType name="45+" type="min_age_limit" filter={AGE_LIMIT.MIN_45} />
+        <FilterType
+          name="45+"
+          type={FILTER_KEYS.MIN_AGE_LIMIT}
+          filter={AGE_LIMIT.MIN_45}
+        />
+      </View>
+      <Text style={styles.filterSectionTitle}>COST</Text>
+      <View style={styles.filterSection}>
+        <FilterType
+          name="All"
+          type={FILTER_KEYS.FEE_TYPE}
+          filter={undefined}
+          separator
+        />
+        <FilterType
+          name="Free"
+          type={FILTER_KEYS.FEE_TYPE}
+          filter={FEE_TYPE.FREE}
+          separator
+        />
+        <FilterType
+          name="Paid"
+          type={FILTER_KEYS.FEE_TYPE}
+          filter={FEE_TYPE.PAID}
+        />
       </View>
       <Text style={styles.filterSectionTitle}>DOSE AVAILABILITY</Text>
       <View style={styles.filterSection}>
         <FilterType
           name="Any"
-          type="availability"
+          type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.AVAILABLE}
           separator
         />
         <FilterType
           name="1st"
-          type="availability"
+          type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.DOSE_1}
           separator
         />
         <FilterType
           name="2nd"
-          type="availability"
+          type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.DOSE_2}
         />
       </View>
       <View style={styles.filterAction}>
         <Pressable
-          style={styles.filterActionButtonReset}
-          onPress={onPressReset}>
-          <Text style={styles.filterReset}>RESET</Text>
-        </Pressable>
-        <Pressable
           style={styles.filterActionButtonApply}
           onPress={onPressApply}>
           <Text style={styles.filterApply}>APPLY</Text>
+        </Pressable>
+        <Pressable
+          style={styles.filterActionButtonReset}
+          onPress={onPressReset}>
+          <Text style={styles.filterReset}>RESET</Text>
         </Pressable>
       </View>
     </Animated.View>

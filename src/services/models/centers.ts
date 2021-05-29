@@ -14,6 +14,12 @@ export enum AVAILABILITY {
   DOSE_1 = 'available_capacity_dose1',
   DOSE_2 = 'available_capacity_dose2',
 }
+
+export enum FEE_TYPE {
+  FREE = 'Free',
+  PAID = 'Paid',
+}
+
 export interface Session {
   center_id: number;
   name: string;
@@ -26,7 +32,7 @@ export interface Session {
   long: number;
   from: string;
   to: string;
-  fee_type: string;
+  fee_type: FEE_TYPE;
   session_id: string;
   date: string;
   [AVAILABILITY.AVAILABLE]: number;

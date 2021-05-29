@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import fonts from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
+import { FILTER_COMPONENT_SIZE } from './Filters';
 
 const useStyle = () => {
   const { colors } = useVtTheme();
@@ -148,18 +149,17 @@ const useStyle = () => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      borderWidth: 1,
-      marginLeft: 6,
+      borderWidth: 0.5,
+      marginRight: 6,
       paddingVertical: 8,
       borderColor: colors.PRIMARY,
     },
     filterActionButtonReset: {
-      flex: 1,
+      flex: 0.2,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      borderWidth: 1,
-      marginRight: 6,
+      marginLeft: 6,
       paddingVertical: 8,
       borderColor: colors.TERTIARY,
     },
@@ -206,11 +206,11 @@ const useStyle = () => {
       paddingHorizontal: 20,
       paddingVertical: 16,
       position: 'absolute',
-      top: -150,
+      top: (FILTER_COMPONENT_SIZE - 80) * -1,
       left: 0,
       right: 0,
       zIndex: 3,
-      height: 230,
+      height: FILTER_COMPONENT_SIZE,
       backgroundColor: colors.BACKGROUND,
     },
     filterApply: {

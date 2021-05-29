@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Animated, RefreshControl } from 'react-native';
 import { Center } from '../../../services/models/centers';
 import HospitalCard from './HospitalCard';
@@ -8,10 +8,12 @@ const List = ({
   centersForSelectedDate,
   refetch,
   scrollY,
+  filterAnim,
 }: {
   centersForSelectedDate: Center[];
   refetch: () => void;
   scrollY: Animated.Value;
+  filterAnim: Animated.Value;
 }) => {
   const styles = useStyle();
   const listData = centersForSelectedDate.sort(
@@ -23,6 +25,7 @@ const List = ({
   );
   return (
     <Animated.FlatList
+      style={{ transform: [{ translateY: filterAnim }] }}
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         { useNativeDriver: true },
