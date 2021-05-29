@@ -12,10 +12,23 @@ const useStyle = () => {
       alignItems: 'center',
     },
     noDataText: {
-      fontSize: 18,
+      fontSize: 14,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
-      opacity: 0.3,
+      opacity: 0.5,
+    },
+    notifyText: {
+      fontSize: 16,
+      fontFamily: fonts.MEDIUM,
+      color: colors.SECONDARY,
+    },
+    notifyParent: {
+      marginTop: 6,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 8,
+      borderWidth: 0.5,
+      borderColor: colors.SECONDARY,
     },
   });
 };
