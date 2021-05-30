@@ -1,6 +1,5 @@
 {
   "react-native": {
-    "admob_android_app_id": "ca-app-pub-9968987511053896~1170479156",
-    "crashlytics_debug_enabled": true
+    "admob_android_app_id": "ca-app-pub-9968987511053896~1170479156"
   }
 }

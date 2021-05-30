@@ -8,7 +8,7 @@ const useAppInitialize = () => {
   const { postalCode, isLoading, getLocation } = useLocation();
   const { data, setData } = useUserStore();
   if (data) SplashScreen.hide();
-
+  console.log('Data from store, ', data, postalCode);
   useEffect(() => {
     if (!data) {
       getLocation();

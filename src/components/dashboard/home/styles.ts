@@ -57,9 +57,6 @@ const useStyle = () => {
       textTransform: 'uppercase',
       paddingLeft: 6,
     },
-    hospitalAd: {
-      marginTop: 20,
-    },
     hospitalAddress: {
       fontFamily: fonts.REGULAR,
       fontSize: 14,

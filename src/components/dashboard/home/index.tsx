@@ -25,6 +25,7 @@ import { Filter } from '../../../services/models/filters';
 import { LOCATION } from '../../../services/models/user';
 import { useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
+import FullBannerAd from '../../common/ad';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -244,6 +245,7 @@ const Home = () => {
           <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
         )}
       </Animated.View>
+      <FullBannerAd />
     </SafeAreaView>
   );
 };
