@@ -20,8 +20,12 @@ const List = ({
     (a, b) =>
       b.sessions[0].available_capacity - a.sessions[0].available_capacity,
   );
-  const renderItem = ({ item }: { item: Center }) => (
-    <HospitalCard hospital={item} session={item.sessions[0]} />
+  const renderItem = ({ item, index }: { item: Center; index: number }) => (
+    <HospitalCard
+      hospital={item}
+      session={item.sessions[0]}
+      showAd={(index + 2) % 3 === 0}
+    />
   );
   return (
     <Animated.FlatList
