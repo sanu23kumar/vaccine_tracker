@@ -1,7 +1,4 @@
-import admob, {
-  MaxAdContentRating,
-  TestIds,
-} from '@react-native-firebase/admob';
+import admob, { MaxAdContentRating } from '@react-native-firebase/admob';
 import { useEffect } from 'react';
 
 const setupAdmob = () => {
