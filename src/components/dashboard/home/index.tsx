@@ -23,7 +23,7 @@ import useLocation from '../../../services/location/useLocation';
 import { Center } from '../../../services/models/centers';
 import { Filter } from '../../../services/models/filters';
 import { LOCATION } from '../../../services/models/user';
-import { useUserStore } from '../../../services/stores';
+import { useDistrictsStore, useUserStore } from '../../../services/stores';
 import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
@@ -59,13 +59,14 @@ const Home = () => {
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const filterAnim = useRef(new Animated.Value(0)).current;
+  const { districtsData } = useDistrictsStore();
 
   const { data: queryData, refetch, isLoading, isError } = useQuery(
     ['Home', queryCode.code, queryDate],
     () => findAvailableSlots(queryCode.code, queryDate, queryCode.type),
   );
   const data = queryData ? queryData[queryDate] : null;
-  const suggestions = suggestDistricts(searchText);
+  const suggestions = suggestDistricts(searchText, districtsData.states);
 
   const setUser = (name: string, code: number, type: LOCATION) => {
     setQueryCode({ name, code, type });

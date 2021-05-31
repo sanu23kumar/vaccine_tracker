@@ -14,22 +14,22 @@ import {
   CentersResponseByDate,
   Session,
 } from './models/centers';
-import {
-  DistrictsResponse,
-  STATES_WITH_DISTRICTS,
-  SuggestDistrictResponse,
-} from './models/districts';
+import { DistrictsResponse, SuggestDistrictResponse } from './models/districts';
 import { Filter, FILTER_KEYS } from './models/filters';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
 import { LOCATION } from './models/user';
 
-export const suggestDistricts = (prefix: string): SuggestDistrictResponse[] => {
+export const suggestDistricts = (
+  prefix: string,
+  states,
+): SuggestDistrictResponse[] => {
+  console.log('States', states);
   let beginMatch = [];
   let wordMatch = [];
   let beginMatchRegex = new RegExp('^' + prefix, 'gi');
   let wordMatchRegex = new RegExp('\\b' + prefix, 'gi');
-  for (const state of STATES_WITH_DISTRICTS) {
+  for (const state of states) {
     for (const district of state.districts) {
       if (beginMatchRegex.test(district.district_name)) {
         beginMatch.push({ ...district, ...state, districts: undefined });
