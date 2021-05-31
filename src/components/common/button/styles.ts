@@ -17,6 +17,9 @@ const useStyle = () => {
       paddingVertical: 8,
       borderRadius: 8,
       borderWidth: 0.5,
+      margin: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
       borderColor: colors.SECONDARY,
     },
   });
