@@ -13,6 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
+import translations from '../../../assets/translations';
 import {
   filterCenters,
   findAvailableSlots,
@@ -144,7 +145,7 @@ const Home = () => {
         barStyle="dark-content"
         backgroundColor={styles.parent.backgroundColor}
       />
-      <VtHeader title={strings.dashboard.home.header}>
+      <VtHeader title={translations.NOTIFICATION_SCREEN_TITLE}>
         <Pressable style={styles.filterHeaderParent} onPress={onPressFilter}>
           <Text
             style={[
