@@ -1,5 +1,6 @@
+import { getDate } from '../date';
 import { AGE_LIMIT, AVAILABILITY, FEE_TYPE, VACCINE } from './centers';
-import { Location } from './user';
+import { LOCATION, Location } from './user';
 
 export enum FILTER_KEYS {
   MIN_AGE_LIMIT = 'min_age_limit',
@@ -27,4 +28,12 @@ export interface NotificationFilter extends Filter {
   [FILTER_KEYS.ENABLED]: boolean;
 }
 
-export const initialFilter: Filter = {};
+export const initialFilter: NotificationFilter | undefined = __DEV__
+  ? {
+      notification_id: 1,
+      notification_name: 'My test filter',
+      location: { code: 140, name: '140603', type: LOCATION.DISTRICT },
+      date: getDate(),
+      enabled: true,
+    }
+  : undefined;

@@ -9,13 +9,14 @@ import {
   GET_STATES,
 } from './endpoints';
 import {
+  AVAILABILITY,
   Center,
   CentersResponse,
   CentersResponseByDate,
   Session,
 } from './models/centers';
 import { DistrictsResponse, SuggestDistrictResponse } from './models/districts';
-import { Filter, FILTER_KEYS } from './models/filters';
+import { Filter, FILTER_KEYS, NotificationFilter } from './models/filters';
 import { GenerateOtpResponse, ValidateOtpResponse } from './models/otp';
 import { StatesResponse } from './models/states';
 import { LOCATION } from './models/user';
@@ -24,7 +25,6 @@ export const suggestDistricts = (
   prefix: string,
   states,
 ): SuggestDistrictResponse[] => {
-  console.log('States', states);
   let beginMatch = [];
   let wordMatch = [];
   let beginMatchRegex = new RegExp('^' + prefix, 'gi');
@@ -130,14 +130,12 @@ export const filterCenters = (centers: Center[], filters: Filter) => {
     );
   };
   let validCenters: Center[] = JSON.parse(JSON.stringify(centers));
-  // Don't modify the original centers list
   validCenters = validCenters.filter(center => {
     center.sessions = center.sessions.filter(session =>
       checkIfValidSession(session, center),
     );
     return center.sessions.length > 0;
   });
-  console.log('Filter', filters, 'Valid centers: ', validCenters);
   return validCenters;
 };
 
@@ -162,6 +160,53 @@ export const findAvailableSlots = async (
   } while (expandDates || requestCounter === 15);
 
   return validCenters;
+};
+
+export const findAvailableSlotsToNotify = async (
+  filters: NotificationFilter,
+) => {
+  const validCenters: CentersResponseByDate = {};
+  let firstHitDate = undefined;
+  let requestCounter = 0;
+  let availableSlots = 0;
+  let availableCenters = 0;
+  let requestDate = filters.date;
+  let expandDates = true;
+  const findBy =
+    filters.location.type === LOCATION.DISTRICT ? findByDistrict : findByPin;
+  do {
+    const { centers } = await findBy(filters.location.code, filters.date);
+    requestCounter++;
+    if (centers) {
+      validCenters[requestDate] = { centers: filterCenters(centers, filters) };
+      if (validCenters[requestDate].centers.length !== 0) {
+        expandDates = false;
+        firstHitDate = validCenters[requestDate].centers[0].sessions[0].date;
+        validCenters[requestDate].centers.forEach(center => {
+          const sessions = center.sessions.filter(session => {
+            const isOfSameDate = session.date === firstHitDate;
+            if (isOfSameDate) availableSlots += session[AVAILABILITY.AVAILABLE];
+            return isOfSameDate;
+          });
+          if (sessions.length > 0) availableCenters++;
+        });
+      } else {
+        requestDate = addDays(requestDate, 7);
+      }
+    } else {
+      expandDates = false;
+    }
+  } while (expandDates || requestCounter === 15);
+  console.log(
+    'Result of ',
+    filters,
+    ' is: ',
+    requestDate,
+    firstHitDate,
+    availableSlots,
+    validCenters,
+  );
+  return { firstHitDate, availableSlots, availableCenters };
 };
 
 export const testFn = async () => {

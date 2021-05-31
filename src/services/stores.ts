@@ -1,5 +1,5 @@
 import useStore from 'potli/useStore';
-import { StatesModel } from './models/districts';
+import { StatesModel, STATES_WITH_DISTRICTS } from './models/districts';
 import { NotificationFilter } from './models/filters';
 import { UserModel } from './models/user';
 
@@ -26,4 +26,9 @@ export const useDistrictsStore = () => {
     STATES_WITH_DISTRICTS_STORE_KEY,
   );
   return { districtsData: data, setDistrictsData: setData };
+};
+
+export const initialStoreData = {
+  [STATES_WITH_DISTRICTS_STORE_KEY]: { states: STATES_WITH_DISTRICTS },
+  [STORE_FILTER_KEY]: { notifications: [] },
 };
