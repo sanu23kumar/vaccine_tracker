@@ -1,13 +1,11 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import WorkManager from 'react-native-background-worker';
 import PushNotification from 'react-native-push-notification';
-import { findByDistrict } from '.';
+import { findAvailableSlotsToNotify } from '.';
 import { STORE_KEY } from '../root';
-import { getDate } from './date';
-import { CentersResponse } from './models/centers';
-import { UserModel } from './models/user';
-import { STORE_USER_KEY } from './stores';
+import { initialFilter, NotificationFilter } from './models/filters';
+import { STORE_FILTER_KEY } from './stores';
 
 export const createLocalNotification = (title, message) => {
   PushNotification.localNotification({
@@ -18,31 +16,36 @@ export const createLocalNotification = (title, message) => {
   });
 };
 
-const parseCentersAndNotify = (response: CentersResponse) => {
-  const validCenters = response.centers.filter(
-    center =>
-      center.sessions.filter(session => session.available_capacity > 0).length >
-      0,
-  );
-  if (validCenters.length > 0) {
-    createLocalNotification(
-      'Centers administrings vaccines updated!',
-      JSON.stringify(validCenters[0]),
-    );
-  } else {
-    createLocalNotification(
-      'No center administring vaccines in your area',
-      `Don't worry we'll keep you notified`,
-    );
-  }
-};
-
 const fetchCenters = async () => {
   const dataString = await AsyncStorage.getItem(STORE_KEY);
   const asyncData = dataString && (await JSON.parse(dataString));
-  const userData: UserModel = asyncData[STORE_USER_KEY];
-  const response = await findByDistrict(userData.district, getDate(), true);
-  return response;
+  const filterData: NotificationFilter[] = __DEV__
+    ? [initialFilter]
+    : asyncData[STORE_FILTER_KEY].notifications;
+  for (const filter of filterData) {
+    const {
+      firstHitDate,
+      availableSlots,
+      availableCenters,
+    } = await findAvailableSlotsToNotify(filter);
+    if (availableCenters > 0) {
+      createLocalNotification(
+        filter.notification_name,
+        availableCenters +
+          (availableCenters > 1 ? ' Centers' : ' Center') +
+          ' found on ' +
+          firstHitDate +
+          '\n' +
+          availableSlots +
+          ' slots, Book Now 🎉',
+      );
+    } else {
+      createLocalNotification(
+        filter.notification_name,
+        `No center administring vaccines in your area\nDon't worry we'll keep you notified`,
+      );
+    }
+  }
 };
 
 async function setUpdater() {
@@ -54,10 +57,7 @@ async function setUpdater() {
         title: 'Fetching vaccination centers',
         text: 'Don`t worry, we will keep you updated',
       },
-      workflow: async () => {
-        const response = await fetchCenters();
-        parseCentersAndNotify(response);
-      },
+      workflow: fetchCenters,
       foregroundBehaviour: 'foreground',
       constraints: {
         network: 'connected',

@@ -30,7 +30,7 @@ const HospitalCard = ({
     }
   };
   return (
-    <View style={styles.hospitalCard}>
+    <View style={[styles.hospitalCard, { marginBottom: showAd ? 20 : 40 }]}>
       <View style={styles.hospitalContent}>
         <Text
           style={[

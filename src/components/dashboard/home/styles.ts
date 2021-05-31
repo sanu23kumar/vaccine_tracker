@@ -32,6 +32,12 @@ const useStyle = () => {
       color: colors.TEXT,
       paddingVertical: 8,
     },
+    suggestionState: {
+      fontFamily: fonts.REGULAR,
+      fontSize: 16,
+      color: colors.TEXT_LIGHT,
+      paddingVertical: 8,
+    },
     hospitalVaccineDetailsParent: {
       flexDirection: 'row',
       alignItems: 'flex-end',
@@ -59,6 +65,8 @@ const useStyle = () => {
     },
     hospitalAd: {
       marginTop: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     hospitalAddress: {
       fontFamily: fonts.REGULAR,
@@ -231,6 +239,15 @@ const useStyle = () => {
       fontSize: 16,
       marginBottom: 16,
       color: colors.TEXT_DISABLED,
+    },
+    filterSubtext: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 16,
+      marginBottom: 16,
+      color: colors.TEXT_DISABLED,
+    },
+    suggestionTextParent: {
+      flexDirection: 'row',
     },
     filterType: { flexDirection: 'row' },
     filterSeparator: {

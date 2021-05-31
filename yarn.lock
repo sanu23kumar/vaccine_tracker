@@ -939,17 +939,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@react-native-async-storage/async-storage@^1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.4.tgz#cdba464ca3bb9f10ec538342cbf2520c06f453ab"
-  integrity sha512-pC0MS6UBuv/YiVAxtzi7CgUed8oCQNYMtGt0yb/I9fI/BWTiJK5cj4YtW2XtL95K5IuvPX/6uGWaouZ8KqXwdg==
-  dependencies:
-    deep-assign "^3.0.0"
-
-"@react-native-community/async-storage@^1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.12.1.tgz#25f821b4f6b13abe005ad67e47c6f1cee9f27b24"
-  integrity sha512-70WGaH3PKYASi4BThuEEKMkyAgE9k7VytBqmgPRx3MzJx9/MkspwqJGmn3QLCgHLIFUgF1pit2mWICbRJ3T3lg==
+"@react-native-async-storage/async-storage@^1.15.5":
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.15.5.tgz#0d221a5ef1cd7a6494a42fcaad43136d68379afb"
+  integrity sha512-4AYehLH39B9a8UXCMf3ieOK+G61wGMP72ikx6/XSMA0DUnvx0PgaeaT2Wyt06kTrDTy8edewKnbrbeqwaM50TQ==
   dependencies:
     deep-assign "^3.0.0"
 
@@ -5521,12 +5514,10 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
-potli@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/potli/-/potli-1.0.9.tgz#79fed664e7c6acf00f1809a81efd478b13c0dbf1"
-  integrity sha512-b0tfViMncCo56BRbf+2LrPNs+7tdvUbVhVVVT79nRlrQdrGTf0aRKugwh0MSKbYL39HRD/U8p4Nr5sPbAhbV7A==
-  dependencies:
-    "@react-native-async-storage/async-storage" "^1.15.4"
+potli@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/potli/-/potli-1.1.0.tgz#84b27f6f39a82547ddc84ddba6d4e8d39349c81b"
+  integrity sha512-TImkxZXaMIrxYsVjNByIo78EwAi0kH5UEFcPfNBULBXJEgy+qD4hHbg2UY6DkpDNbEu/ZKUkrPLJSreCKOmJtQ==
 
 prelude-ls@^1.2.1:
   version "1.2.1"

@@ -4,12 +4,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useRef } from 'react';
 import { useColorScheme } from 'react-native';
 import DashboardNavigator from '../components/dashboard';
+import useBackgroundFetch from '../services/useBackgroundFetch';
 
 const Stack = createStackNavigator();
 const RootNavigator = () => {
   const scheme = useColorScheme();
   const navigationRef = useRef();
   const routeNameRef = useRef();
+  useBackgroundFetch();
   return (
     <NavigationContainer
       theme={scheme === 'dark' ? DefaultTheme : DefaultTheme}

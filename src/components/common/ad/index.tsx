@@ -4,11 +4,11 @@ import { View } from 'react-native';
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : 'ca-app-pub-9968987511053896/2625023446';
+  : 'ca-app-pub-9968987511053896/7614438312';
 
 const FullBannerAd = ({ style }) => {
   return (
-    <View style={[{ justifyContent: 'center', alignItems: 'center' }, style]}>
+    <View style={style}>
       <BannerAd
         unitId={adUnitId}
         size={BannerAdSize.SMART_BANNER}
