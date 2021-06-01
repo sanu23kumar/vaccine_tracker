@@ -88,7 +88,6 @@ const Home = () => {
     );
     centersForSelectedDate = filterCenters(centersForSelectedDate, filter);
   }
-  console.log(selectedDate, centersForSelectedDate);
 
   const onEndEditing = () => {
     if (isNumeric(searchText)) {
