@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../assets/strings';
 import useVtTheme from '../../assets/theme/useVtTheme';
@@ -62,10 +63,10 @@ const TabNavigator = () => {
 
 const DashboardNavigator = () => {
   const initialized = useAppInitialize();
-  useBackgroundFetch();
   useAdmob();
 
   if (!initialized) return null;
+  SplashScreen.hide();
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

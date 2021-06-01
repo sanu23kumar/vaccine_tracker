@@ -24,7 +24,7 @@ const List = ({
     <HospitalCard
       hospital={item}
       session={item.sessions[0]}
-      showAd={(index + 2) % 3 === 0}
+      showAd={index % 3 === 0}
     />
   );
   return (

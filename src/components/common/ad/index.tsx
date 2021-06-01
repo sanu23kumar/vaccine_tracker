@@ -8,7 +8,7 @@ const adUnitId = __DEV__
 
 const FullBannerAd = ({ style }) => {
   return (
-    <View style={[{ justifyContent: 'center', alignItems: 'center' }, style]}>
+    <View style={style}>
       <BannerAd
         unitId={adUnitId}
         size={BannerAdSize.SMART_BANNER}

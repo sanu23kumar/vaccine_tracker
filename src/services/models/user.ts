@@ -1,3 +1,5 @@
+import { Filter } from './filters';
+
 export enum LOCATION {
   PIN = 'pin',
   DISTRICT = 'district',
@@ -16,6 +18,7 @@ export const initialLocation: Location = {
 
 export interface UserModel {
   location: Location;
+  filter: Filter;
 }
 
 export const initialUser: UserModel = {

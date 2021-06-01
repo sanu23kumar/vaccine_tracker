@@ -36,8 +36,11 @@ const AutocompleteHelper = ({
       Keyboard.dismiss();
     };
     return (
-      <Pressable onPress={onItemPress}>
-        <Text style={styles.suggestionText}>{item.district_name}</Text>
+      <Pressable style={styles.suggestionTextParent} onPress={onItemPress}>
+        <Text style={styles.suggestionText}>
+          {item.district_name},{' '}
+          <Text style={styles.suggestionState}>{item.state_name}</Text>
+        </Text>
       </Pressable>
     );
   };

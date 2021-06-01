@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import SplashScreen from 'react-native-splash-screen';
 import useLocation from '../location/useLocation';
 import { initialLocation, LOCATION } from '../models/user';
 import { useUserStore } from '../stores';
 
 const useAppInitialize = () => {
+  console.log('In useAppInitialize');
   const { postalCode, isLoading, getLocation } = useLocation();
   const { data, setData } = useUserStore();
-  if (data) SplashScreen.hide();
 
   useEffect(() => {
     if (!data) {
