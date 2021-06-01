@@ -4,7 +4,7 @@ import { Linking, Pressable, Text, View } from 'react-native';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import { Center, Session } from '../../../services/models/centers';
-import FullBannerAd from '../../common/ad';
+import FullBannerAd from '../../common/ad/banner';
 import useStyle from './styles';
 
 const HospitalCard = ({
