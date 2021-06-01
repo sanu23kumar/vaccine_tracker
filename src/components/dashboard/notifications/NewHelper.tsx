@@ -38,7 +38,7 @@ interface Props {
   onDelete: (arg1: NotificationFilter) => void;
   filterAnim: Animated.Value;
 }
-const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
+const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   const styles = useStyle();
   const {
     postalCode,
@@ -51,13 +51,20 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
   const { districtsData } = useDistrictsStore();
   const { data: userData, setData: setUserData } = useUserStore();
   const [searchText, setSearchText] = useState(userData.location.name);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isChangingTitle, setIsChangingTitle] = useState(false);
   const [titleText, setTitleText] = useState(
     searchText + ', ' + getDate(date).substr(0, 5),
   );
   const [queryCode, setQueryCode] = useState(userData.location);
-  const [filterLocal, setFilterLocal] = useState<NotificationFilter>(filter);
+  const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
+    filter ?? userData.filter ?? {},
+  );
   const suggestions = suggestDistricts(searchText, districtsData.states);
 
+  useEffect(() => {
+    setTitleText(searchText + ', ' + getDate(date).substr(0, 5));
+  }, [date, searchText]);
   const setLocalFilterHelper = (filter: NotificationFilter) => {
     setFilterLocal({
       ...filterLocal,
@@ -72,6 +79,7 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
       notification_name: titleText,
       date: getDate(date),
       enabled: true,
+      location: userData.location,
     });
   };
 
@@ -85,7 +93,7 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
     setUser(name, code, LOCATION.DISTRICT);
   };
 
-  const onEndEditing = () => {
+  const onSubmitEditing = () => {
     if (isNumeric(searchText)) {
       if (searchText.length !== 6) {
         ToastAndroid.show('Not a valid OTP', ToastAndroid.SHORT);
@@ -114,13 +122,18 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
   const onPressDate = () => {
     setShowDatePicker(true);
   };
-  const isSearching = queryCode.name !== searchText;
+  const onChangeFocus = () => {
+    setIsSearching(!isSearching);
+  };
+  const onChangeTitleFocus = () => {
+    setIsChangingTitle(!isChangingTitle);
+  };
   useEffect(() => {
     Animated.spring(searchAnim, {
-      toValue: isSearching ? -220 : 0,
+      toValue: isSearching || isChangingTitle ? -310 : 0,
       useNativeDriver: true,
     }).start();
-  }, [isSearching]);
+  }, [isSearching, isChangingTitle]);
 
   useEffect(() => {
     if (isLocationLoading === 0 && postalCode) {
@@ -129,9 +142,13 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
     }
   }, [isLocationLoading, postalCode]);
 
+  useEffect(() => {
+    setSearchText(userData.location.name);
+    setFilterLocal(userData.filter ?? {});
+  }, [userData]);
+
   return (
-    <Animated.ScrollView
-      keyboardShouldPersistTaps="always"
+    <Animated.View
       style={[
         styles.filterParent,
         {
@@ -274,10 +291,12 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
         <TextInput
           value={searchText}
           onChangeText={setSearchText}
+          onFocus={onChangeFocus}
+          onEndEditing={onChangeFocus}
           style={styles.search}
           placeholder={strings.dashboard.home.search}
           placeholderTextColor={styles.placeholder.color}
-          onSubmitEditing={onEndEditing}
+          onSubmitEditing={onSubmitEditing}
         />
         <Pressable onPress={getLocation}>
           <Icon
@@ -297,6 +316,8 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
       <View style={styles.searchParent}>
         <TextInput
           value={titleText}
+          onFocus={onChangeTitleFocus}
+          onEndEditing={onChangeTitleFocus}
           onChangeText={setTitleText}
           style={styles.search}
         />
@@ -304,7 +325,7 @@ const NewHelper = ({ filter = {}, onSave, onDelete, filterAnim }: Props) => {
       <Pressable style={styles.filterActionButtonApply} onPress={onPressApply}>
         <Text style={styles.filterApply}>Save</Text>
       </Pressable>
-    </Animated.ScrollView>
+    </Animated.View>
   );
 };
 

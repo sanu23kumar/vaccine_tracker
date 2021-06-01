@@ -4,7 +4,7 @@ import WorkManager from 'react-native-background-worker';
 import PushNotification from 'react-native-push-notification';
 import { findAvailableSlotsToNotify } from '.';
 import { STORE_KEY } from '../root';
-import { initialFilter, NotificationFilter } from './models/filters';
+import { NotificationFilter } from './models/filters';
 import { STORE_FILTER_KEY } from './stores';
 
 export const createLocalNotification = (title, message) => {
@@ -19,10 +19,12 @@ export const createLocalNotification = (title, message) => {
 const fetchCenters = async () => {
   const dataString = await AsyncStorage.getItem(STORE_KEY);
   const asyncData = dataString && (await JSON.parse(dataString));
-  const filterData: NotificationFilter[] = __DEV__
-    ? [initialFilter]
-    : asyncData[STORE_FILTER_KEY].notifications;
+  const filterData: NotificationFilter[] =
+    asyncData[STORE_FILTER_KEY].notifications;
+
   for (const filter of filterData) {
+    if (!filter.enabled) break;
+    console.log(filter);
     const {
       firstHitDate,
       availableSlots,
@@ -30,7 +32,7 @@ const fetchCenters = async () => {
     } = await findAvailableSlotsToNotify(filter);
     if (availableCenters > 0) {
       createLocalNotification(
-        filter.notification_name,
+        filter.notification_name ?? 'Update!',
         availableCenters +
           (availableCenters > 1 ? ' Centers' : ' Center') +
           ' found on ' +
@@ -41,7 +43,7 @@ const fetchCenters = async () => {
       );
     } else {
       createLocalNotification(
-        filter.notification_name,
+        filter.notification_name ?? 'Update!',
         `No center administring vaccines in your area\nDon't worry we'll keep you notified`,
       );
     }

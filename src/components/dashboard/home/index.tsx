@@ -47,12 +47,8 @@ const Home = () => {
   } = useLocation();
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
-  const [filter, setFilter] = useState<Filter>({
-    vaccine: undefined,
-    min_age_limit: undefined,
-    availability: undefined,
-  });
   const { data: userData, setData: setUserData } = useUserStore();
+  const [filter, setFilter] = useState<Filter>(userData.filter ?? {});
   const [searchText, setSearchText] = useState(userData.location.name);
   const [queryCode, setQueryCode] = useState(userData.location);
   const [selectedDate, setSelectedDate] = useState(getDate());
@@ -79,6 +75,10 @@ const Home = () => {
     }
   }, [isLocationLoading, postalCode]);
 
+  useEffect(() => {
+    setSearchText(userData.location.name);
+  }, [userData]);
+
   let centersForSelectedDate: Center[];
   if (data?.centers) {
     centersForSelectedDate = data.centers.filter(
@@ -88,6 +88,7 @@ const Home = () => {
     );
     centersForSelectedDate = filterCenters(centersForSelectedDate, filter);
   }
+  console.log(selectedDate, centersForSelectedDate);
 
   const onEndEditing = () => {
     if (isNumeric(searchText)) {
@@ -132,6 +133,7 @@ const Home = () => {
 
   const setFilterAndCloseSection = (filter: Filter) => {
     setFilter(filter);
+    setUserData({ filter });
     onPressFilter();
   };
   const isSearching = queryCode.name !== searchText;
