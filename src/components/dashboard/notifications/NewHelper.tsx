@@ -1,4 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from '@react-native-firebase/admob';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -29,6 +34,10 @@ import { isNumeric } from '../home';
 import AutocompleteHelper from '../home/AutocompleteHelper';
 import FilterType from './FilterType';
 import useStyle from './styles';
+
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-9968987511053896/3123571100';
 
 export const HELPER_COMPONENT_SIZE = 600;
 
@@ -61,26 +70,52 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     filter ?? userData.filter ?? {},
   );
   const suggestions = suggestDistricts(searchText, districtsData.states);
+  const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
   useEffect(() => {
     setTitleText(searchText + ', ' + getDate(date).substr(0, 5));
   }, [date, searchText]);
+
+  useEffect(() => {
+    console.log('In use effect');
+    const eventListener = rewarded.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        console.log('Ad loaded', type, error);
+      } else if (type === RewardedAdEventType.EARNED_REWARD) {
+        onSave({
+          ...filterLocal,
+          notification_id: new Date().getMilliseconds(),
+          notification_name: titleText,
+          date: getDate(date),
+          enabled: true,
+          location: userData.location,
+        });
+      } else if (type === 'closed') {
+        rewarded.load();
+      } else {
+        console.log('Something happened', type, error);
+      }
+    });
+    rewarded.load();
+    return () => {
+      eventListener();
+    };
+  }, []);
+
   const setLocalFilterHelper = (filter: NotificationFilter) => {
     setFilterLocal({
       ...filterLocal,
       ...filter,
     });
   };
-
+  console.log(rewarded);
   const onPressApply = () => {
-    onSave({
-      ...filterLocal,
-      notification_id: new Date().getMilliseconds(),
-      notification_name: titleText,
-      date: getDate(date),
-      enabled: true,
-      location: userData.location,
-    });
+    console.log('Showing ad');
+    if (rewarded.loaded) {
+      rewarded.show();
+    } else {
+      console.log('Not loaded');
+    }
   };
 
   const setUser = (name: string, code: number, type: LOCATION) => {
