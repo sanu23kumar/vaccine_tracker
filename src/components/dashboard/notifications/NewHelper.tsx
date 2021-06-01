@@ -70,16 +70,17 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     filter ?? userData.filter ?? {},
   );
   const suggestions = suggestDistricts(searchText, districtsData.states);
-  const rewarded = RewardedAd.createForAdRequest(adUnitId);
+  const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
   useEffect(() => {
     setTitleText(searchText + ', ' + getDate(date).substr(0, 5));
   }, [date, searchText]);
 
   useEffect(() => {
+    console.log('In use effect');
     const eventListener = rewarded.onAdEvent((type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {
-        rewarded.show();
+        console.log('Ad loaded', type, error);
       } else if (type === RewardedAdEventType.EARNED_REWARD) {
         onSave({
           ...filterLocal,
@@ -89,8 +90,13 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           enabled: true,
           location: userData.location,
         });
+      } else if (type === 'closed') {
+        rewarded.load();
+      } else {
+        console.log('Something happened', type, error);
       }
     });
+    rewarded.load();
     return () => {
       eventListener();
     };
@@ -102,9 +108,14 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       ...filter,
     });
   };
-
+  console.log(rewarded);
   const onPressApply = () => {
-    rewarded.load();
+    console.log('Showing ad');
+    if (rewarded.loaded) {
+      rewarded.show();
+    } else {
+      console.log('Not loaded');
+    }
   };
 
   const setUser = (name: string, code: number, type: LOCATION) => {
