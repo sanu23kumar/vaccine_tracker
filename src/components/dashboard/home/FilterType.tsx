@@ -1,0 +1,59 @@
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import {
+  AGE_LIMIT,
+  AVAILABILITY,
+  FEE_TYPE,
+  VACCINE,
+} from '../../../services/models/centers';
+import { Filter } from '../../../services/models/filters';
+import useStyle from './styles';
+
+const Separator = () => {
+  const styles = useStyle();
+  return <Text style={styles.filterSeparator}> / </Text>;
+};
+
+interface Props {
+  name: string;
+  type: string;
+  filter: VACCINE | AVAILABILITY | AGE_LIMIT | FEE_TYPE | undefined;
+  separator?: boolean;
+  filterLocal: Filter;
+  setLocalFilterHelper: (arg1: Filter) => void;
+}
+
+const FilterType = ({
+  name,
+  type,
+  filter,
+  separator,
+  filterLocal,
+  setLocalFilterHelper,
+}: Props) => {
+  const styles = useStyle();
+  const onPressFilter = () => {
+    setLocalFilterHelper({ [type]: filter });
+  };
+  const selected = filterLocal[type] === filter;
+  return (
+    <View style={styles.filterType}>
+      <Pressable onPress={onPressFilter}>
+        <Text
+          style={[
+            styles.filterText,
+            {
+              color: selected
+                ? styles.selectedDayStyle.color
+                : styles.filterText.color,
+            },
+          ]}>
+          {name}
+        </Text>
+      </Pressable>
+      {!separator ? null : <Separator />}
+    </View>
+  );
+};
+
+export default FilterType;

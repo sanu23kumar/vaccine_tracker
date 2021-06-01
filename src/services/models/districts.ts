@@ -14,13 +14,19 @@ export interface DistrictsResponse {
 }
 
 export interface SuggestDistrictResponse {
-  district_id: number,
-  district_name: string,
-  state_id: number,
+  district_id: number;
+  district_name: string;
+  state_id: number;
   state_name: string;
 }
 
-export const STATES_WITH_DISTRICTS = [
+export interface StatesModel {
+  state_id: number;
+  state_name: string;
+  districts: { district_id: number; district_name: string }[];
+}
+
+export const STATES_WITH_DISTRICTS: StatesModel[] = [
   {
     state_id: 1,
     state_name: 'Andaman and Nicobar Islands',

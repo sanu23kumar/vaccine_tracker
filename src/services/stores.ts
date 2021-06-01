@@ -1,5 +1,6 @@
 import useStore from 'potli/useStore';
-import { QueryKey } from 'react-query';
+import { StatesModel, STATES_WITH_DISTRICTS } from './models/districts';
+import { NotificationFilter } from './models/filters';
 import { UserModel } from './models/user';
 
 export const STORE_USER_KEY = 'user';
@@ -9,16 +10,25 @@ export const useUserStore = () => {
   return { data, setData };
 };
 
-export const STORE_QUERY_KEY = 'queries';
+export const STORE_FILTER_KEY = 'filters';
 
-export const useQueryStore = () => {
-  const { data, setData } = useStore(STORE_QUERY_KEY);
-  const setPersistedData = (key: QueryKey, newData) => {
-    setData({ [key.toString()]: newData });
-  };
-  const getPersistedData = (key: QueryKey) => {
-    if (!data) return undefined;
-    return data[key.toString()];
-  };
-  return { getPersistedData, setPersistedData };
+export const useFilterStore = () => {
+  const { data, setData } = useStore<{ notifications: NotificationFilter[] }>(
+    STORE_FILTER_KEY,
+  );
+  return { notificationsData: data, setNotificationsData: setData };
+};
+
+export const STATES_WITH_DISTRICTS_STORE_KEY = 'states_with_districts';
+
+export const useDistrictsStore = () => {
+  const { data, setData } = useStore<{ states: StatesModel[] }>(
+    STATES_WITH_DISTRICTS_STORE_KEY,
+  );
+  return { districtsData: data, setDistrictsData: setData };
+};
+
+export const initialStoreData = {
+  [STATES_WITH_DISTRICTS_STORE_KEY]: { states: STATES_WITH_DISTRICTS },
+  [STORE_FILTER_KEY]: { notifications: [] },
 };

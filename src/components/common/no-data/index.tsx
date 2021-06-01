@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import strings from '../../../assets/strings';
+import VtButton from '../button';
 import useStyle from './styles';
 
 const NoDataView = () => {
@@ -13,9 +14,7 @@ const NoDataView = () => {
   return (
     <View style={styles.noDataParent}>
       <Text style={styles.noDataText}>No data found</Text>
-      <Pressable onPress={onPressNotify} style={styles.notifyParent}>
-        <Text style={styles.notifyText}>Notify me when slots open up</Text>
-      </Pressable>
+      <VtButton title="Notify me when slots open up" onPress={onPressNotify} />
     </View>
   );
 };

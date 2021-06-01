@@ -11,7 +11,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-community/datetimepicker": "^3.5.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/admob": "^11.5.0",
     "@react-native-firebase/analytics": "^12.0.0",
@@ -23,7 +24,7 @@
     "@timwangdev/react-native-geocoder": "^1.0.0-alpha.5",
     "@types/react-native": "^0.64.4",
     "add": "^2.0.6",
-    "potli": "^1.0.9",
+    "potli": "^1.1.0",
     "react": "17.0.1",
     "react-native": "0.64.1",
     "react-native-background-worker": "^0.0.5",
