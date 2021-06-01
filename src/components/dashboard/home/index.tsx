@@ -34,7 +34,7 @@ import Filters, { FILTER_COMPONENT_SIZE } from './Filters';
 import List from './List';
 import useStyle from './styles';
 
-const isNumeric = (value: string) => {
+export const isNumeric = (value: string) => {
   return /^-?\d+$/.test(value);
 };
 const Home = () => {

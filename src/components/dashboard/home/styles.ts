@@ -9,6 +9,7 @@ const useStyle = () => {
   return StyleSheet.create({
     autocompleteParent: {
       paddingHorizontal: 32,
+      paddingBottom: 32,
     },
     containerShadow: {
       elevation: 0,
@@ -248,6 +249,7 @@ const useStyle = () => {
     },
     suggestionTextParent: {
       flexDirection: 'row',
+      flexWrap: 'wrap',
     },
     filterType: { flexDirection: 'row' },
     filterSeparator: {
