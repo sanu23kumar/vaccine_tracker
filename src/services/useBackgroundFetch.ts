@@ -23,7 +23,7 @@ const fetchCenters = async () => {
     asyncData[STORE_FILTER_KEY].notifications;
 
   for (const filter of filterData) {
-    if (!filter.enabled) break;
+    if (!filter.enabled) continue;
     console.log(filter);
     const {
       firstHitDate,
