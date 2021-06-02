@@ -6,12 +6,12 @@ const adUnitId = __DEV__
   ? TestIds.BANNER
   : 'ca-app-pub-9968987511053896/7614438312';
 
-const FullBannerAd = ({ style }) => {
+const FullBannerAd = ({ style, size = BannerAdSize.SMART_BANNER }) => {
   return (
     <View style={style}>
       <BannerAd
         unitId={adUnitId}
-        size={BannerAdSize.SMART_BANNER}
+        size={size}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
         }}

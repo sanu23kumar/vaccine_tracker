@@ -19,6 +19,7 @@ const Notifications = () => {
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const [filter, setFilter] = useState<NotificationFilter | undefined>();
   const onPressAddNotificationHelper = () => {
+    console.log('Closing section', isFilterPressed);
     Animated.spring(filterAnim, {
       toValue: isFilterPressed ? 0 : HELPER_COMPONENT_SIZE,
       useNativeDriver: true,
@@ -27,11 +28,11 @@ const Notifications = () => {
     setIsFilterPressed(!isFilterPressed);
   };
   const onSave = (notificationFilter: NotificationFilter) => {
+    onPressAddNotificationHelper();
     setNotificationsData({
       notifications: [notificationFilter, ...notificationsData.notifications],
     });
     setFilter(undefined);
-    onPressAddNotificationHelper();
   };
 
   const onDelete = (notificationFilter: NotificationFilter) => {

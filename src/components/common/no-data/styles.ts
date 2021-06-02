@@ -9,13 +9,19 @@ const useStyle = () => {
     noDataParent: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
     },
     noDataText: {
       fontSize: 14,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
       opacity: 0.5,
+      alignSelf: 'center',
+    },
+    adStyle: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      marginTop: 120,
     },
   });
 };

@@ -13,6 +13,7 @@ const useStyle = () => {
     line: {
       width: 32,
       height: 1,
+      borderRadius: 2,
     },
     circle: {
       width: 16,
