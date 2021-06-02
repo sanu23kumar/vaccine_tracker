@@ -7,7 +7,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import strings from '../../../assets/strings';
+import translations from '../../../assets/translations';
 import { getDistrict, suggestDistricts } from '../../../services';
 import { StatesModel } from '../../../services/models/districts';
 import { useDistrictsStore, useUserStore } from '../../../services/stores';
@@ -57,11 +57,13 @@ const Settings = () => {
 
   return (
     <SafeAreaView style={styles.parent}>
-      <VtHeader title={strings.dashboard.settings.header} />
+      <VtHeader title={translations.SETTINGS_SCREEN_TITLE} />
       {userState ? (
         <Pressable onPress={onPressRefreshStates} style={styles.refetchParent}>
           <View>
-            <Text style={styles.refetchText}>Refetch districts for</Text>
+            <Text style={styles.refetchText}>
+              {translations.SETTINGS_REFETCH_DISTRICTS}
+            </Text>
             <Text style={styles.refetchStateText}>{userState.state_name}</Text>
           </View>
           <ActivityIndicator

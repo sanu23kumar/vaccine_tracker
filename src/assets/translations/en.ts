@@ -6,6 +6,7 @@ const en: TranslationModel = {
   SETTINGS_SCREEN_TITLE: 'Settings',
   FILTER_TEXT: 'Filter',
   FILTER_ALL_TEXT: 'All',
+  FILTER_ANY_TEXT: 'Any',
   FILTER_VACCINE_TEXT: 'Vaccine',
   FILTER_VACCINE_SPUTNIK_TEXT: 'Sputnik',
   FILTER_VACCINE_COVISHIELD_TEXT: 'Covishield',
@@ -21,7 +22,8 @@ const en: TranslationModel = {
   FILTER_DOSE_SECOND_TEXT: '2nd',
   FILTER_APPLY_TEXT: 'Apply',
   FILTER_RESET_TEXT: 'Reset',
-
+  FILTER_SAVE_TEXT: 'Save',
+  FILTER_DELETE_TEXT: 'Delete',
   HOME_SEARCH_TEXT: 'Search by District or Pincode',
   HOME_SCREEN_AVAILABLE_TEXT: 'available',
   BOOK_NOW_TEMPLATE: 'Book now for $',
@@ -30,9 +32,15 @@ const en: TranslationModel = {
   HOME_ZERO_RESULT_CLEAR_FILTERS_TEXT: 'Clear Filters',
 
   NOTIFICATIONS_ADD: 'Add Notification',
+  NOTIFICATIONS_CLOSE: 'Close',
+  NOTIFICATIONS_EDIT: 'Edit',
   NOTIFICATION_DATE: 'Due Date',
   NOTIFICATION_LOCATION: 'District or Pincode',
   NOTIFICATION_TITLE: 'Notification Title',
+  NOTIFICATION_ON: 'ON',
+  NOTIFICATION_OFF: 'OFF',
+
+  SETTINGS_REFETCH_DISTRICTS: 'Refetch Districts',
 };
 
 export default en;

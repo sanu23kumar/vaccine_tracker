@@ -3,6 +3,7 @@ import React from 'react';
 import { Linking, Pressable, Text, View } from 'react-native';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
+import translations from '../../../assets/translations';
 import { Center, Session } from '../../../services/models/centers';
 import FullBannerAd from '../../common/ad/banner';
 import useStyle from './styles';
@@ -60,7 +61,7 @@ const HospitalCard = ({
                 styles.hospitalAvailableText,
                 { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
               ]}>
-              available
+              {translations.HOME_SCREEN_AVAILABLE_TEXT}
             </Text>
             <Text
               style={styles.hospitalMinAge}>{`${session.min_age_limit}+`}</Text>
@@ -87,11 +88,12 @@ const HospitalCard = ({
                 { color: bookable ? colors.PRIMARY : colors.SECONDARY },
               ]}>
               {bookable
-                ? `Book now for ${
+                ? translations.BOOK_NOW_TEMPLATE.replace(
+                    '$',
                     hospital.fee_type.toLowerCase().includes('free')
-                      ? 'free'
-                      : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0)
-                  }`
+                      ? translations.FILTER_COST_FREE_TEXT
+                      : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0),
+                  )
                 : 'Notify Me'}
             </Text>
           </Pressable>

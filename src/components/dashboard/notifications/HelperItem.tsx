@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import useVtTheme from '../../../assets/theme/useVtTheme';
+import translations from '../../../assets/translations';
 import {
   FILTER_KEYS,
   NotificationFilter,
@@ -20,7 +21,9 @@ const HelperItem = ({ item, onPressEdit, onPressEnableDisable }: Props) => {
   return (
     <View style={styles.helperItemParent}>
       <Pressable onPress={onPressEdit} style={styles.helperItemTextContent}>
-        <Text style={styles.helperItemEdit}>EDIT</Text>
+        <Text style={styles.helperItemEdit}>
+          {translations.NOTIFICATIONS_EDIT}
+        </Text>
         <Text style={styles.helperItemTitle}>{item.notification_name}</Text>
       </Pressable>
       <View style={styles.helperSwitchParent}>
@@ -33,7 +36,9 @@ const HelperItem = ({ item, onPressEdit, onPressEnableDisable }: Props) => {
                 : colors.TEXT_DISABLED,
             },
           ]}>
-          {item[FILTER_KEYS.ENABLED] ? 'ON' : 'OFF'}
+          {item[FILTER_KEYS.ENABLED]
+            ? translations.NOTIFICATION_ON
+            : translations.NOTIFICATION_OFF}
         </Text>
         <VtSwitch
           enabled={item[FILTER_KEYS.ENABLED]}

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Animated, SafeAreaView, ToastAndroid, View } from 'react-native';
-import strings from '../../../assets/strings';
+import translations from '../../../assets/translations';
 import {
   FILTER_KEYS,
   NotificationFilter,
@@ -77,10 +77,14 @@ const Notifications = () => {
   };
   return (
     <SafeAreaView style={styles.parent}>
-      <VtHeader title={strings.dashboard.notifications.header} />
+      <VtHeader title={translations.NOTIFICATION_SCREEN_TITLE} />
       <View style={styles.addParent}>
         <VtButton
-          title={isFilterPressed ? 'Close' : 'Add notification helper'}
+          title={
+            isFilterPressed
+              ? translations.NOTIFICATIONS_CLOSE
+              : translations.NOTIFICATIONS_ADD
+          }
           onPress={onPressAddNotificationHelper}
         />
       </View>

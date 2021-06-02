@@ -10,6 +10,7 @@ export interface TranslationModel {
 
   FILTER_TEXT: string;
   FILTER_ALL_TEXT: string;
+  FILTER_ANY_TEXT: string;
   FILTER_VACCINE_TEXT: string;
   FILTER_VACCINE_SPUTNIK_TEXT: string;
   FILTER_VACCINE_COVISHIELD_TEXT: string;
@@ -25,6 +26,8 @@ export interface TranslationModel {
   FILTER_DOSE_SECOND_TEXT: string;
   FILTER_APPLY_TEXT: string;
   FILTER_RESET_TEXT: string;
+  FILTER_SAVE_TEXT: string;
+  FILTER_DELETE_TEXT: string;
 
   HOME_SEARCH_TEXT: string;
   HOME_SCREEN_AVAILABLE_TEXT: string;
@@ -35,6 +38,12 @@ export interface TranslationModel {
 
   NOTIFICATIONS_ADD: string;
   NOTIFICATION_DATE: string;
+  NOTIFICATIONS_CLOSE: string;
+  NOTIFICATIONS_EDIT: string;
   NOTIFICATION_LOCATION: string;
   NOTIFICATION_TITLE: string;
+  NOTIFICATION_ON: string;
+  NOTIFICATION_OFF: string;
+
+  SETTINGS_REFETCH_DISTRICTS: string;
 }

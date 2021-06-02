@@ -6,6 +6,7 @@ const hi: TranslationModel = {
   SETTINGS_SCREEN_TITLE: 'सेटिंग्स',
   FILTER_TEXT: 'छानिये',
   FILTER_ALL_TEXT: 'सभी',
+  FILTER_ANY_TEXT: 'कोई भी',
   FILTER_VACCINE_TEXT: 'टीका',
   FILTER_VACCINE_SPUTNIK_TEXT: 'स्पूतनिक',
   FILTER_VACCINE_COVISHIELD_TEXT: 'कोविशील्ड',
@@ -21,6 +22,8 @@ const hi: TranslationModel = {
   FILTER_DOSE_SECOND_TEXT: 'दूसरा',
   FILTER_APPLY_TEXT: 'लागू करें',
   FILTER_RESET_TEXT: 'साफ़ करें',
+  FILTER_SAVE_TEXT: 'सेव',
+  FILTER_DELETE_TEXT: 'मिटा दें',
 
   HOME_SEARCH_TEXT: 'जिला या पिनकोड द्वारा खोजें',
   HOME_SCREEN_AVAILABLE_TEXT: 'उपलब्ध है',
@@ -30,10 +33,15 @@ const hi: TranslationModel = {
   HOME_ZERO_RESULT_CLEAR_FILTERS_TEXT: 'छन्नी साफ़ करें',
 
   NOTIFICATIONS_ADD: 'नोटिफिकेशन से सूचित करें',
+  NOTIFICATIONS_CLOSE: 'बंद करे',
   NOTIFICATION_DATE: 'नीयत तारीख़',
+  NOTIFICATIONS_EDIT: 'एडिट',
   NOTIFICATION_LOCATION: 'जिला या पिनकोड',
   NOTIFICATION_TITLE: 'नोटिफिकेशन का नाम',
+  NOTIFICATION_ON: 'ऑन',
+  NOTIFICATION_OFF: 'ऑफ',
 
+  SETTINGS_REFETCH_DISTRICTS: 'जिले फिर से खोजें',
 };
 
 export default hi;
