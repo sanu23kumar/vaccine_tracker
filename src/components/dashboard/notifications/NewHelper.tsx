@@ -41,6 +41,26 @@ const adUnitId = __DEV__
 
 export const HELPER_COMPONENT_SIZE = 600;
 
+const getTitle = (filterLocal: NotificationFilter) => {
+  let newTitle = '';
+  if (
+    filterLocal.availability &&
+    filterLocal.availability !== AVAILABILITY.AVAILABLE
+  ) {
+    newTitle +=
+      ', ' +
+      filterLocal.availability
+        .substr(filterLocal.availability.indexOf('dose'))
+        .toUpperCase();
+  }
+  if (filterLocal.vaccine) {
+    newTitle += ', ' + filterLocal.vaccine;
+  }
+  if (filterLocal.min_age_limit) {
+    newTitle += ', ' + filterLocal.min_age_limit + '+';
+  }
+  return newTitle;
+};
 interface Props {
   filter?: NotificationFilter;
   onSave: (arg1: NotificationFilter) => void;
@@ -70,14 +90,14 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   const [date, setDate] = useState(filterLocal.date);
   const [isChangingTitle, setIsChangingTitle] = useState(false);
   const [titleText, setTitleText] = useState(
-    searchText + ', ' + date.substr(0, 5),
+    searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal),
   );
   const suggestions = suggestDistricts(searchText, districtsData.states);
   const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
   useEffect(() => {
-    setTitleText(searchText + ', ' + date.substr(0, 5));
-  }, [date, searchText]);
+    setTitleText(searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal));
+  }, [date, searchText, filterLocal]);
 
   useEffect(() => {
     const eventListener = rewarded.onAdEvent((type, error, reward) => {
