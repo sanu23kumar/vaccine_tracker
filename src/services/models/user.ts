@@ -1,3 +1,4 @@
+import { getDate } from '../date';
 import { NotificationFilter } from './filters';
 
 export enum LOCATION {
@@ -21,5 +22,5 @@ export interface UserModel {
 }
 
 export const initialUser: UserModel = {
-  filter: {},
+  filter: { date: getDate(), location: initialLocation },
 };

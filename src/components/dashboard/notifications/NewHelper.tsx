@@ -16,7 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
 import { suggestDistricts } from '../../../services';
-import { getUsDateFromIn } from '../../../services/date';
+import { getDate, getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import {
   AGE_LIMIT,
@@ -59,7 +59,11 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   const { districtsData } = useDistrictsStore();
   const { data: userData } = useUserStore();
   const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
-    filter ?? { ...userData.filter, availability: AVAILABILITY.AVAILABLE },
+    filter ?? {
+      ...userData.filter,
+      availability: AVAILABILITY.AVAILABLE,
+      date: userData.filter.date ?? getDate(),
+    },
   );
   const [searchText, setSearchText] = useState(filterLocal.location.name);
   const [isSearching, setIsSearching] = useState(false);
@@ -68,7 +72,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   const [titleText, setTitleText] = useState(
     searchText + ', ' + date.substr(0, 5),
   );
-
   const suggestions = suggestDistricts(searchText, districtsData.states);
   const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
@@ -77,7 +80,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   }, [date, searchText]);
 
   useEffect(() => {
-    console.log('In use effect');
     const eventListener = rewarded.onAdEvent((type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {
         console.log('Ad loaded', type, error);
@@ -88,7 +90,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           notification_name: titleText,
           date,
           enabled: true,
-          location: filterLocal.location,
         });
       } else if (type === 'closed') {
         rewarded.load();
@@ -100,7 +101,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     return () => {
       eventListener();
     };
-  }, []);
+  }, [filterLocal, date, titleText]);
 
   const setLocalFilterHelper = (filter: NotificationFilter) => {
     setFilterLocal({
@@ -108,7 +109,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       ...filter,
     });
   };
-  console.log(rewarded);
   const onPressApply = () => {
     console.log('Showing ad');
     if (rewarded.loaded) {
@@ -149,7 +149,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     }
   };
   const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || getUsDateFromIn(date);
+    const currentDate = getDate(selectedDate) || date;
     setShowDatePicker(false);
     setDate(currentDate);
   };
@@ -177,7 +177,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
-    console.log('In user data update');
     setSearchText(userData.filter.location.name);
     setDate(userData.filter.date);
     setFilterLocal({

@@ -24,7 +24,6 @@ import { Center } from '../../../services/models/centers';
 import { Filter } from '../../../services/models/filters';
 import { LOCATION } from '../../../services/models/user';
 import { useDistrictsStore, useUserStore } from '../../../services/stores';
-import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -39,7 +38,6 @@ export const isNumeric = (value: string) => {
 };
 const Home = () => {
   const styles = useStyle();
-  useBackgroundFetch();
   const {
     postalCode,
     isLoading: isLocationLoading,
@@ -48,9 +46,9 @@ const Home = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const { data: userData, setData: setUserData } = useUserStore();
-  console.log(userData);
   const [filter, setFilter] = useState<Filter>(userData.filter ?? {});
   const [searchText, setSearchText] = useState(userData.filter.location.name);
+  const [isSearching, setIsSearching] = useState(false);
   const [queryCode, setQueryCode] = useState(userData.filter.location);
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
@@ -71,6 +69,10 @@ const Home = () => {
       filter: { ...userData.filter, location: { name, code, type } },
     });
   };
+
+  useEffect(() => {
+    if (!userData.filter.date) setDate(selectedDate);
+  }, []);
   useEffect(() => {
     if (isLocationLoading === 0 && postalCode) {
       setSearchText(postalCode);
@@ -139,7 +141,9 @@ const Home = () => {
     setUserData({ filter: { ...userData.filter, ...filter } });
     onPressFilter();
   };
-  const isSearching = queryCode.name !== searchText;
+  const onChangeFocus = () => {
+    setIsSearching(!isSearching);
+  };
   // Not including location and date
   let filterCount = -2;
   for (const f in filter) {
@@ -231,6 +235,8 @@ const Home = () => {
             style={styles.search}
             placeholder={strings.dashboard.home.search}
             placeholderTextColor={styles.placeholder.color}
+            onFocus={onChangeFocus}
+            onEndEditing={onChangeFocus}
             onSubmitEditing={onEndEditing}
           />
           <Pressable onPress={getLocation}>
