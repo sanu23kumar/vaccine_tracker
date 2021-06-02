@@ -7,12 +7,17 @@ import { STORE_KEY } from '../root';
 import { NotificationFilter } from './models/filters';
 import { STORE_FILTER_KEY } from './stores';
 
-export const createLocalNotification = (title, message) => {
+export const createLocalNotification = (
+  title: string,
+  message: string,
+  filter: NotificationFilter,
+) => {
   PushNotification.localNotification({
     channelId: 'default-channel-id',
     title,
     message,
     smallIcon: 'ic_notification',
+    userData: { filter },
   });
 };
 
@@ -23,7 +28,7 @@ const fetchCenters = async () => {
     asyncData[STORE_FILTER_KEY].notifications;
 
   for (const filter of filterData) {
-    if (!filter.enabled) break;
+    if (!filter.enabled) continue;
     console.log(filter);
     const {
       firstHitDate,
@@ -40,11 +45,7 @@ const fetchCenters = async () => {
           '\n' +
           availableSlots +
           ' slots, Book Now 🎉',
-      );
-    } else {
-      createLocalNotification(
-        filter.notification_name ?? 'Update!',
-        `No center administring vaccines in your area\nDon't worry we'll keep you notified`,
+        { ...filter, date: firstHitDate },
       );
     }
   }

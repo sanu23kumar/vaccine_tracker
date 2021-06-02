@@ -1,4 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from '@react-native-firebase/admob';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -11,7 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
 import { suggestDistricts } from '../../../services';
-import { getDate } from '../../../services/date';
+import { getDate, getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import {
   AGE_LIMIT,
@@ -30,8 +35,32 @@ import AutocompleteHelper from '../home/AutocompleteHelper';
 import FilterType from './FilterType';
 import useStyle from './styles';
 
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-9968987511053896/3123571100';
+
 export const HELPER_COMPONENT_SIZE = 600;
 
+const getTitle = (filterLocal: NotificationFilter) => {
+  let newTitle = '';
+  if (
+    filterLocal.availability &&
+    filterLocal.availability !== AVAILABILITY.AVAILABLE
+  ) {
+    newTitle +=
+      ', ' +
+      filterLocal.availability
+        .substr(filterLocal.availability.indexOf('dose'))
+        .toUpperCase();
+  }
+  if (filterLocal.vaccine) {
+    newTitle += ', ' + filterLocal.vaccine;
+  }
+  if (filterLocal.min_age_limit) {
+    newTitle += ', ' + filterLocal.min_age_limit + '+';
+  }
+  return newTitle;
+};
 interface Props {
   filter?: NotificationFilter;
   onSave: (arg1: NotificationFilter) => void;
@@ -47,45 +76,75 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   } = useLocation();
   const searchAnim = useRef(new Animated.Value(0)).current;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(new Date());
   const { districtsData } = useDistrictsStore();
-  const { data: userData, setData: setUserData } = useUserStore();
-  const [searchText, setSearchText] = useState(userData.location.name);
+  const { data: userData } = useUserStore();
+  const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
+    filter ?? {
+      ...userData.filter,
+      availability: AVAILABILITY.AVAILABLE,
+      date: userData.filter.date ?? getDate(),
+    },
+  );
+  console.log('User data is: ', userData);
+  const [searchText, setSearchText] = useState(filterLocal.location.name);
   const [isSearching, setIsSearching] = useState(false);
+  const [date, setDate] = useState(filterLocal.date);
   const [isChangingTitle, setIsChangingTitle] = useState(false);
   const [titleText, setTitleText] = useState(
-    searchText + ', ' + getDate(date).substr(0, 5),
-  );
-  const [queryCode, setQueryCode] = useState(userData.location);
-  const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
-    filter ?? userData.filter ?? {},
+    searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal),
   );
   const suggestions = suggestDistricts(searchText, districtsData.states);
+  const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
   useEffect(() => {
-    setTitleText(searchText + ', ' + getDate(date).substr(0, 5));
-  }, [date, searchText]);
+    setTitleText(searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal));
+  }, [date, searchText, filterLocal]);
+
+  useEffect(() => {
+    const eventListener = rewarded.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        console.log('Ad loaded', type, error);
+      } else if (type === RewardedAdEventType.EARNED_REWARD) {
+        onSave({
+          ...filterLocal,
+          notification_id: new Date().getMilliseconds(),
+          notification_name: titleText,
+          date,
+          enabled: true,
+        });
+      } else if (type === 'closed') {
+        rewarded.load();
+      } else {
+        console.log('Something happened', type, error);
+      }
+    });
+    rewarded.load();
+    return () => {
+      eventListener();
+    };
+  }, [filterLocal, date, titleText]);
+
   const setLocalFilterHelper = (filter: NotificationFilter) => {
     setFilterLocal({
       ...filterLocal,
       ...filter,
     });
   };
-
   const onPressApply = () => {
-    onSave({
-      ...filterLocal,
-      notification_id: new Date().getMilliseconds(),
-      notification_name: titleText,
-      date: getDate(date),
-      enabled: true,
-      location: userData.location,
-    });
+    console.log('Showing ad');
+    if (rewarded.loaded) {
+      rewarded.show();
+    } else {
+      console.log('Not loaded');
+    }
+  };
+
+  const onPressDelete = () => {
+    onDelete(filter);
   };
 
   const setUser = (name: string, code: number, type: LOCATION) => {
-    setQueryCode({ name, code, type });
-    setUserData({ location: { name, code, type } });
+    setFilterLocal({ location: { name, code, type } });
   };
 
   const onPressAutocompleteItem = ({ code, name }) => {
@@ -115,7 +174,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     }
   };
   const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = getDate(selectedDate) || date;
     setShowDatePicker(false);
     setDate(currentDate);
   };
@@ -143,8 +202,12 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
-    setSearchText(userData.location.name);
-    setFilterLocal(userData.filter ?? {});
+    setSearchText(userData.filter.location.name);
+    setDate(userData.filter.date);
+    setFilterLocal({
+      ...userData.filter,
+      availability: AVAILABILITY.AVAILABLE,
+    });
   }, [userData]);
 
   return (
@@ -275,12 +338,12 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
         WHEN DO YOU WISH TO GET VACCINATED
       </Text>
       <Pressable onPress={onPressDate} style={styles.searchParent}>
-        <Text style={styles.search}>{getDate(date)}</Text>
+        <Text style={styles.search}>{date}</Text>
       </Pressable>
       {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={date}
+          value={new Date(getUsDateFromIn(date))}
           mode="date"
           display="default"
           onChange={onChangeDate}
@@ -325,6 +388,13 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       <Pressable style={styles.filterActionButtonApply} onPress={onPressApply}>
         <Text style={styles.filterApply}>Save</Text>
       </Pressable>
+      {!filter ? null : (
+        <Pressable
+          style={styles.filterActionButtonDelete}
+          onPress={onPressDelete}>
+          <Text style={styles.filterDelete}>Delete</Text>
+        </Pressable>
+      )}
     </Animated.View>
   );
 };
