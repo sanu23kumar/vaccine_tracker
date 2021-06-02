@@ -14,7 +14,7 @@ const NoDataView = () => {
 
   const onPressNotify = () => {
     navigate(strings.dashboard.notifications.NAME, {
-      createHelper: { value: true },
+      createHelper: { value: new Date() },
     });
   };
   return (

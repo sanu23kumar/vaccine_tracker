@@ -28,7 +28,9 @@ const HospitalCard = ({
     if (bookable) {
       Linking.openURL('https://selfregistration.cowin.gov.in/');
     } else {
-      navigate(strings.dashboard.notifications.NAME, { createHelper: true });
+      navigate(strings.dashboard.notifications.NAME, {
+        createHelper: new Date(),
+      });
     }
   };
   return (

@@ -40,6 +40,7 @@ const Notifications = ({
   };
   useEffect(() => {
     if (createHelper) {
+      console.log('Create helper updated');
       onPressAddNotificationHelper({ open: true });
     }
   }, [createHelper]);
