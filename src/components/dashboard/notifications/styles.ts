@@ -19,7 +19,7 @@ const useStyle = () => {
       paddingHorizontal: 20,
     },
     helperItemTextContent: {
-      flexShrink: 1,
+      flex: 1,
       paddingRight: 12,
     },
     helperItemEdit: {
@@ -61,16 +61,15 @@ const useStyle = () => {
       alignItems: 'center',
       borderRadius: 8,
       borderWidth: 0.5,
-      marginRight: 6,
       paddingVertical: 8,
       borderColor: colors.PRIMARY,
+      marginBottom: 16,
     },
-    filterActionButtonReset: {
-      flex: 0.2,
+    filterActionButtonDelete: {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      marginLeft: 6,
+      borderWidth: 0.5,
       paddingVertical: 8,
       borderColor: colors.TERTIARY,
     },
@@ -129,6 +128,11 @@ const useStyle = () => {
       fontFamily: fonts.MEDIUM,
       fontSize: 16,
       color: colors.PRIMARY,
+    },
+    filterDelete: {
+      fontFamily: fonts.MEDIUM,
+      fontSize: 16,
+      color: colors.TERTIARY,
     },
     filterReset: {
       fontFamily: fonts.MEDIUM,

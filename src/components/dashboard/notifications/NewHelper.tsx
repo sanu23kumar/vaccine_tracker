@@ -85,6 +85,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       date: userData.filter.date ?? getDate(),
     },
   );
+  console.log('User data is: ', userData);
   const [searchText, setSearchText] = useState(filterLocal.location.name);
   const [isSearching, setIsSearching] = useState(false);
   const [date, setDate] = useState(filterLocal.date);
@@ -136,6 +137,10 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     } else {
       console.log('Not loaded');
     }
+  };
+
+  const onPressDelete = () => {
+    onDelete(filter);
   };
 
   const setUser = (name: string, code: number, type: LOCATION) => {
@@ -383,6 +388,13 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       <Pressable style={styles.filterActionButtonApply} onPress={onPressApply}>
         <Text style={styles.filterApply}>Save</Text>
       </Pressable>
+      {!filter ? null : (
+        <Pressable
+          style={styles.filterActionButtonDelete}
+          onPress={onPressDelete}>
+          <Text style={styles.filterDelete}>Delete</Text>
+        </Pressable>
+      )}
     </Animated.View>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Animated, SafeAreaView, View } from 'react-native';
+import { Animated, SafeAreaView, ToastAndroid, View } from 'react-native';
 import strings from '../../../assets/strings';
 import {
   FILTER_KEYS,
@@ -17,6 +17,7 @@ const Notifications = () => {
   const { notificationsData, setNotificationsData } = useFilterStore();
   const filterAnim = useRef(new Animated.Value(0)).current;
   const [isFilterPressed, setIsFilterPressed] = useState(false);
+  const [filter, setFilter] = useState<NotificationFilter | undefined>();
   const onPressAddNotificationHelper = () => {
     Animated.spring(filterAnim, {
       toValue: isFilterPressed ? 0 : HELPER_COMPONENT_SIZE,
@@ -29,10 +30,17 @@ const Notifications = () => {
     setNotificationsData({
       notifications: [notificationFilter, ...notificationsData.notifications],
     });
+    setFilter(undefined);
     onPressAddNotificationHelper();
   };
 
   const onDelete = (notificationFilter: NotificationFilter) => {
+    ToastAndroid.show(
+      'Notification deleted successfully ' +
+        notificationFilter.notification_name,
+      ToastAndroid.SHORT,
+    );
+    onPressAddNotificationHelper();
     setNotificationsData({
       notifications: notificationsData.notifications.filter(
         notification =>
@@ -42,7 +50,10 @@ const Notifications = () => {
     });
   };
   const renderItem = ({ item }: { item: NotificationFilter }) => {
-    const onPressEdit = () => {};
+    const onPressEdit = () => {
+      setFilter(item);
+      onPressAddNotificationHelper();
+    };
     const onPressEnableDisable = () => {
       setNotificationsData({
         notifications: notificationsData.notifications.map(filter =>
@@ -79,6 +90,7 @@ const Notifications = () => {
           onSave={onSave}
           onDelete={onDelete}
           filterAnim={filterAnim}
+          filter={filter}
         />
       </View>
 
