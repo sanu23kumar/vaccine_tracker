@@ -59,7 +59,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   const { districtsData } = useDistrictsStore();
   const { data: userData } = useUserStore();
   const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
-    filter ?? userData.filter ?? {},
+    filter ?? { ...userData.filter, availability: AVAILABILITY.AVAILABLE },
   );
   const [searchText, setSearchText] = useState(filterLocal.location.name);
   const [isSearching, setIsSearching] = useState(false);
@@ -180,7 +180,10 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     console.log('In user data update');
     setSearchText(userData.filter.location.name);
     setDate(userData.filter.date);
-    setFilterLocal(userData.filter ?? {});
+    setFilterLocal({
+      ...userData.filter,
+      availability: AVAILABILITY.AVAILABLE,
+    });
   }, [userData]);
 
   return (

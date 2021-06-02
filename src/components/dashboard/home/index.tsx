@@ -140,7 +140,8 @@ const Home = () => {
     onPressFilter();
   };
   const isSearching = queryCode.name !== searchText;
-  let filterCount = 0;
+  // Not including location and date
+  let filterCount = -2;
   for (const f in filter) {
     filterCount += filter[f] ? 1 : 0;
   }
