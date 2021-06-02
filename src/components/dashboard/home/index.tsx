@@ -48,9 +48,10 @@ const Home = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const { data: userData, setData: setUserData } = useUserStore();
+  console.log(userData);
   const [filter, setFilter] = useState<Filter>(userData.filter ?? {});
-  const [searchText, setSearchText] = useState(userData.location.name);
-  const [queryCode, setQueryCode] = useState(userData.location);
+  const [searchText, setSearchText] = useState(userData.filter.location.name);
+  const [queryCode, setQueryCode] = useState(userData.filter.location);
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
   const [isFilterPressed, setIsFilterPressed] = useState(false);
@@ -66,7 +67,9 @@ const Home = () => {
 
   const setUser = (name: string, code: number, type: LOCATION) => {
     setQueryCode({ name, code, type });
-    setUserData({ location: { name, code, type } });
+    setUserData({
+      filter: { ...userData.filter, location: { name, code, type } },
+    });
   };
   useEffect(() => {
     if (isLocationLoading === 0 && postalCode) {
@@ -76,7 +79,7 @@ const Home = () => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
-    setSearchText(userData.location.name);
+    setSearchText(userData.filter.location.name);
   }, [userData]);
 
   let centersForSelectedDate: Center[];
@@ -113,6 +116,7 @@ const Home = () => {
 
   const setDate = (date: string) => {
     setSelectedDate(date);
+    setUserData({ filter: { ...userData.filter, date } });
     setQueryDate(getQueryDate(date));
   };
 
@@ -132,7 +136,7 @@ const Home = () => {
 
   const setFilterAndCloseSection = (filter: Filter) => {
     setFilter(filter);
-    setUserData({ filter });
+    setUserData({ filter: { ...userData.filter, ...filter } });
     onPressFilter();
   };
   const isSearching = queryCode.name !== searchText;

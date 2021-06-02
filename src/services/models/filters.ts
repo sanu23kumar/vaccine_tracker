@@ -21,19 +21,9 @@ export interface Filter {
 }
 
 export interface NotificationFilter extends Filter {
-  [FILTER_KEYS.NOTIFICATION_ID]: number;
-  [FILTER_KEYS.NAME]: string;
-  [FILTER_KEYS.LOCATION]: Location;
-  [FILTER_KEYS.DATE]: string;
-  [FILTER_KEYS.ENABLED]: boolean;
+  [FILTER_KEYS.NOTIFICATION_ID]?: number;
+  [FILTER_KEYS.NAME]?: string;
+  [FILTER_KEYS.LOCATION]?: Location;
+  [FILTER_KEYS.DATE]?: string;
+  [FILTER_KEYS.ENABLED]?: boolean;
 }
-
-export const initialFilter: NotificationFilter | undefined = __DEV__
-  ? {
-      notification_id: 1,
-      notification_name: 'My test filter',
-      location: { code: 140, name: '140603', type: LOCATION.DISTRICT },
-      date: getDate(),
-      enabled: true,
-    }
-  : undefined;

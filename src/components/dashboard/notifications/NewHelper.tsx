@@ -16,7 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../../assets/strings';
 import { suggestDistricts } from '../../../services';
-import { getDate } from '../../../services/date';
+import { getUsDateFromIn } from '../../../services/date';
 import useLocation from '../../../services/location/useLocation';
 import {
   AGE_LIMIT,
@@ -56,24 +56,24 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   } = useLocation();
   const searchAnim = useRef(new Animated.Value(0)).current;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(new Date());
   const { districtsData } = useDistrictsStore();
-  const { data: userData, setData: setUserData } = useUserStore();
-  const [searchText, setSearchText] = useState(userData.location.name);
-  const [isSearching, setIsSearching] = useState(false);
-  const [isChangingTitle, setIsChangingTitle] = useState(false);
-  const [titleText, setTitleText] = useState(
-    searchText + ', ' + getDate(date).substr(0, 5),
-  );
-  const [queryCode, setQueryCode] = useState(userData.location);
+  const { data: userData } = useUserStore();
   const [filterLocal, setFilterLocal] = useState<NotificationFilter>(
     filter ?? userData.filter ?? {},
   );
+  const [searchText, setSearchText] = useState(filterLocal.location.name);
+  const [isSearching, setIsSearching] = useState(false);
+  const [date, setDate] = useState(filterLocal.date);
+  const [isChangingTitle, setIsChangingTitle] = useState(false);
+  const [titleText, setTitleText] = useState(
+    searchText + ', ' + date.substr(0, 5),
+  );
+
   const suggestions = suggestDistricts(searchText, districtsData.states);
   const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
 
   useEffect(() => {
-    setTitleText(searchText + ', ' + getDate(date).substr(0, 5));
+    setTitleText(searchText + ', ' + date.substr(0, 5));
   }, [date, searchText]);
 
   useEffect(() => {
@@ -86,9 +86,9 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           ...filterLocal,
           notification_id: new Date().getMilliseconds(),
           notification_name: titleText,
-          date: getDate(date),
+          date,
           enabled: true,
-          location: userData.location,
+          location: filterLocal.location,
         });
       } else if (type === 'closed') {
         rewarded.load();
@@ -119,8 +119,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   };
 
   const setUser = (name: string, code: number, type: LOCATION) => {
-    setQueryCode({ name, code, type });
-    setUserData({ location: { name, code, type } });
+    setFilterLocal({ location: { name, code, type } });
   };
 
   const onPressAutocompleteItem = ({ code, name }) => {
@@ -150,7 +149,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     }
   };
   const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || getUsDateFromIn(date);
     setShowDatePicker(false);
     setDate(currentDate);
   };
@@ -178,7 +177,9 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
-    setSearchText(userData.location.name);
+    console.log('In user data update');
+    setSearchText(userData.filter.location.name);
+    setDate(userData.filter.date);
     setFilterLocal(userData.filter ?? {});
   }, [userData]);
 
@@ -310,12 +311,12 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
         WHEN DO YOU WISH TO GET VACCINATED
       </Text>
       <Pressable onPress={onPressDate} style={styles.searchParent}>
-        <Text style={styles.search}>{getDate(date)}</Text>
+        <Text style={styles.search}>{date}</Text>
       </Pressable>
       {showDatePicker && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={date}
+          value={new Date(getUsDateFromIn(date))}
           mode="date"
           display="default"
           onChange={onChangeDate}

@@ -19,7 +19,9 @@ const Settings = () => {
   const [isRefreshingDistricts, setIsRefreshingDistricts] = useState(false);
   const {
     data: {
-      location: { name },
+      filter: {
+        location: { name },
+      },
     },
   } = useUserStore();
   const {
@@ -32,7 +34,6 @@ const Settings = () => {
   const onPressRefreshStates = async () => {
     setIsRefreshingDistricts(true);
     const districtsResponse = await getDistrict(userState?.state_id);
-    console.log(districtsResponse);
     if (districtsResponse?.districts?.length > 0) {
       const newStatesData: StatesModel[] = JSON.parse(JSON.stringify(states));
       newStatesData.forEach(state => {

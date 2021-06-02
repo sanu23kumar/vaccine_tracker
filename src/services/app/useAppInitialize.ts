@@ -4,7 +4,6 @@ import { initialLocation, LOCATION } from '../models/user';
 import { useUserStore } from '../stores';
 
 const useAppInitialize = () => {
-  console.log('In useAppInitialize');
   const { postalCode, isLoading, getLocation } = useLocation();
   const { data, setData } = useUserStore();
 
@@ -18,14 +17,16 @@ const useAppInitialize = () => {
       if (isLoading === 0) {
         if (postalCode) {
           setData({
-            location: {
-              name: postalCode,
-              code: parseInt(postalCode),
-              type: LOCATION.PIN,
+            filter: {
+              location: {
+                name: postalCode,
+                code: parseInt(postalCode),
+                type: LOCATION.PIN,
+              },
             },
           });
         } else {
-          setData({ location: initialLocation });
+          setData({ filter: { location: initialLocation } });
         }
       }
     }
