@@ -14,6 +14,7 @@ import { useDistrictsStore, useUserStore } from '../../../services/stores';
 import VtHeader from '../../common/header';
 import useStyle from './styles';
 
+// TODO: Update toast strings
 const Settings = () => {
   const styles = useStyle();
   const [isRefreshingDistricts, setIsRefreshingDistricts] = useState(false);
