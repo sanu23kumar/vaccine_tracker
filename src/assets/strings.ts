@@ -2,7 +2,7 @@ const strings = {
   dashboard: {
     home: {
       NAME: 'HOME_SCREEN',
-      header: 'Centers',
+      header: '',
       search: 'Search by district or pin',
     },
     notifications: {

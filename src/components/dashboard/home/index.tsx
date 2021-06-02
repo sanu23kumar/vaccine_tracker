@@ -13,6 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
 import strings from '../../../assets/strings';
+import translations from '../../../assets/translations';
 import {
   filterCenters,
   findAvailableSlots,
@@ -155,7 +156,7 @@ const Home = () => {
         barStyle="dark-content"
         backgroundColor={styles.parent.backgroundColor}
       />
-      <VtHeader title={strings.dashboard.home.header}>
+      <VtHeader title={translations.HOME_SCREEN_TITLE}>
         <Pressable style={styles.filterHeaderParent} onPress={onPressFilter}>
           <Text
             style={[
@@ -166,7 +167,7 @@ const Home = () => {
                   : styles.filterHeaderText.color,
               },
             ]}>
-            FILTER
+            {translations.FILTER_TEXT}
           </Text>
           <View>
             <Icon
@@ -233,7 +234,7 @@ const Home = () => {
             value={searchText}
             onChangeText={setSearchText}
             style={styles.search}
-            placeholder={strings.dashboard.home.search}
+            placeholder={translations.HOME_SEARCH_TEXT}
             placeholderTextColor={styles.placeholder.color}
             onFocus={onChangeFocus}
             onEndEditing={onChangeFocus}

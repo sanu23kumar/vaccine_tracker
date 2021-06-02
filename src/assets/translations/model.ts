@@ -1,0 +1,49 @@
+export interface TranslationModel {
+  // Home screen
+  HOME_SCREEN_TITLE: string;
+
+  // Notification screen
+  NOTIFICATION_SCREEN_TITLE: string;
+
+  // Settings screen
+  SETTINGS_SCREEN_TITLE: string;
+
+  FILTER_TEXT: string;
+  FILTER_ALL_TEXT: string;
+  FILTER_ANY_TEXT: string;
+  FILTER_VACCINE_TEXT: string;
+  FILTER_VACCINE_SPUTNIK_TEXT: string;
+  FILTER_VACCINE_COVISHIELD_TEXT: string;
+  FILTER_VACCINE_COVAXIN_TEXT: string;
+  FILTER_AGE_TEXT: string;
+  FILTER_AGE_18_PLUS_TEXT: string;
+  FILTER_AGE_45_PLUS_TEXT: string;
+  FILTER_COST_TEXT: string;
+  FILTER_COST_FREE_TEXT: string;
+  FILTER_COST_PAID_TEXT: string;
+  FILTER_DOSE_TEXT: string;
+  FILTER_DOSE_FIRST_TEXT: string;
+  FILTER_DOSE_SECOND_TEXT: string;
+  FILTER_APPLY_TEXT: string;
+  FILTER_RESET_TEXT: string;
+  FILTER_SAVE_TEXT: string;
+  FILTER_DELETE_TEXT: string;
+
+  HOME_SEARCH_TEXT: string;
+  HOME_SCREEN_AVAILABLE_TEXT: string;
+  BOOK_NOW_TEMPLATE: string;
+  HOME_SCREEN_NOTIFY_ME_TEXT: string;
+  HOME_ZERO_RESULT_TEXT: string;
+  HOME_ZERO_RESULT_CLEAR_FILTERS_TEXT: string;
+
+  NOTIFICATIONS_ADD: string;
+  NOTIFICATION_DATE: string;
+  NOTIFICATIONS_CLOSE: string;
+  NOTIFICATIONS_EDIT: string;
+  NOTIFICATION_LOCATION: string;
+  NOTIFICATION_TITLE: string;
+  NOTIFICATION_ON: string;
+  NOTIFICATION_OFF: string;
+
+  SETTINGS_REFETCH_DISTRICTS: string;
+}

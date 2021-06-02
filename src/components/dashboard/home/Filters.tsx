@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
+import translations from '../../../assets/translations';
 import {
   AGE_LIMIT,
   AVAILABILITY,
@@ -56,10 +57,12 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           ],
         },
       ]}>
-      <Text style={styles.filterSectionTitle}>VACCINE</Text>
+      <Text style={styles.filterSectionTitle}>
+        {translations.FILTER_VACCINE_TEXT}
+      </Text>
       <View style={styles.filterSection}>
         <FilterType
-          name="All"
+          name={translations.FILTER_ALL_TEXT}
           type={FILTER_KEYS.VACCINE}
           filter={undefined}
           separator
@@ -67,7 +70,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="SPUTNIK"
+          name={translations.FILTER_VACCINE_SPUTNIK_TEXT}
           type={FILTER_KEYS.VACCINE}
           filter={VACCINE.SPUTNIK}
           separator
@@ -75,7 +78,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="COVISHIELD"
+          name={translations.FILTER_VACCINE_COVISHIELD_TEXT}
           type={FILTER_KEYS.VACCINE}
           filter={VACCINE.COVISHIELD}
           separator
@@ -83,17 +86,19 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="COVAXIN"
+          name={translations.FILTER_VACCINE_COVAXIN_TEXT}
           type={FILTER_KEYS.VACCINE}
           filter={VACCINE.COVAXIN}
           filterLocal={filterLocal}
           setLocalFilterHelper={setLocalFilterHelper}
         />
       </View>
-      <Text style={styles.filterSectionTitle}>AGE</Text>
+      <Text style={styles.filterSectionTitle}>
+        {translations.FILTER_AGE_TEXT}
+      </Text>
       <View style={styles.filterSection}>
         <FilterType
-          name="All"
+          name={translations.FILTER_ALL_TEXT}
           type={FILTER_KEYS.MIN_AGE_LIMIT}
           filter={undefined}
           separator
@@ -101,7 +106,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="18+"
+          name={translations.FILTER_AGE_18_PLUS_TEXT}
           type={FILTER_KEYS.MIN_AGE_LIMIT}
           filter={AGE_LIMIT.MIN_18}
           separator
@@ -109,17 +114,19 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="45+"
+          name={translations.FILTER_AGE_45_PLUS_TEXT}
           type={FILTER_KEYS.MIN_AGE_LIMIT}
           filter={AGE_LIMIT.MIN_45}
           filterLocal={filterLocal}
           setLocalFilterHelper={setLocalFilterHelper}
         />
       </View>
-      <Text style={styles.filterSectionTitle}>COST</Text>
+      <Text style={styles.filterSectionTitle}>
+        {translations.FILTER_COST_TEXT}
+      </Text>
       <View style={styles.filterSection}>
         <FilterType
-          name="All"
+          name={translations.FILTER_ALL_TEXT}
           type={FILTER_KEYS.FEE_TYPE}
           filter={undefined}
           separator
@@ -127,7 +134,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="Free"
+          name={translations.FILTER_COST_FREE_TEXT}
           type={FILTER_KEYS.FEE_TYPE}
           filter={FEE_TYPE.FREE}
           separator
@@ -135,17 +142,19 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="Paid"
+          name={translations.FILTER_COST_PAID_TEXT}
           type={FILTER_KEYS.FEE_TYPE}
           filter={FEE_TYPE.PAID}
           filterLocal={filterLocal}
           setLocalFilterHelper={setLocalFilterHelper}
         />
       </View>
-      <Text style={styles.filterSectionTitle}>DOSE AVAILABILITY</Text>
+      <Text style={styles.filterSectionTitle}>
+        {translations.FILTER_DOSE_TEXT}
+      </Text>
       <View style={styles.filterSection}>
         <FilterType
-          name="Any"
+          name={translations.FILTER_ANY_TEXT}
           type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.AVAILABLE}
           separator
@@ -153,7 +162,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="1st"
+          name={translations.FILTER_DOSE_FIRST_TEXT}
           type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.DOSE_1}
           separator
@@ -161,7 +170,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name="2nd"
+          name={translations.FILTER_DOSE_SECOND_TEXT}
           type={FILTER_KEYS.AVAILABILITY}
           filter={AVAILABILITY.DOSE_2}
           filterLocal={filterLocal}
@@ -172,12 +181,16 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
         <Pressable
           style={styles.filterActionButtonApply}
           onPress={onPressApply}>
-          <Text style={styles.filterApply}>APPLY</Text>
+          <Text style={styles.filterApply}>
+            {translations.FILTER_APPLY_TEXT}
+          </Text>
         </Pressable>
         <Pressable
           style={styles.filterActionButtonReset}
           onPress={onPressReset}>
-          <Text style={styles.filterReset}>RESET</Text>
+          <Text style={styles.filterReset}>
+            {translations.FILTER_RESET_TEXT}
+          </Text>
         </Pressable>
       </View>
     </Animated.View>

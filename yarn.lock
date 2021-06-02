@@ -4487,6 +4487,11 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+localized-strings@^0.2.0:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/localized-strings/-/localized-strings-0.2.4.tgz#9d61c06b60cc7b5edf7c46e6c7f2d1ecb84aeb2c"
+  integrity sha512-TKDhqFPkIIN/if2FSvVVZTaM/GP9TzfgdQ2uY65mr32xgFu5nqkKXprXbzy5rfx32DF5LDvS/y1UqYF/mAscYA==
+
 locate-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"
@@ -5655,6 +5660,13 @@ react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-localization@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/react-localization/-/react-localization-1.0.17.tgz#f12f78c8c5e16dea5015cd44b1871c2dee09e99d"
+  integrity sha512-UowuLAvnEPXJgzxjDX/9hKdKYvtUgC6hQ5PV0CnT5f/77tItIUru5tTwgrDY2UL5oUK3JRMgz42tqnAU2W5eoA==
+  dependencies:
+    localized-strings "^0.2.0"
+
 react-native-background-worker@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/react-native-background-worker/-/react-native-background-worker-0.0.5.tgz#7423f68f72bb329695b13f688c9dd31f77dd9de3"
@@ -5704,6 +5716,13 @@ react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
+
+react-native-localization@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-localization/-/react-native-localization-2.1.7.tgz#7e0fc9a94570f5472751d5a147c882d2815b4e7e"
+  integrity sha512-F7oALsAyQuF4C/8kAJnA5eT0+F9ACnscKC1ahd+vjv8bs3UdhHo09u89JKfhdX4sZA2CWEi3E3mCKTqpqy3Otw==
+  dependencies:
+    react-localization "^1.0.17"
 
 react-native-push-notification@^7.3.1:
   version "7.3.1"

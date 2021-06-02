@@ -39,10 +39,6 @@ const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
       if (!notification?.userData?.filter) return;
       console.log('Initial notification popped', notification);
       setData({ filter: notification.userData.filter });
-      navigation?.current?.reset({
-        index: 0,
-        routes: [{ name: 'Dashboard' }],
-      });
       PushNotification.removeAllDeliveredNotifications();
     });
   }, []);
