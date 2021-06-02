@@ -3,7 +3,6 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ThemeProvider from '../assets/theme';
-import CreateNotificationProvider from '../notifications/createNotificationProvider';
 import { initialStoreData } from '../services/stores';
 import RootNavigator from './navigation';
 
@@ -13,13 +12,11 @@ const Root = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Store storeKey={STORE_KEY} initialData={initialStoreData}>
-        <CreateNotificationProvider>
-          <SafeAreaProvider>
-            <ThemeProvider>
-              <RootNavigator />
-            </ThemeProvider>
-          </SafeAreaProvider>
-        </CreateNotificationProvider>
+        <SafeAreaProvider>
+          <ThemeProvider>
+            <RootNavigator />
+          </ThemeProvider>
+        </SafeAreaProvider>
       </Store>
     </QueryClientProvider>
   );

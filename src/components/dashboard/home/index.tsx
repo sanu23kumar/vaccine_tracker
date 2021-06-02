@@ -24,7 +24,6 @@ import { Center } from '../../../services/models/centers';
 import { Filter } from '../../../services/models/filters';
 import { LOCATION } from '../../../services/models/user';
 import { useDistrictsStore, useUserStore } from '../../../services/stores';
-import useBackgroundFetch from '../../../services/useBackgroundFetch';
 import ErrorView from '../../common/error';
 import VtHeader from '../../common/header';
 import NoDataView from '../../common/no-data';
@@ -39,7 +38,6 @@ export const isNumeric = (value: string) => {
 };
 const Home = () => {
   const styles = useStyle();
-  useBackgroundFetch();
   const {
     postalCode,
     isLoading: isLocationLoading,
@@ -49,8 +47,9 @@ const Home = () => {
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const { data: userData, setData: setUserData } = useUserStore();
   const [filter, setFilter] = useState<Filter>(userData.filter ?? {});
-  const [searchText, setSearchText] = useState(userData.location.name);
-  const [queryCode, setQueryCode] = useState(userData.location);
+  const [searchText, setSearchText] = useState(userData.filter.location.name);
+  const [isSearching, setIsSearching] = useState(false);
+  const [queryCode, setQueryCode] = useState(userData.filter.location);
   const [selectedDate, setSelectedDate] = useState(getDate());
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
   const [isFilterPressed, setIsFilterPressed] = useState(false);
@@ -66,8 +65,14 @@ const Home = () => {
 
   const setUser = (name: string, code: number, type: LOCATION) => {
     setQueryCode({ name, code, type });
-    setUserData({ location: { name, code, type } });
+    setUserData({
+      filter: { ...userData.filter, location: { name, code, type } },
+    });
   };
+
+  useEffect(() => {
+    if (!userData.filter.date) setDate(selectedDate);
+  }, []);
   useEffect(() => {
     if (isLocationLoading === 0 && postalCode) {
       setSearchText(postalCode);
@@ -76,7 +81,7 @@ const Home = () => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
-    setSearchText(userData.location.name);
+    setSearchText(userData.filter.location.name);
   }, [userData]);
 
   let centersForSelectedDate: Center[];
@@ -113,6 +118,7 @@ const Home = () => {
 
   const setDate = (date: string) => {
     setSelectedDate(date);
+    setUserData({ filter: { ...userData.filter, date } });
     setQueryDate(getQueryDate(date));
   };
 
@@ -132,11 +138,14 @@ const Home = () => {
 
   const setFilterAndCloseSection = (filter: Filter) => {
     setFilter(filter);
-    setUserData({ filter });
+    setUserData({ filter: { ...userData.filter, ...filter } });
     onPressFilter();
   };
-  const isSearching = queryCode.name !== searchText;
-  let filterCount = 0;
+  const onChangeFocus = () => {
+    setIsSearching(!isSearching);
+  };
+  // Not including location and date
+  let filterCount = -2;
   for (const f in filter) {
     filterCount += filter[f] ? 1 : 0;
   }
@@ -226,6 +235,8 @@ const Home = () => {
             style={styles.search}
             placeholder={strings.dashboard.home.search}
             placeholderTextColor={styles.placeholder.color}
+            onFocus={onChangeFocus}
+            onEndEditing={onChangeFocus}
             onSubmitEditing={onEndEditing}
           />
           <Pressable onPress={getLocation}>
