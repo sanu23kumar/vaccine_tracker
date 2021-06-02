@@ -8,6 +8,7 @@ import {
   VACCINE,
 } from '../../../services/models/centers';
 import { Filter, FILTER_KEYS } from '../../../services/models/filters';
+import VtButton from '../../common/button';
 import FilterType from './FilterType';
 import useStyle from './styles';
 
@@ -178,13 +179,14 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
         />
       </View>
       <View style={styles.filterAction}>
-        <Pressable
-          style={styles.filterActionButtonApply}
-          onPress={onPressApply}>
-          <Text style={styles.filterApply}>
-            {translations.FILTER_APPLY_TEXT}
-          </Text>
-        </Pressable>
+        <View style={styles.filterActionButtonApply}>
+          <VtButton
+            title={translations.FILTER_APPLY_TEXT}
+            onPress={onPressApply}
+            color={styles.filterApply.color}
+          />
+        </View>
+
         <Pressable
           style={styles.filterActionButtonReset}
           onPress={onPressReset}>

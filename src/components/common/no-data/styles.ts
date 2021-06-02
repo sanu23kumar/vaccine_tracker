@@ -16,6 +16,7 @@ const useStyle = () => {
       color: colors.TEXT_DISABLED,
       opacity: 0.5,
       alignSelf: 'center',
+      marginBottom: 16,
     },
     adStyle: {
       alignItems: 'center',

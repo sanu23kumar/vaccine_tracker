@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Linking, Pressable, Text, View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import translations from '../../../assets/translations';
 import { Center, Session } from '../../../services/models/centers';
 import FullBannerAd from '../../common/ad/banner';
+import VtButton from '../../common/button';
 import useStyle from './styles';
 
 const HospitalCard = ({
@@ -27,7 +28,7 @@ const HospitalCard = ({
     if (bookable) {
       Linking.openURL('https://selfregistration.cowin.gov.in/');
     } else {
-      navigate(strings.dashboard.notifications.NAME);
+      navigate(strings.dashboard.notifications.NAME, { createHelper: true });
     }
   };
   return (
@@ -75,31 +76,22 @@ const HospitalCard = ({
             {session.vaccine}
           </Text>
         </View>
-        <View style={styles.hospitalActionParent}>
-          <Pressable
-            onPress={onPress}
-            style={[
-              styles.actionParent,
-              { borderColor: bookable ? colors.PRIMARY : colors.SECONDARY },
-            ]}>
-            <Text
-              style={[
-                styles.actionText,
-                { color: bookable ? colors.PRIMARY : colors.SECONDARY },
-              ]}>
-              {bookable
-                ? translations.BOOK_NOW_TEMPLATE.replace(
-                    '$',
-                    hospital.fee_type.toLowerCase().includes('free')
-                      ? translations.FILTER_COST_FREE_TEXT
-                      : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0),
-                  )
-                : 'Notify Me'}
-            </Text>
-          </Pressable>
-          {showAd ? <FullBannerAd style={styles.hospitalAd} /> : null}
-        </View>
       </View>
+      <VtButton
+        color={bookable ? colors.PRIMARY : colors.SECONDARY}
+        title={
+          bookable
+            ? translations.BOOK_NOW_TEMPLATE.replace(
+                '$',
+                hospital.fee_type.toLowerCase().includes('free')
+                  ? translations.FILTER_COST_FREE_TEXT
+                  : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0),
+              )
+            : 'Notify Me'
+        }
+        onPress={onPress}
+      />
+      {showAd ? <FullBannerAd style={styles.hospitalAd} /> : null}
     </View>
   );
 };

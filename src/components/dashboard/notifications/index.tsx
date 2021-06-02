@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, SafeAreaView, ToastAndroid, View } from 'react-native';
 import translations from '../../../assets/translations';
 import {
@@ -12,21 +12,37 @@ import HelperItem from './HelperItem';
 import NewHelper, { HELPER_COMPONENT_SIZE } from './NewHelper';
 import useStyle from './styles';
 
-const Notifications = () => {
+const Notifications = ({
+  route: {
+    params: { createHelper },
+  },
+}) => {
   const styles = useStyle();
   const { notificationsData, setNotificationsData } = useFilterStore();
   const filterAnim = useRef(new Animated.Value(0)).current;
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const [filter, setFilter] = useState<NotificationFilter | undefined>();
-  const onPressAddNotificationHelper = () => {
-    console.log('Closing section', isFilterPressed);
+  const onPressAddNotificationHelper = (value = undefined) => {
+    const open = value?.open;
+    let toValue = 0;
+    if (open) {
+      console.log('Open is defined', open);
+      toValue = !open ? 0 : HELPER_COMPONENT_SIZE;
+    } else {
+      toValue = isFilterPressed ? 0 : HELPER_COMPONENT_SIZE;
+    }
     Animated.spring(filterAnim, {
-      toValue: isFilterPressed ? 0 : HELPER_COMPONENT_SIZE,
+      toValue,
       useNativeDriver: true,
     }).start();
 
-    setIsFilterPressed(!isFilterPressed);
+    setIsFilterPressed(open ?? !isFilterPressed);
   };
+  useEffect(() => {
+    if (createHelper) {
+      onPressAddNotificationHelper({ open: true });
+    }
+  }, [createHelper]);
   const onSave = (notificationFilter: NotificationFilter) => {
     onPressAddNotificationHelper();
     setNotificationsData({

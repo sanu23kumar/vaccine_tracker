@@ -11,8 +11,11 @@ import useStyle from './styles';
 const NoDataView = () => {
   const styles = useStyle();
   const { navigate } = useNavigation();
+
   const onPressNotify = () => {
-    navigate(strings.dashboard.notifications.NAME);
+    navigate(strings.dashboard.notifications.NAME, {
+      createHelper: { value: true },
+    });
   };
   return (
     <View style={styles.noDataParent}>

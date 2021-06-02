@@ -22,7 +22,7 @@ const useStyle = () => {
       color: colors.TEXT_DISABLED,
       textTransform: 'lowercase',
     },
-    hospitalActionParent: {},
+    hospitalActionParent: { alignItems: 'stretch' },
     hospitalAgeParent: {
       flexDirection: 'row',
       alignItems: 'flex-end',
@@ -47,11 +47,12 @@ const useStyle = () => {
     },
     hospitalCard: {
       marginBottom: 40,
-      marginHorizontal: 20,
       flexDirection: 'column',
       alignItems: 'stretch',
     },
-    hospitalContent: {},
+    hospitalContent: {
+      marginHorizontal: 20,
+    },
     hospitalName: {
       fontFamily: fonts.MEDIUM,
       fontSize: 18,
@@ -158,21 +159,14 @@ const useStyle = () => {
     },
     filterActionButtonApply: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 8,
-      borderWidth: 0.5,
-      marginRight: 6,
-      paddingVertical: 8,
-      borderColor: colors.PRIMARY,
+      marginLeft: -20,
     },
     filterActionButtonReset: {
-      flex: 0.2,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 8,
-      marginLeft: 6,
-      paddingVertical: 8,
+      marginRight: 6,
+      marginBottom: 16,
       borderColor: colors.TERTIARY,
     },
     filterCountParent: {
@@ -216,7 +210,7 @@ const useStyle = () => {
     },
     filterParent: {
       paddingHorizontal: 20,
-      paddingVertical: 16,
+      paddingVertical: 4,
       position: 'absolute',
       top: (FILTER_COMPONENT_SIZE - 80) * -1,
       left: 0,
@@ -232,7 +226,7 @@ const useStyle = () => {
     },
     filterReset: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: 16,
       color: colors.TERTIARY,
     },
     filterText: {

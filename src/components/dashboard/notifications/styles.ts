@@ -115,7 +115,7 @@ const useStyle = () => {
     filterParent: {
       flex: 1,
       paddingHorizontal: 20,
-      paddingVertical: 16,
+      paddingVertical: 4,
       position: 'absolute',
       top: HELPER_COMPONENT_SIZE * -1,
       left: 0,
