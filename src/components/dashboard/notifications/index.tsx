@@ -12,11 +12,8 @@ import HelperItem from './HelperItem';
 import NewHelper, { HELPER_COMPONENT_SIZE } from './NewHelper';
 import useStyle from './styles';
 
-const Notifications = ({
-  route: {
-    params: { createHelper },
-  },
-}) => {
+const Notifications = ({ route }) => {
+  const createHelper = route?.params?.createHelper;
   const styles = useStyle();
   const { notificationsData, setNotificationsData } = useFilterStore();
   const filterAnim = useRef(new Animated.Value(0)).current;

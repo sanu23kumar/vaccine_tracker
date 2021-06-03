@@ -15,6 +15,11 @@ const useStyle = () => {
       flex: 1,
       backgroundColor: colors.BACKGROUND,
     },
+    languageText: {
+      fontSize: 12,
+      fontFamily: fonts.MEDIUM,
+      color: colors.TEXT_DISABLED,
+    },
     refetchParent: {
       paddingVertical: 10,
       paddingHorizontal: 20,
@@ -22,11 +27,19 @@ const useStyle = () => {
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    sectionParent: {
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+    },
+    sectionText: {
+      fontSize: 16,
+      fontFamily: fonts.REGULAR,
+      color: colors.TEXT_DISABLED,
+    },
     refetchText: {
       fontSize: 12,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
-      textTransform: 'uppercase',
     },
     refetchStateText: {
       fontSize: 16,

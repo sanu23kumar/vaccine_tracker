@@ -9,7 +9,7 @@ import {
 import { Filter } from '../../../services/models/filters';
 import useStyle from './styles';
 
-const Separator = () => {
+export const Separator = () => {
   const styles = useStyle();
   return <Text style={styles.filterSeparator}> / </Text>;
 };
