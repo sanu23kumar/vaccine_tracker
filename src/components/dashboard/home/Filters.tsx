@@ -12,7 +12,7 @@ import VtButton from '../../common/button';
 import FilterType from './FilterType';
 import useStyle from './styles';
 
-export const FILTER_COMPONENT_SIZE = 285;
+export const FILTER_COMPONENT_SIZE = 300;
 interface Props {
   filter: Filter;
   setFilter: (arg1: Filter) => void;

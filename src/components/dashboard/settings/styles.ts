@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../assets/fonts';
+import fonts, { fontSizes } from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 
 const useStyle = () => {
@@ -16,7 +16,7 @@ const useStyle = () => {
       backgroundColor: colors.BACKGROUND,
     },
     languageText: {
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
     },
@@ -32,18 +32,18 @@ const useStyle = () => {
       paddingHorizontal: 20,
     },
     sectionText: {
-      fontSize: 16,
-      fontFamily: fonts.REGULAR,
+      fontSize: fontSizes.CONTENT,
+      fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
     },
     refetchText: {
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
     },
     refetchStateText: {
-      fontSize: 16,
-      fontFamily: fonts.REGULAR,
+      fontSize: fontSizes.CONTENT,
+      fontFamily: fonts.MEDIUM,
       color: colors.TEXT,
     },
     refetchIconStyle: {

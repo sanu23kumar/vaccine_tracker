@@ -89,7 +89,7 @@ const HospitalCard = ({
                   ? translations.FILTER_COST_FREE_TEXT
                   : '₹ ' + (hospital.vaccine_fees[0]?.fee ?? 0),
               )
-            : 'Notify Me'
+            : translations.HOME_SCREEN_NOTIFY_ME_TEXT
         }
         onPress={onPress}
       />

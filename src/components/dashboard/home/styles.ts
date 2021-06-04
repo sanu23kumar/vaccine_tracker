@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../assets/fonts';
+import fonts, { fontSizes } from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import { FILTER_COMPONENT_SIZE } from './Filters';
 
@@ -17,7 +17,7 @@ const useStyle = () => {
     dayHeader: {
       width: 32,
       textAlign: 'center',
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_DISABLED,
       textTransform: 'lowercase',
@@ -29,13 +29,13 @@ const useStyle = () => {
     },
     suggestionText: {
       fontFamily: fonts.REGULAR,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT,
       paddingVertical: 8,
     },
     suggestionState: {
       fontFamily: fonts.REGULAR,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT_LIGHT,
       paddingVertical: 8,
     },
@@ -55,15 +55,8 @@ const useStyle = () => {
     },
     hospitalName: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 18,
+      fontSize: fontSizes.TITLE,
       paddingBottom: 2,
-    },
-    hospitalFeeType: {
-      fontFamily: fonts.MEDIUM,
-      color: colors.SECONDARY,
-      fontSize: 14,
-      textTransform: 'uppercase',
-      paddingLeft: 6,
     },
     hospitalAd: {
       marginTop: 20,
@@ -72,53 +65,33 @@ const useStyle = () => {
     },
     hospitalAddress: {
       fontFamily: fonts.REGULAR,
-      fontSize: 14,
+      fontSize: fontSizes.CONTENT,
       paddingBottom: 12,
-      color: colors.TEXT_DISABLED,
+      color: colors.TEXT_LIGHT,
     },
     hospitalMinAge: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 14,
+      fontSize: fontSizes.CONTENT,
       paddingLeft: 12,
       color: colors.TEXT_DISABLED,
     },
     hospitalVaccine: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       flexWrap: 'wrap',
       color: colors.TERTIARY,
       paddingLeft: 24,
     },
     hospitalAvailable: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 14,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT_LIGHT,
     },
     hospitalAvailableText: {
       fontFamily: fonts.REGULAR,
-      fontSize: 10,
+      fontSize: fontSizes.LABEL,
       paddingLeft: 3,
-      paddingBottom: 1.5,
       color: colors.TEXT_LIGHT,
-    },
-    hospitalYrsText: {
-      fontFamily: fonts.REGULAR,
-      fontSize: 10,
-      paddingLeft: 3,
-      paddingBottom: 1.5,
-      color: colors.TEXT_DISABLED,
-    },
-    actionParent: {
-      borderWidth: 0.5,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      marginBottom: 4,
-      alignItems: 'center',
-    },
-    actionText: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 14,
     },
     district: {
       paddingHorizontal: 20,
@@ -137,7 +110,7 @@ const useStyle = () => {
       fontFamily: fonts.REGULAR,
       paddingHorizontal: 12,
       flex: 1,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT,
     },
     selectedDayStyle: {
@@ -196,7 +169,7 @@ const useStyle = () => {
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_LIGHT,
       paddingHorizontal: 6,
-      fontSize: 14,
+      fontSize: fontSizes.LABEL,
     },
     filterSection: {
       flexDirection: 'row',
@@ -205,7 +178,7 @@ const useStyle = () => {
     },
     filterSectionTitle: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       color: colors.TEXT_DISABLED,
     },
     filterParent: {
@@ -220,26 +193,18 @@ const useStyle = () => {
       backgroundColor: colors.BACKGROUND,
     },
     filterApply: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 12,
       color: colors.PRIMARY,
     },
     filterReset: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.TERTIARY,
     },
     filterText: {
       fontFamily: fonts.MEDIUM,
       fontSize: 16,
-      marginBottom: 16,
-      color: colors.TEXT_DISABLED,
-    },
-    filterSubtext: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 16,
-      marginBottom: 16,
-      color: colors.TEXT_DISABLED,
+      marginBottom: fontSizes.CONTENT,
+      color: colors.TEXT_LIGHT,
     },
     suggestionTextParent: {
       flexDirection: 'row',
@@ -248,8 +213,10 @@ const useStyle = () => {
     filterType: { flexDirection: 'row' },
     filterSeparator: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
+      fontSize: fontSizes.LABEL,
       marginBottom: 16,
+      paddingHorizontal: 8,
+      opacity: 0.3,
       color: colors.TEXT_DISABLED,
     },
     locationIconStyle: {

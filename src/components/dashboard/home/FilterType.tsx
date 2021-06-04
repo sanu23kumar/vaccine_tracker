@@ -11,7 +11,7 @@ import useStyle from './styles';
 
 export const Separator = () => {
   const styles = useStyle();
-  return <Text style={styles.filterSeparator}> / </Text>;
+  return <Text style={styles.filterSeparator}>|</Text>;
 };
 
 interface Props {

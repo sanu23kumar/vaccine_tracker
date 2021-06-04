@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../assets/fonts';
+import fonts, { fontSizes } from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import { HELPER_COMPONENT_SIZE } from './NewHelper';
 
@@ -24,12 +24,12 @@ const useStyle = () => {
     },
     helperItemEdit: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       color: colors.TEXT_DISABLED,
     },
     helperItemTitle: {
-      fontFamily: fonts.REGULAR,
-      fontSize: 18,
+      fontFamily: fonts.MEDIUM,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT,
       flexShrink: 1,
     },
@@ -37,7 +37,7 @@ const useStyle = () => {
     helperSwitchText: {
       marginRight: 12,
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
     },
     iconStyle: {
       alignSelf: 'center',
@@ -100,7 +100,7 @@ const useStyle = () => {
       fontFamily: fonts.MEDIUM,
       color: colors.TEXT_LIGHT,
       paddingHorizontal: 6,
-      fontSize: 14,
+      fontSize: fontSizes.LABEL,
     },
     filterSection: {
       flexDirection: 'row',
@@ -109,7 +109,7 @@ const useStyle = () => {
     },
     filterSectionTitle: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.LABEL,
       color: colors.TEXT_DISABLED,
     },
     filterParent: {
@@ -126,28 +126,17 @@ const useStyle = () => {
     },
     filterApply: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.PRIMARY,
     },
     filterDelete: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
-      color: colors.TERTIARY,
-    },
-    filterReset: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 12,
+      fontSize: fontSizes.CONTENT,
       color: colors.TERTIARY,
     },
     filterText: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
-      marginBottom: 16,
-      color: colors.TEXT_DISABLED,
-    },
-    filterSubtext: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       marginBottom: 16,
       color: colors.TEXT_DISABLED,
     },
@@ -157,15 +146,17 @@ const useStyle = () => {
     filterType: { flexDirection: 'row' },
     filterSeparator: {
       fontFamily: fonts.MEDIUM,
-      fontSize: 16,
+      fontSize: fontSizes.LABEL,
+      opacity: 0.3,
       marginBottom: 16,
+      paddingHorizontal: 8,
       color: colors.TEXT_DISABLED,
     },
     search: {
       fontFamily: fonts.REGULAR,
       paddingHorizontal: 12,
       flex: 1,
-      fontSize: 16,
+      fontSize: fontSizes.CONTENT,
       color: colors.TEXT,
     },
     searchParent: {
