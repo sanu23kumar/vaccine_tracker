@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import translations from '../../../assets/translations';
 import {
@@ -29,16 +29,22 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
     });
   };
 
+  useEffect(() => {
+    setFilterLocal(filter);
+  }, [filter]);
+
   const onPressReset = () => {
     setFilter({
       vaccine: undefined,
       min_age_limit: undefined,
       availability: undefined,
+      fee_type: undefined,
     });
     setFilterLocal({
       vaccine: undefined,
       min_age_limit: undefined,
       availability: undefined,
+      fee_type: undefined,
     });
   };
 

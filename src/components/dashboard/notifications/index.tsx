@@ -43,10 +43,21 @@ const Notifications = ({ route }) => {
   }, [createHelper]);
   const onSave = (notificationFilter: NotificationFilter) => {
     onPressAddNotificationHelper();
-    setNotificationsData({
-      notifications: [notificationFilter, ...notificationsData.notifications],
-    });
-    setFilter(undefined);
+    if (filter) {
+      setNotificationsData({
+        notifications: notificationsData.notifications.map(notification =>
+          notification[FILTER_KEYS.NOTIFICATION_ID] ===
+          notificationFilter[FILTER_KEYS.NOTIFICATION_ID]
+            ? { ...notification, ...notificationFilter }
+            : notification,
+        ),
+      });
+      setFilter(undefined);
+    } else {
+      setNotificationsData({
+        notifications: [notificationFilter, ...notificationsData.notifications],
+      });
+    }
   };
 
   const onDelete = (notificationFilter: NotificationFilter) => {

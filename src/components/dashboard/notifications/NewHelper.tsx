@@ -108,7 +108,9 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       } else if (type === 'closed') {
         onSave({
           ...filterLocal,
-          notification_id: new Date().getMilliseconds(),
+          notification_id: filter
+            ? filterLocal[FILTER_KEYS.NOTIFICATION_ID]
+            : new Date().getMilliseconds(),
           notification_name: titleText,
           date,
           enabled: true,
