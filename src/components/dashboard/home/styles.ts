@@ -91,6 +91,7 @@ const useStyle = () => {
       fontFamily: fonts.REGULAR,
       fontSize: fontSizes.LABEL,
       paddingLeft: 3,
+      paddingBottom: 1,
       color: colors.TEXT_LIGHT,
     },
     district: {

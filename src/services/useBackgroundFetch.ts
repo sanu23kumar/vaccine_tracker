@@ -4,7 +4,7 @@ import WorkManager from 'react-native-background-worker';
 import PushNotification from 'react-native-push-notification';
 import { findAvailableSlotsToNotify } from '.';
 import { STORE_KEY } from '../root';
-import { NotificationFilter } from './models/filters';
+import { FILTER_KEYS, NotificationFilter } from './models/filters';
 import { STORE_FILTER_KEY } from './stores';
 
 export const createLocalNotification = (
@@ -18,10 +18,13 @@ export const createLocalNotification = (
     message,
     smallIcon: 'ic_notification',
     userData: { filter },
+    id: filter[FILTER_KEYS.NOTIFICATION_ID],
+    ignoreInForeground: __DEV__ ? false : true,
   });
 };
 
-const fetchCenters = async () => {
+const fetchCenters = async (notifications: any[]) => {
+  console.log('Delivered notifications are', notifications);
   const dataString = await AsyncStorage.getItem(STORE_KEY);
   const asyncData = dataString && (await JSON.parse(dataString));
   const filterData: NotificationFilter[] =
@@ -29,6 +32,16 @@ const fetchCenters = async () => {
 
   for (const filter of filterData) {
     if (!filter.enabled) continue;
+    if (
+      notifications.findIndex(
+        notification =>
+          notification.identifier ===
+          filter[FILTER_KEYS.NOTIFICATION_ID].toString(),
+      ) > -1
+    ) {
+      console.log('Notification ', filter, ' already exists');
+      continue;
+    }
     console.log(filter);
     const {
       firstHitDate,
@@ -51,6 +64,12 @@ const fetchCenters = async () => {
   }
 };
 
+const getDeliveredNotificationsAndFetchCenters = async () => {
+  PushNotification.getDeliveredNotifications(notifications =>
+    fetchCenters(notifications),
+  );
+};
+
 async function setUpdater() {
   const updaterId = await WorkManager.setWorker(
     /*periodic worker:*/ {
@@ -60,8 +79,9 @@ async function setUpdater() {
         title: 'Fetching vaccination centers',
         text: 'Don`t worry, we will keep you updated',
       },
-      workflow: fetchCenters,
+      workflow: getDeliveredNotificationsAndFetchCenters,
       foregroundBehaviour: 'foreground',
+      timeout: 60000,
       constraints: {
         network: 'connected',
       },
