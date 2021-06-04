@@ -1,6 +1,6 @@
 import React from 'react';
 import { WeekCalendar } from 'react-native-calendars';
-import fonts from '../../../assets/fonts';
+import fonts, { fontSizes } from '../../../assets/fonts';
 import { getUsDateFromIn } from '../../../services/date';
 import useStyle from './styles';
 
@@ -20,8 +20,9 @@ const CalendarWeek = ({ current, selectedDate, setSelectedDate }) => {
       style={{ backgroundColor: styles.parent.backgroundColor }}
       theme={{
         selectedDayBackgroundColor: styles.parent.backgroundColor,
-        dayTextColor: styles.placeholder.color,
+        dayTextColor: styles.filterText.color,
         textDayFontFamily: fonts.REGULAR,
+        textDayFontSize: fontSizes.CONTENT,
         textDayHeaderFontFamily: fonts.MEDIUM,
         textMonthFontFamily: fonts.MEDIUM,
         dotColor: styles.selectedDayStyle.color,
