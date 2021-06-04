@@ -1,13 +1,5 @@
-import { District } from './districts';
-
-export interface State {
-  state_id: number;
-  state_name: string;
-  state_name_l: string;
-  districts?: District[];
-}
-
+import { StatesModel } from './districts';
 export interface StatesResponse {
-  states: State[];
+  states: StatesModel[];
   ttl: number;
 }

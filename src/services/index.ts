@@ -143,22 +143,16 @@ export const findAvailableSlots = async (
   code: number,
   date: string,
   type: LOCATION,
-  expandDates = false,
 ) => {
   const validCenters: CentersResponseByDate = {};
   var requestCounter = 0;
   const findBy = type === LOCATION.DISTRICT ? findByDistrict : findByPin;
-  do {
-    const { centers } = await findBy(code, date);
-    requestCounter++;
-    if (centers) {
-      validCenters[date] = { centers };
-      date = addDays(date, 7);
-    } else {
-      expandDates = false;
-    }
-  } while (expandDates || requestCounter === 15);
-
+  const { centers } = await findBy(code, date);
+  requestCounter++;
+  if (centers) {
+    validCenters[date] = { centers };
+  }
+  console.log('Result of ', ' is: ', date, code, validCenters);
   return validCenters;
 };
 

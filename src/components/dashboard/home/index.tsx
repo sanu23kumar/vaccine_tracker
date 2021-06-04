@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useQuery } from 'react-query';
-import strings from '../../../assets/strings';
 import translations from '../../../assets/translations';
 import {
   filterCenters,
@@ -51,7 +50,12 @@ const Home = () => {
   const [searchText, setSearchText] = useState(userData.filter.location.name);
   const [isSearching, setIsSearching] = useState(false);
   const [queryCode, setQueryCode] = useState(userData.filter.location);
-  const [selectedDate, setSelectedDate] = useState(getDate());
+  const [selectedDate, setSelectedDate] = useState(
+    userData.filter.date ?? getDate(),
+  );
+  const [currentDate, setCurrentDate] = useState(
+    userData.filter.date ?? getDate(),
+  );
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const filterAnim = useRef(new Animated.Value(0)).current;
@@ -83,6 +87,9 @@ const Home = () => {
 
   useEffect(() => {
     setSearchText(userData.filter.location.name);
+    setFilter(userData.filter);
+    setSelectedDate(userData.filter.date);
+    setCurrentDate(userData.filter.date);
   }, [userData]);
 
   let centersForSelectedDate: Center[];
@@ -145,8 +152,8 @@ const Home = () => {
   const onChangeFocus = () => {
     setIsSearching(!isSearching);
   };
-  // Not including location and date
-  let filterCount = -2;
+  // Not including location,date, enabled, id and name
+  let filterCount = -5;
   for (const f in filter) {
     filterCount += filter[f] ? 1 : 0;
   }
@@ -255,7 +262,11 @@ const Home = () => {
             onPress={onPressAutocompleteItem}
           />
         ) : (
-          <CalendarWeek selectedDate={selectedDate} setSelectedDate={setDate} />
+          <CalendarWeek
+            current={currentDate}
+            selectedDate={selectedDate}
+            setSelectedDate={setDate}
+          />
         )}
       </Animated.View>
     </SafeAreaView>

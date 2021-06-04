@@ -1,8 +1,10 @@
 import analytics from '@react-native-firebase/analytics';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useRef } from 'react';
+import useStore from 'potli/useStore';
+import React, { useEffect, useRef, useState } from 'react';
 import { useColorScheme } from 'react-native';
+import translations from '../assets/translations';
 import DashboardNavigator from '../components/dashboard';
 import CreateNotificationProvider from '../notifications/createNotificationProvider';
 import useBackgroundFetch from '../services/useBackgroundFetch';
@@ -12,7 +14,16 @@ const RootNavigator = () => {
   const scheme = useColorScheme();
   const navigationRef = useRef();
   const routeNameRef = useRef();
+  const [isLanguageSet, setIsLanguageSet] = useState(false);
+  const { data: userLanguage } = useStore('LANGUAGE');
+  useEffect(() => {
+    if (userLanguage?.name) {
+      translations.setLanguage(userLanguage.name);
+    }
+    setIsLanguageSet(true);
+  }, []);
   useBackgroundFetch();
+  if (!isLanguageSet) return null;
   return (
     <CreateNotificationProvider navigation={navigationRef}>
       <NavigationContainer

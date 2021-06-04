@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import translations from '../../../assets/translations';
 import {
@@ -8,10 +8,11 @@ import {
   VACCINE,
 } from '../../../services/models/centers';
 import { Filter, FILTER_KEYS } from '../../../services/models/filters';
+import VtButton from '../../common/button';
 import FilterType from './FilterType';
 import useStyle from './styles';
 
-export const FILTER_COMPONENT_SIZE = 285;
+export const FILTER_COMPONENT_SIZE = 300;
 interface Props {
   filter: Filter;
   setFilter: (arg1: Filter) => void;
@@ -28,16 +29,22 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
     });
   };
 
+  useEffect(() => {
+    setFilterLocal(filter);
+  }, [filter]);
+
   const onPressReset = () => {
     setFilter({
       vaccine: undefined,
       min_age_limit: undefined,
       availability: undefined,
+      fee_type: undefined,
     });
     setFilterLocal({
       vaccine: undefined,
       min_age_limit: undefined,
       availability: undefined,
+      fee_type: undefined,
     });
   };
 
@@ -178,13 +185,14 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
         />
       </View>
       <View style={styles.filterAction}>
-        <Pressable
-          style={styles.filterActionButtonApply}
-          onPress={onPressApply}>
-          <Text style={styles.filterApply}>
-            {translations.FILTER_APPLY_TEXT}
-          </Text>
-        </Pressable>
+        <View style={styles.filterActionButtonApply}>
+          <VtButton
+            title={translations.FILTER_APPLY_TEXT}
+            onPress={onPressApply}
+            color={styles.filterApply.color}
+          />
+        </View>
+
         <Pressable
           style={styles.filterActionButtonReset}
           onPress={onPressReset}>

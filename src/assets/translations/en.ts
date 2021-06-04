@@ -40,7 +40,7 @@ const en: TranslationModel = {
   NOTIFICATION_ON: 'ON',
   NOTIFICATION_OFF: 'OFF',
 
-  SETTINGS_REFETCH_DISTRICTS: 'Refetch Districts',
+  SETTINGS_REFETCH_DISTRICTS: 'Autocomplete data',
 };
 
 export default en;

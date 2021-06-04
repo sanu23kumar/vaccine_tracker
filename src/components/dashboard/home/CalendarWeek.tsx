@@ -4,11 +4,11 @@ import fonts from '../../../assets/fonts';
 import { getUsDateFromIn } from '../../../services/date';
 import useStyle from './styles';
 
-const CalendarWeek = ({ selectedDate, setSelectedDate }) => {
+const CalendarWeek = ({ current, selectedDate, setSelectedDate }) => {
   const styles = useStyle();
-
   return (
     <WeekCalendar
+      current={getUsDateFromIn(current)}
       markedDates={{
         [getUsDateFromIn(selectedDate)]: {
           selected: true,

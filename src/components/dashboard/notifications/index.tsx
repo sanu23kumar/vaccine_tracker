@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, SafeAreaView, ToastAndroid, View } from 'react-native';
 import translations from '../../../assets/translations';
 import {
@@ -12,26 +12,52 @@ import HelperItem from './HelperItem';
 import NewHelper, { HELPER_COMPONENT_SIZE } from './NewHelper';
 import useStyle from './styles';
 
-const Notifications = () => {
+const Notifications = ({ route }) => {
+  const createHelper = route?.params?.createHelper;
   const styles = useStyle();
   const { notificationsData, setNotificationsData } = useFilterStore();
   const filterAnim = useRef(new Animated.Value(0)).current;
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const [filter, setFilter] = useState<NotificationFilter | undefined>();
-  const onPressAddNotificationHelper = () => {
+  const onPressAddNotificationHelper = (value = undefined) => {
+    const open = value?.open;
+    let toValue = 0;
+    if (open) {
+      console.log('Open is defined', open);
+      toValue = !open ? 0 : HELPER_COMPONENT_SIZE;
+    } else {
+      toValue = isFilterPressed ? 0 : HELPER_COMPONENT_SIZE;
+    }
     Animated.spring(filterAnim, {
-      toValue: isFilterPressed ? 0 : HELPER_COMPONENT_SIZE,
+      toValue,
       useNativeDriver: true,
     }).start();
 
-    setIsFilterPressed(!isFilterPressed);
+    setIsFilterPressed(open ?? !isFilterPressed);
   };
+  useEffect(() => {
+    if (createHelper) {
+      console.log('Create helper updated');
+      onPressAddNotificationHelper({ open: true });
+    }
+  }, [createHelper]);
   const onSave = (notificationFilter: NotificationFilter) => {
-    setNotificationsData({
-      notifications: [notificationFilter, ...notificationsData.notifications],
-    });
-    setFilter(undefined);
     onPressAddNotificationHelper();
+    if (filter) {
+      setNotificationsData({
+        notifications: notificationsData.notifications.map(notification =>
+          notification[FILTER_KEYS.NOTIFICATION_ID] ===
+          notificationFilter[FILTER_KEYS.NOTIFICATION_ID]
+            ? { ...notification, ...notificationFilter }
+            : notification,
+        ),
+      });
+      setFilter(undefined);
+    } else {
+      setNotificationsData({
+        notifications: [notificationFilter, ...notificationsData.notifications],
+      });
+    }
   };
 
   const onDelete = (notificationFilter: NotificationFilter) => {

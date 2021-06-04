@@ -1,6 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
-  RewardedAd,
+  InterstitialAd,
   RewardedAdEventType,
   TestIds,
 } from '@react-native-firebase/admob';
@@ -37,8 +37,8 @@ import FilterType from './FilterType';
 import useStyle from './styles';
 
 const adUnitId = __DEV__
-  ? TestIds.REWARDED
-  : 'ca-app-pub-9968987511053896/3123571100';
+  ? TestIds.INTERSTITIAL
+  : 'ca-app-pub-9968987511053896/3798853365';
 
 export const HELPER_COMPONENT_SIZE = 600;
 
@@ -86,7 +86,6 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       date: userData.filter.date ?? getDate(),
     },
   );
-  console.log('User data is: ', userData);
   const [searchText, setSearchText] = useState(filterLocal.location.name);
   const [isSearching, setIsSearching] = useState(false);
   const [date, setDate] = useState(filterLocal.date);
@@ -95,31 +94,31 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal),
   );
   const suggestions = suggestDistricts(searchText, districtsData.states);
-  const rewarded = useRef(RewardedAd.createForAdRequest(adUnitId)).current;
+  const initerstitial = useRef(InterstitialAd.createForAdRequest(adUnitId))
+    .current;
 
   useEffect(() => {
     setTitleText(searchText + ', ' + date.substr(0, 5) + getTitle(filterLocal));
   }, [date, searchText, filterLocal]);
 
   useEffect(() => {
-    const eventListener = rewarded.onAdEvent((type, error, reward) => {
+    const eventListener = initerstitial.onAdEvent((type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {
         console.log('Ad loaded', type, error);
-      } else if (type === RewardedAdEventType.EARNED_REWARD) {
+      } else if (type === 'closed') {
         onSave({
           ...filterLocal,
-          notification_id: new Date().getMilliseconds(),
+          notification_id: filter
+            ? filterLocal[FILTER_KEYS.NOTIFICATION_ID]
+            : new Date().getMilliseconds(),
           notification_name: titleText,
           date,
           enabled: true,
         });
-      } else if (type === 'closed') {
-        rewarded.load();
-      } else {
-        console.log('Something happened', type, error);
+        initerstitial.load();
       }
     });
-    rewarded.load();
+    initerstitial.load();
     return () => {
       eventListener();
     };
@@ -132,11 +131,8 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     });
   };
   const onPressApply = () => {
-    console.log('Showing ad');
-    if (rewarded.loaded) {
-      rewarded.show();
-    } else {
-      console.log('Not loaded');
+    if (initerstitial.loaded) {
+      initerstitial.show();
     }
   };
 
@@ -203,6 +199,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
   }, [isLocationLoading, postalCode]);
 
   useEffect(() => {
+    if (filter) return;
     setSearchText(userData.filter.location.name);
     setDate(userData.filter.date);
     setFilterLocal({
@@ -210,6 +207,16 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
       availability: AVAILABILITY.AVAILABLE,
     });
   }, [userData]);
+
+  useEffect(() => {
+    if (!filter) return;
+    setSearchText(filter.location.name);
+    setDate(filter.date);
+    setFilterLocal({
+      ...filter,
+      availability: AVAILABILITY.AVAILABLE,
+    });
+  }, [filter]);
 
   return (
     <Animated.View

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../assets/fonts';
+import fonts, { fontSizes } from '../../../assets/fonts';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 
 const useStyle = () => {
@@ -18,7 +18,7 @@ const useStyle = () => {
     },
     headerText: {
       fontFamily: fonts.BOLD,
-      fontSize: 32,
+      fontSize: fontSizes.HEADER,
       color: colors.TEXT,
     },
   });

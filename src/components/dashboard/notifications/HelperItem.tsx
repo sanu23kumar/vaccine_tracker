@@ -27,19 +27,6 @@ const HelperItem = ({ item, onPressEdit, onPressEnableDisable }: Props) => {
         <Text style={styles.helperItemTitle}>{item.notification_name}</Text>
       </Pressable>
       <View style={styles.helperSwitchParent}>
-        <Text
-          style={[
-            styles.helperSwitchText,
-            {
-              color: item[FILTER_KEYS.ENABLED]
-                ? colors.PRIMARY
-                : colors.TEXT_DISABLED,
-            },
-          ]}>
-          {item[FILTER_KEYS.ENABLED]
-            ? translations.NOTIFICATION_ON
-            : translations.NOTIFICATION_OFF}
-        </Text>
         <VtSwitch
           enabled={item[FILTER_KEYS.ENABLED]}
           onPress={onPressEnableDisable}
