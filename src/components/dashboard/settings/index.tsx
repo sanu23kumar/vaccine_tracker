@@ -74,7 +74,7 @@ const Settings = () => {
                   color:
                     userLanguage?.name === undefined
                       ? colors.PRIMARY
-                      : colors.TEXT_DISABLED,
+                      : colors.TEXT_LIGHT,
                 },
               ]}>
               Default
@@ -100,7 +100,7 @@ const Settings = () => {
                   color:
                     userLanguage?.name === 'hi'
                       ? colors.PRIMARY
-                      : colors.TEXT_DISABLED,
+                      : colors.TEXT_LIGHT,
                 },
               ]}>
               हिंदी
@@ -126,7 +126,7 @@ const Settings = () => {
                   color:
                     userLanguage?.name === 'en'
                       ? colors.PRIMARY
-                      : colors.TEXT_DISABLED,
+                      : colors.TEXT_LIGHT,
                 },
               ]}>
               English

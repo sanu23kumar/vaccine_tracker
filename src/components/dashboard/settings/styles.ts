@@ -34,7 +34,7 @@ const useStyle = () => {
     sectionText: {
       fontSize: fontSizes.CONTENT,
       fontFamily: fonts.MEDIUM,
-      color: colors.TEXT_DISABLED,
+      color: colors.TEXT_LIGHT,
     },
     refetchText: {
       fontSize: fontSizes.LABEL,
