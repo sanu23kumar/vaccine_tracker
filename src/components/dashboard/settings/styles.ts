@@ -33,7 +33,7 @@ const useStyle = () => {
     },
     sectionText: {
       fontSize: fontSizes.CONTENT,
-      fontFamily: fonts.MEDIUM,
+      fontFamily: fonts.REGULAR,
       color: colors.TEXT_LIGHT,
     },
     refetchText: {
@@ -43,7 +43,7 @@ const useStyle = () => {
     },
     refetchStateText: {
       fontSize: fontSizes.CONTENT,
-      fontFamily: fonts.MEDIUM,
+      fontFamily: fonts.REGULAR,
       color: colors.TEXT,
     },
     refetchIconStyle: {
