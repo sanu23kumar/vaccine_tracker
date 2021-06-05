@@ -13,11 +13,12 @@ export const createLocalNotification = (
   filter: NotificationFilter,
 ) => {
   PushNotification.localNotification({
-    channelId: 'default-channel-id',
+    channelId: 'slots-availability',
     title,
     message,
     smallIcon: 'ic_notification',
     userData: { filter },
+    soundName: 'android.resource://com.vaccinetracker/raw/slot_alert.wav',
     id: filter[FILTER_KEYS.NOTIFICATION_ID],
     ignoreInForeground: __DEV__ ? false : true,
   });

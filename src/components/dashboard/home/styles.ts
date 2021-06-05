@@ -163,7 +163,7 @@ const useStyle = () => {
       flexDirection: 'row',
       justifyContent: 'flex-end',
       alignItems: 'center',
-      paddingHorizontal: 20,
+      paddingLeft: 20,
       paddingTop: 4,
     },
     filterHeaderText: {

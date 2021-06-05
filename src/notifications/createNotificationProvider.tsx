@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import PushNotification from 'react-native-push-notification';
+import strings from '../assets/strings';
 import { useUserStore } from '../services/stores';
 import NotifService from './NotifService';
 
@@ -17,12 +18,18 @@ export const NotificationContext = createContext(initialParams);
 
 const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
   const { setData } = useUserStore();
-  console.log('Creating notification provider');
   const onRegister = token => {
     console.log('Setting the token on register ', token);
   };
   const onNotification = notification => {
+    if (notification?.data?.link) {
+      navigation?.current?.navigate(strings.dashboard.webview.NAME, {
+        url: notification.data.link,
+      });
+      return;
+    }
     // Get data from notification and set it to userData, then navigate the user to home
+    if (!notification?.userData?.filter) return;
     setData({ filter: notification.userData.filter });
     navigation?.current?.reset({
       index: 0,
@@ -36,6 +43,14 @@ const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
 
   useEffect(() => {
     PushNotification.popInitialNotification(notification => {
+      console.log(notification);
+      if (notification?.data?.link) {
+        navigation?.current?.navigate(strings.dashboard.webview.NAME, {
+          url: notification.data.link,
+          title: notification.data?.title,
+        });
+        return;
+      }
       if (!notification?.userData?.filter) return;
       console.log('Initial notification popped', notification);
       setData({ filter: notification.userData.filter });

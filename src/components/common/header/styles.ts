@@ -15,11 +15,13 @@ const useStyle = () => {
       alignItems: 'center',
       zIndex: 4,
       backgroundColor: colors.BACKGROUND,
+      paddingRight: 20,
     },
     headerText: {
       fontFamily: fonts.BOLD,
       fontSize: fontSizes.HEADER,
       color: colors.TEXT,
+      flexShrink: 1,
     },
   });
 };
