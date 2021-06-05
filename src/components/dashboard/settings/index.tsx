@@ -93,7 +93,7 @@ const Settings = () => {
                   color:
                     userLanguage?.name === undefined
                       ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                      : colors.TEXT,
                 },
               ]}>
               {translations.SETTINGS_DEFAULT}
@@ -106,9 +106,7 @@ const Settings = () => {
                 styles.sectionText,
                 {
                   color:
-                    userLanguage?.name === 'hi'
-                      ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                    userLanguage?.name === 'hi' ? colors.PRIMARY : colors.TEXT,
                 },
               ]}>
               हिंदी
@@ -121,9 +119,7 @@ const Settings = () => {
                 styles.sectionText,
                 {
                   color:
-                    userLanguage?.name === 'en'
-                      ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                    userLanguage?.name === 'en' ? colors.PRIMARY : colors.TEXT,
                 },
               ]}>
               English
@@ -142,7 +138,7 @@ const Settings = () => {
                   color:
                     userTheme?.name === undefined
                       ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                      : colors.TEXT,
                 },
               ]}>
               {translations.THEME_DEFAULT}
@@ -155,9 +151,7 @@ const Settings = () => {
                 styles.sectionText,
                 {
                   color:
-                    userTheme?.name === 'light'
-                      ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                    userTheme?.name === 'light' ? colors.PRIMARY : colors.TEXT,
                 },
               ]}>
               {translations.THEME_LIGHT}
@@ -170,9 +164,7 @@ const Settings = () => {
                 styles.sectionText,
                 {
                   color:
-                    userTheme?.name === 'dark'
-                      ? colors.PRIMARY
-                      : colors.TEXT_LIGHT,
+                    userTheme?.name === 'dark' ? colors.PRIMARY : colors.TEXT,
                 },
               ]}>
               {translations.THEME_DARK}
