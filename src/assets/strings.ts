@@ -13,6 +13,9 @@ const strings = {
       NAME: 'SETTINGS_SCREEN',
       header: 'Settings',
     },
+    webview: {
+      NAME: 'WEB_VIEW',
+    },
   },
 };
 

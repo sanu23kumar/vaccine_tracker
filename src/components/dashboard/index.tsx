@@ -5,12 +5,12 @@ import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import strings from '../../assets/strings';
 import useVtTheme from '../../assets/theme/useVtTheme';
-import CreateNotificationProvider from '../../notifications/createNotificationProvider';
 import useAdmob from '../../services/ads';
 import useAppInitialize from '../../services/app/useAppInitialize';
 import Home from './home';
 import Notifications from './notifications';
 import Settings from './settings';
+import VtWebView from './webview';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,6 +70,10 @@ const DashboardNavigator = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name={strings.dashboard.webview.NAME}
+        component={VtWebView}
+      />
       <Stack.Screen name={'Default'} component={TabNavigator} />
     </Stack.Navigator>
   );

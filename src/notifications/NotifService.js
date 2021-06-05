@@ -1,4 +1,4 @@
-import PushNotification from 'react-native-push-notification';
+import PushNotification, { Importance } from 'react-native-push-notification';
 import NotificationHandler from './NotificationHandler';
 export default class NotifService {
   constructor(onRegister, onNotification) {
@@ -37,15 +37,14 @@ export default class NotifService {
     );
     PushNotification.createChannel(
       {
-        channelId: 'sound-channel-id', // (required)
-        channelName: `Sound channel`, // (required)
-        channelDescription: 'A sound channel', // (optional) default: undefined.
-        soundName: 'sample.mp3', // (optional) See `soundName` parameter of `localNotification` function
-        importance: 4, // (optional) default: 4. Int value of the Android notification importance
-        vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+        channelId: 'firebase-channel', // (required)
+        channelName: `Firebase channel`, // (required)
+        channelDescription: 'Firebase channel', // (optional) default: undefined.
+        importance: Importance.DEFAULT, // (optional) default: 4. Int value of the Android notification importance
+        vibrate: false, // (optional) default: true. Creates the default vibration patten if true.
       },
       created =>
-        console.log(`createChannel 'sound-channel-id' returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+        console.log(`createChannel 'firebase-channel' returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
     );
   }
 
