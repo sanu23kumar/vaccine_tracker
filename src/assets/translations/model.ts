@@ -49,4 +49,9 @@ export interface TranslationModel {
   SETTINGS_DEFAULT: string;
   SETTINGS_AUTOCOMPLETE_DATA: string;
   SETTINGS_REFETCH_DISTRICTS: string;
+
+  THEME: string;
+  THEME_DEFAULT: string;
+  THEME_LIGHT: string;
+  THEME_DARK: string;
 }

@@ -44,6 +44,11 @@ const en: TranslationModel = {
   SETTINGS_DEFAULT: 'Default',
   SETTINGS_AUTOCOMPLETE_DATA: 'Autocomplete data',
   SETTINGS_REFETCH_DISTRICTS: 'Refetch all districts',
+
+  THEME: 'Theme',
+  THEME_DEFAULT: 'Default',
+  THEME_LIGHT: 'Light',
+  THEME_DARK: 'Dark',
 };
 
 export default en;

@@ -22,6 +22,7 @@ import useStyle from './styles';
 const Settings = () => {
   const styles = useStyle();
   const { data: userLanguage, setData: setUserLanguage } = useStore('LANGUAGE');
+  const { data: userTheme, setData: setUserTheme } = useStore('THEME');
   const { colors } = useVtTheme();
   const { reset } = useNavigation();
   const [isRefreshingDistricts, setIsRefreshingDistricts] = useState(false);
@@ -41,6 +42,22 @@ const Settings = () => {
     }
     setIsRefreshingDistricts(false);
   };
+
+  const themeHelper = (name: string) => {
+    setUserTheme({ name });
+    reset({
+      index: 1,
+      routes: [
+        { name: 'Dashboard' },
+        { name: strings.dashboard.settings.NAME },
+      ],
+    });
+  };
+
+  const setDefaultTheme = () => themeHelper(undefined);
+
+  const setLightTheme = () => themeHelper('light');
+  const setDarkTheme = () => themeHelper('dark');
 
   const languageHelper = (name: string, language?: string) => {
     setUserLanguage({ name });
@@ -114,7 +131,55 @@ const Settings = () => {
           </Pressable>
         </View>
       </View>
-
+      <View style={styles.sectionParent}>
+        <Text style={styles.languageText}>{translations.THEME}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Pressable onPress={setDefaultTheme}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    userTheme?.name === undefined
+                      ? colors.PRIMARY
+                      : colors.TEXT_LIGHT,
+                },
+              ]}>
+              {translations.THEME_DEFAULT}
+            </Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={setLightTheme}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    userTheme?.name === 'light'
+                      ? colors.PRIMARY
+                      : colors.TEXT_LIGHT,
+                },
+              ]}>
+              {translations.THEME_LIGHT}
+            </Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={setDarkTheme}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    userTheme?.name === 'dark'
+                      ? colors.PRIMARY
+                      : colors.TEXT_LIGHT,
+                },
+              ]}>
+              {translations.THEME_DARK}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
       <Pressable onPress={onPressRefreshStates} style={styles.refetchParent}>
         <View>
           <Text style={styles.refetchText}>
