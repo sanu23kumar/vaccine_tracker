@@ -46,16 +46,19 @@ const Home = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   // const { getPersistedData, setPersistedData } = useQueryStore();
   const { data: userData, setData: setUserData } = useUserStore();
+
   const [filter, setFilter] = useState<Filter>(userData.filter ?? {});
   const [searchText, setSearchText] = useState(userData.filter.location.name);
   const [isSearching, setIsSearching] = useState(false);
   const [queryCode, setQueryCode] = useState(userData.filter.location);
   const [selectedDate, setSelectedDate] = useState(
-    userData.filter.date ?? getDate(),
+    userData?.filter?.date ?? getDate(),
   );
   const [currentDate, setCurrentDate] = useState(
-    userData.filter.date ?? getDate(),
+    userData?.filter?.date ?? getDate(),
   );
+  console.log(userData, selectedDate);
+
   const [queryDate, setQueryDate] = useState(getQueryDate(selectedDate));
   const [isFilterPressed, setIsFilterPressed] = useState(false);
   const filterAnim = useRef(new Animated.Value(0)).current;
@@ -88,8 +91,8 @@ const Home = () => {
   useEffect(() => {
     setSearchText(userData.filter.location.name);
     setFilter(userData.filter);
-    setSelectedDate(userData.filter.date);
-    setCurrentDate(userData.filter.date);
+    if (userData.filter.date) setSelectedDate(userData.filter.date);
+    if (userData.filter.date) setCurrentDate(userData.filter.date);
   }, [userData]);
 
   let centersForSelectedDate: Center[];

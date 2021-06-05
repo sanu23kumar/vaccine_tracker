@@ -28,7 +28,7 @@ const useStyle = () => {
       color: colors.TEXT_DISABLED,
     },
     helperItemTitle: {
-      fontFamily: fonts.MEDIUM,
+      fontFamily: fonts.REGULAR,
       fontSize: fontSizes.CONTENT,
       color: colors.TEXT,
       flexShrink: 1,

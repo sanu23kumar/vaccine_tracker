@@ -40,7 +40,15 @@ const en: TranslationModel = {
   NOTIFICATION_ON: 'ON',
   NOTIFICATION_OFF: 'OFF',
 
-  SETTINGS_REFETCH_DISTRICTS: 'Autocomplete data',
+  SETTINGS_LANGUAGE: 'Language',
+  SETTINGS_DEFAULT: 'Default',
+  SETTINGS_AUTOCOMPLETE_DATA: 'Autocomplete data',
+  SETTINGS_REFETCH_DISTRICTS: 'Refetch all districts',
+
+  THEME: 'Theme',
+  THEME_DEFAULT: 'Default',
+  THEME_LIGHT: 'Light',
+  THEME_DARK: 'Dark',
 };
 
 export default en;

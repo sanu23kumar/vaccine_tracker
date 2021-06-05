@@ -14,6 +14,7 @@ export const getUsDateFromIn = (date: string) => {
 };
 
 export const getQueryDate = (date: string) => {
+  console.log('Initial', date);
   const dd = parseInt(date.substr(0, 2));
   let newDD = Math.floor(dd / 7) * 7;
   if (newDD === 0) newDD = 1;

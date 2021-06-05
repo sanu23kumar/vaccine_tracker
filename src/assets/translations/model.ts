@@ -45,5 +45,13 @@ export interface TranslationModel {
   NOTIFICATION_ON: string;
   NOTIFICATION_OFF: string;
 
+  SETTINGS_LANGUAGE: string;
+  SETTINGS_DEFAULT: string;
+  SETTINGS_AUTOCOMPLETE_DATA: string;
   SETTINGS_REFETCH_DISTRICTS: string;
+
+  THEME: string;
+  THEME_DEFAULT: string;
+  THEME_LIGHT: string;
+  THEME_DARK: string;
 }

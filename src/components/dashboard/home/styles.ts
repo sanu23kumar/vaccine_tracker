@@ -116,7 +116,7 @@ const useStyle = () => {
     },
     selectedDayStyle: {
       color: colors.PRIMARY,
-      fontFamily: fonts.MEDIUM,
+      fontFamily: fonts.BOLD,
     },
     searchParent: {
       backgroundColor: colors.PRIMARY_LIGHT,

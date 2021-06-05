@@ -41,7 +41,15 @@ const hi: TranslationModel = {
   NOTIFICATION_ON: 'ऑन',
   NOTIFICATION_OFF: 'ऑफ',
 
-  SETTINGS_REFETCH_DISTRICTS: 'जिले फिर से खोजें',
+  SETTINGS_LANGUAGE: 'भाषा',
+  SETTINGS_DEFAULT: 'डिफ़ॉल्ट',
+  SETTINGS_AUTOCOMPLETE_DATA: 'पूर्ण डेटा',
+  SETTINGS_REFETCH_DISTRICTS: 'सभी जिलों को रीफ़्रेश करें',
+
+  THEME: 'थीम',
+  THEME_DEFAULT: 'डिफ़ॉल्ट',
+  THEME_LIGHT: 'लाइट',
+  THEME_DARK: 'डार्क',
 };
 
 export default hi;
