@@ -64,7 +64,9 @@ const Settings = () => {
     <SafeAreaView style={styles.parent}>
       <VtHeader title={translations.SETTINGS_SCREEN_TITLE} />
       <View style={styles.sectionParent}>
-        <Text style={styles.languageText}>Language</Text>
+        <Text style={styles.languageText}>
+          {translations.SETTINGS_LANGUAGE}
+        </Text>
         <View style={{ flexDirection: 'row' }}>
           <Pressable onPress={setDefaultLanguage}>
             <Text
@@ -77,22 +79,11 @@ const Settings = () => {
                       : colors.TEXT_LIGHT,
                 },
               ]}>
-              Default
+              {translations.SETTINGS_DEFAULT}
             </Text>
           </Pressable>
           <Separator />
-          <Pressable
-            onPress={() => {
-              setUserLanguage({ name: 'hi' });
-              translations.setLanguage('hi');
-              reset({
-                index: 1,
-                routes: [
-                  { name: 'Dashboard' },
-                  { name: strings.dashboard.settings.NAME },
-                ],
-              });
-            }}>
+          <Pressable onPress={setHindi}>
             <Text
               style={[
                 styles.sectionText,
@@ -107,18 +98,7 @@ const Settings = () => {
             </Text>
           </Pressable>
           <Separator />
-          <Pressable
-            onPress={() => {
-              setUserLanguage({ name: 'en' });
-              translations.setLanguage('en');
-              reset({
-                index: 1,
-                routes: [
-                  { name: 'Dashboard' },
-                  { name: strings.dashboard.settings.NAME },
-                ],
-              });
-            }}>
+          <Pressable onPress={setEnglish}>
             <Text
               style={[
                 styles.sectionText,
@@ -138,9 +118,11 @@ const Settings = () => {
       <Pressable onPress={onPressRefreshStates} style={styles.refetchParent}>
         <View>
           <Text style={styles.refetchText}>
+            {translations.SETTINGS_AUTOCOMPLETE_DATA}
+          </Text>
+          <Text style={styles.refetchStateText}>
             {translations.SETTINGS_REFETCH_DISTRICTS}
           </Text>
-          <Text style={styles.refetchStateText}>Refetch all districts</Text>
         </View>
         <ActivityIndicator
           animating={isRefreshingDistricts}

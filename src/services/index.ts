@@ -152,7 +152,6 @@ export const findAvailableSlots = async (
   if (centers) {
     validCenters[date] = { centers };
   }
-  console.log('Result of ', ' is: ', date, code, validCenters);
   return validCenters;
 };
 
