@@ -18,19 +18,17 @@ export const NotificationContext = createContext(initialParams);
 
 const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
   const { setData } = useUserStore();
-  console.log('Creating notification provider');
   const onRegister = token => {
     console.log('Setting the token on register ', token);
   };
   const onNotification = notification => {
-    // Get data from notification and set it to userData, then navigate the user to home
-    console.log(notification);
     if (notification?.data?.link) {
       navigation?.current?.navigate(strings.dashboard.webview.NAME, {
         url: notification.data.link,
       });
       return;
     }
+    // Get data from notification and set it to userData, then navigate the user to home
     if (!notification?.userData?.filter) return;
     setData({ filter: notification.userData.filter });
     navigation?.current?.reset({
