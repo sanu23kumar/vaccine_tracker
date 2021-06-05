@@ -70,11 +70,11 @@ const DashboardNavigator = () => {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={'Default'} component={TabNavigator} />
       <Stack.Screen
         name={strings.dashboard.webview.NAME}
         component={VtWebView}
       />
-      <Stack.Screen name={'Default'} component={TabNavigator} />
     </Stack.Navigator>
   );
 };
