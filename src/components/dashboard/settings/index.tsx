@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
+import InAppReview from 'react-native-in-app-review';
 import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
@@ -77,6 +78,20 @@ const Settings = () => {
 
   const setHindi = () => languageHelper('hi');
   const setEnglish = () => languageHelper('en');
+
+  const onPressFeedback = () => {
+    InAppReview.isAvailable();
+
+    // trigger UI InAppreview
+    InAppReview.RequestInAppReview()
+      .then(hasFlowFinishedSuccessfully => {
+        console.log('Rate us successful', hasFlowFinishedSuccessfully);
+        ToastAndroid.show('Thank you so much!', ToastAndroid.SHORT);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.parent}>
@@ -207,6 +222,17 @@ const Settings = () => {
           color={styles.refetchIconStyle.color}
           size={24}
         />
+      </Pressable>
+      <Pressable
+        onPress={onPressFeedback}
+        hitSlop={8}
+        style={styles.refetchParent}>
+        <View>
+          <Text style={styles.refetchText}>{translations.FEEDBACK}</Text>
+          <Text style={styles.refetchStateText}>
+            {translations.FEEDBACK_MOTIVATION_TEXT}
+          </Text>
+        </View>
       </Pressable>
     </SafeAreaView>
   );

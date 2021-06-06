@@ -50,6 +50,10 @@ const hi: TranslationModel = {
   THEME_DEFAULT: 'डिफ़ॉल्ट',
   THEME_LIGHT: 'लाइट',
   THEME_DARK: 'डार्क',
+
+  FEEDBACK: 'क्या आपको हमारा ऐप पसंद आया?',
+  FEEDBACK_MOTIVATION_TEXT:
+    'हमें 5 स्टार दें और इसे बेहतर बनाने में हमारी मदद करें!',
 };
 
 export default hi;

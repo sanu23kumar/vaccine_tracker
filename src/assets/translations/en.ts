@@ -49,6 +49,9 @@ const en: TranslationModel = {
   THEME_DEFAULT: 'Default',
   THEME_LIGHT: 'Light',
   THEME_DARK: 'Dark',
+
+  FEEDBACK: 'Like our app?',
+  FEEDBACK_MOTIVATION_TEXT: 'Give us 5 stars and help us improve it!',
 };
 
 export default en;
