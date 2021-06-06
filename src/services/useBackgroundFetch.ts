@@ -82,7 +82,7 @@ async function setUpdater() {
       },
       workflow: getDeliveredNotificationsAndFetchCenters,
       foregroundBehaviour: 'foreground',
-      timeout: 60000,
+      timeout: 5000,
       constraints: {
         network: 'connected',
       },
