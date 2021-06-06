@@ -1,9 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {
-  InterstitialAd,
-  RewardedAdEventType,
-  TestIds,
-} from '@react-native-firebase/admob';
+import { InterstitialAd, TestIds } from '@react-native-firebase/admob';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -103,18 +99,9 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
 
   useEffect(() => {
     const eventListener = initerstitial.onAdEvent((type, error, reward) => {
-      if (type === RewardedAdEventType.LOADED) {
+      if (type === 'loaded') {
         console.log('Ad loaded', type, error);
       } else if (type === 'closed') {
-        onSave({
-          ...filterLocal,
-          notification_id: filter
-            ? filterLocal[FILTER_KEYS.NOTIFICATION_ID]
-            : new Date().getMilliseconds(),
-          notification_name: titleText,
-          date,
-          enabled: true,
-        });
         initerstitial.load();
       }
     });
@@ -131,6 +118,15 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
     });
   };
   const onPressApply = () => {
+    onSave({
+      ...filterLocal,
+      notification_id: filter
+        ? filterLocal[FILTER_KEYS.NOTIFICATION_ID]
+        : new Date().getMilliseconds(),
+      notification_name: titleText,
+      date,
+      enabled: true,
+    });
     if (initerstitial.loaded) {
       initerstitial.show();
     }
@@ -379,7 +375,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           placeholderTextColor={styles.placeholder.color}
           onSubmitEditing={onSubmitEditing}
         />
-        <Pressable onPress={getLocation}>
+        <Pressable onPress={getLocation} hitSlop={8}>
           <Icon
             name="locate-outline"
             size={18}

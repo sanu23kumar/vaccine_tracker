@@ -54,4 +54,7 @@ export interface TranslationModel {
   THEME_DEFAULT: string;
   THEME_LIGHT: string;
   THEME_DARK: string;
+
+  FEEDBACK: string;
+  FEEDBACK_MOTIVATION_TEXT: string;
 }

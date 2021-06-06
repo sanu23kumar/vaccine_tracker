@@ -194,6 +194,7 @@ const Filters = ({ filter, setFilter, filterAnim }: Props) => {
         </View>
 
         <Pressable
+          hitSlop={8}
           style={styles.filterActionButtonReset}
           onPress={onPressReset}>
           <Text style={styles.filterReset}>

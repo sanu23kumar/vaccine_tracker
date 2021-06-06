@@ -9,6 +9,8 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
+import InAppReview from 'react-native-in-app-review';
+import fonts from '../../../assets/fonts';
 import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import translations from '../../../assets/translations';
@@ -77,6 +79,19 @@ const Settings = () => {
   const setHindi = () => languageHelper('hi');
   const setEnglish = () => languageHelper('en');
 
+  const onPressFeedback = () => {
+    InAppReview.isAvailable();
+
+    // trigger UI InAppreview
+    InAppReview.RequestInAppReview()
+      .then(hasFlowFinishedSuccessfully => {
+        ToastAndroid.show('Thank you so much!', ToastAndroid.SHORT);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.parent}>
       <VtHeader title={translations.SETTINGS_SCREEN_TITLE} />
@@ -85,7 +100,7 @@ const Settings = () => {
           {translations.SETTINGS_LANGUAGE}
         </Text>
         <View style={{ flexDirection: 'row' }}>
-          <Pressable onPress={setDefaultLanguage}>
+          <Pressable onPress={setDefaultLanguage} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
@@ -94,32 +109,41 @@ const Settings = () => {
                     userLanguage?.name === undefined
                       ? colors.PRIMARY
                       : colors.TEXT,
+
+                  fontFamily:
+                    userLanguage?.name === undefined
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
                 },
               ]}>
               {translations.SETTINGS_DEFAULT}
             </Text>
           </Pressable>
           <Separator />
-          <Pressable onPress={setHindi}>
+          <Pressable onPress={setHindi} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
                 {
                   color:
                     userLanguage?.name === 'hi' ? colors.PRIMARY : colors.TEXT,
+                  fontFamily:
+                    userLanguage?.name === 'hi' ? fonts.MEDIUM : fonts.REGULAR,
                 },
               ]}>
               हिंदी
             </Text>
           </Pressable>
           <Separator />
-          <Pressable onPress={setEnglish}>
+          <Pressable onPress={setEnglish} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
                 {
                   color:
                     userLanguage?.name === 'en' ? colors.PRIMARY : colors.TEXT,
+                  fontFamily:
+                    userLanguage?.name === 'en' ? fonts.MEDIUM : fonts.REGULAR,
                 },
               ]}>
               English
@@ -130,7 +154,7 @@ const Settings = () => {
       <View style={styles.sectionParent}>
         <Text style={styles.languageText}>{translations.THEME}</Text>
         <View style={{ flexDirection: 'row' }}>
-          <Pressable onPress={setDefaultTheme}>
+          <Pressable onPress={setDefaultTheme} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
@@ -139,32 +163,40 @@ const Settings = () => {
                     userTheme?.name === undefined
                       ? colors.PRIMARY
                       : colors.TEXT,
+                  fontFamily:
+                    userTheme?.name === undefined
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
                 },
               ]}>
               {translations.THEME_DEFAULT}
             </Text>
           </Pressable>
           <Separator />
-          <Pressable onPress={setLightTheme}>
+          <Pressable onPress={setLightTheme} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
                 {
                   color:
                     userTheme?.name === 'light' ? colors.PRIMARY : colors.TEXT,
+                  fontFamily:
+                    userTheme?.name === 'light' ? fonts.MEDIUM : fonts.REGULAR,
                 },
               ]}>
               {translations.THEME_LIGHT}
             </Text>
           </Pressable>
           <Separator />
-          <Pressable onPress={setDarkTheme}>
+          <Pressable onPress={setDarkTheme} hitSlop={8}>
             <Text
               style={[
                 styles.sectionText,
                 {
                   color:
                     userTheme?.name === 'dark' ? colors.PRIMARY : colors.TEXT,
+                  fontFamily:
+                    userTheme?.name === 'dark' ? fonts.MEDIUM : fonts.REGULAR,
                 },
               ]}>
               {translations.THEME_DARK}
@@ -172,7 +204,10 @@ const Settings = () => {
           </Pressable>
         </View>
       </View>
-      <Pressable onPress={onPressRefreshStates} style={styles.refetchParent}>
+      <Pressable
+        onPress={onPressRefreshStates}
+        hitSlop={8}
+        style={styles.refetchParent}>
         <View>
           <Text style={styles.refetchText}>
             {translations.SETTINGS_AUTOCOMPLETE_DATA}
@@ -186,6 +221,17 @@ const Settings = () => {
           color={styles.refetchIconStyle.color}
           size={24}
         />
+      </Pressable>
+      <Pressable
+        onPress={onPressFeedback}
+        hitSlop={8}
+        style={styles.refetchParent}>
+        <View>
+          <Text style={styles.refetchText}>{translations.FEEDBACK}</Text>
+          <Text style={styles.refetchStateText}>
+            {translations.FEEDBACK_MOTIVATION_TEXT}
+          </Text>
+        </View>
       </Pressable>
     </SafeAreaView>
   );

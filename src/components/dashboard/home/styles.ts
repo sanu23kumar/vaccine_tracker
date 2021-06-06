@@ -55,7 +55,7 @@ const useStyle = () => {
     },
     hospitalName: {
       fontFamily: fonts.MEDIUM,
-      fontSize: fontSizes.TITLE,
+      fontSize: fontSizes.CONTENT,
       paddingBottom: 2,
     },
     hospitalAd: {
@@ -65,21 +65,20 @@ const useStyle = () => {
     },
     hospitalAddress: {
       fontFamily: fonts.REGULAR,
-      fontSize: fontSizes.CONTENT,
+      fontSize: fontSizes.LABEL,
       paddingBottom: 12,
-      color: colors.TEXT_LIGHT,
     },
     hospitalMinAge: {
       fontFamily: fonts.MEDIUM,
       fontSize: fontSizes.CONTENT,
       paddingLeft: 12,
-      color: colors.TEXT_DISABLED,
+      color: colors.TEXT_LIGHT,
     },
     hospitalVaccine: {
       fontFamily: fonts.MEDIUM,
       fontSize: fontSizes.LABEL,
       flexWrap: 'wrap',
-      color: colors.TERTIARY,
+      color: colors.SECONDARY,
       paddingLeft: 24,
     },
     hospitalAvailable: {
@@ -141,7 +140,7 @@ const useStyle = () => {
       borderRadius: 8,
       marginRight: 6,
       marginBottom: 16,
-      borderColor: colors.TERTIARY,
+      borderColor: colors.SECONDARY,
     },
     filterCountParent: {
       position: 'absolute',
@@ -199,13 +198,13 @@ const useStyle = () => {
     filterReset: {
       fontFamily: fonts.MEDIUM,
       fontSize: fontSizes.CONTENT,
-      color: colors.TERTIARY,
+      color: colors.SECONDARY,
     },
     filterText: {
-      fontFamily: fonts.MEDIUM,
-      fontSize: 16,
-      marginBottom: fontSizes.CONTENT,
-      color: colors.TEXT_LIGHT,
+      fontFamily: fonts.REGULAR,
+      fontSize: fontSizes.CONTENT,
+      marginBottom: 16,
+      color: colors.TEXT,
     },
     suggestionTextParent: {
       flexDirection: 'row',
