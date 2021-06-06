@@ -1,5 +1,6 @@
 const strings = {
   dashboard: {
+    NAME: 'Default',
     home: {
       NAME: 'HOME_SCREEN',
       header: '',

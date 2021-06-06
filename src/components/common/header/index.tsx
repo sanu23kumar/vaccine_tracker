@@ -1,14 +1,19 @@
+import {
+  InterstitialAd,
+  RewardedAdEventType,
+  TestIds,
+} from '@react-native-firebase/admob';
 import { useNavigation } from '@react-navigation/core';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import useStyle from './styles';
 
 const VtHeader = ({ children = undefined, title, back }) => {
   const styles = useStyle();
-  const { navigate } = useNavigation();
+  const { goBack } = useNavigation();
   const goToDashboard = () => {
-    navigate('Default');
+    if (goBack) goBack();
   };
   return (
     <View style={styles.headerParent}>

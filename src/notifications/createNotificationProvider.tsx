@@ -24,7 +24,9 @@ const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
   const onNotification = notification => {
     if (notification?.data?.link) {
       navigation?.current?.navigate(strings.dashboard.webview.NAME, {
-        url: notification.data.link,
+        url: notification.data?.link,
+        title: notification.data?.title,
+        showAd: notification.data?.showAd,
       });
       return;
     }
@@ -48,6 +50,7 @@ const CreateNotificationProvider: React.FC = ({ children, navigation }) => {
         navigation?.current?.navigate(strings.dashboard.webview.NAME, {
           url: notification.data.link,
           title: notification.data?.title,
+          showAd: notification.data?.showAd,
         });
         return;
       }
