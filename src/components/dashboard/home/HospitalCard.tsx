@@ -46,7 +46,7 @@ const HospitalCard = ({
         <Text
           style={[
             styles.hospitalAddress,
-            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT_LIGHT },
+            { color: !bookable ? colors.TEXT_DISABLED : colors.TEXT },
           ]}>
           {hospital.address}
         </Text>
@@ -73,9 +73,15 @@ const HospitalCard = ({
             numberOfLines={1}
             style={[
               styles.hospitalVaccine,
-              { color: !bookable ? colors.TEXT_DISABLED : colors.TERTIARY },
+              { color: !bookable ? colors.TEXT_DISABLED : colors.SECONDARY },
             ]}>
-            {session.vaccine}
+            {
+              translations[
+                'FILTER_VACCINE_' +
+                  session.vaccine.toLocaleUpperCase() +
+                  '_TEXT'
+              ]
+            }
           </Text>
         </View>
       </View>

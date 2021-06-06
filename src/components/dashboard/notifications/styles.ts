@@ -71,7 +71,7 @@ const useStyle = () => {
       borderRadius: 8,
       borderWidth: 0.5,
       paddingVertical: 8,
-      borderColor: colors.TERTIARY,
+      borderColor: colors.SECONDARY,
     },
     filterCountParent: {
       position: 'absolute',
@@ -132,13 +132,13 @@ const useStyle = () => {
     filterDelete: {
       fontFamily: fonts.MEDIUM,
       fontSize: fontSizes.CONTENT,
-      color: colors.TERTIARY,
+      color: colors.SECONDARY,
     },
     filterText: {
-      fontFamily: fonts.MEDIUM,
+      fontFamily: fonts.REGULAR,
       fontSize: fontSizes.CONTENT,
       marginBottom: 16,
-      color: colors.TEXT_DISABLED,
+      color: colors.TEXT,
     },
     suggestionTextParent: {
       flexDirection: 'row',

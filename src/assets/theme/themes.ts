@@ -6,7 +6,6 @@ export interface VtTheme {
   PRIMARY: string;
   PRIMARY_LIGHT: string;
   SECONDARY: string;
-  TERTIARY: string;
 }
 
 export const LightTheme: VtTheme = {
@@ -16,8 +15,7 @@ export const LightTheme: VtTheme = {
   BACKGROUND: '#FFFFFF',
   PRIMARY: '#22CC88',
   PRIMARY_LIGHT: '#EFFFEF',
-  SECONDARY: '#CC9922',
-  TERTIARY: '#2288CC',
+  SECONDARY: '#2288CC',
 };
 
 export const DarkTheme: VtTheme = {
@@ -27,6 +25,5 @@ export const DarkTheme: VtTheme = {
   BACKGROUND: '#000000',
   PRIMARY: '#22CC88',
   PRIMARY_LIGHT: '#000f00',
-  SECONDARY: '#CC9922',
-  TERTIARY: '#2288CC',
+  SECONDARY: '#2288CC',
 };

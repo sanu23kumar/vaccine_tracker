@@ -379,7 +379,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           placeholderTextColor={styles.placeholder.color}
           onSubmitEditing={onSubmitEditing}
         />
-        <Pressable onPress={getLocation}>
+        <Pressable onPress={getLocation} hitSlop={8}>
           <Icon
             name="locate-outline"
             size={18}

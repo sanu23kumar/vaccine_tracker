@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+import fonts from '../../../assets/fonts';
 import {
   AGE_LIMIT,
   AVAILABILITY,
@@ -38,7 +39,7 @@ const FilterType = ({
   const selected = filterLocal[type] === filter;
   return (
     <View style={styles.filterType}>
-      <Pressable onPress={onPressFilter}>
+      <Pressable onPress={onPressFilter} hitSlop={8}>
         <Text
           style={[
             styles.filterText,
@@ -46,6 +47,7 @@ const FilterType = ({
               color: selected
                 ? styles.selectedDayStyle.color
                 : styles.filterText.color,
+              fontFamily: selected ? fonts.MEDIUM : fonts.REGULAR,
             },
           ]}>
           {name}

@@ -167,7 +167,10 @@ const Home = () => {
         backgroundColor={styles.parent.backgroundColor}
       />
       <VtHeader title={translations.HOME_SCREEN_TITLE}>
-        <Pressable style={styles.filterHeaderParent} onPress={onPressFilter}>
+        <Pressable
+          style={styles.filterHeaderParent}
+          hitSlop={8}
+          onPress={onPressFilter}>
           <Text
             style={[
               styles.filterHeaderText,
@@ -250,7 +253,7 @@ const Home = () => {
             onEndEditing={onChangeFocus}
             onSubmitEditing={onEndEditing}
           />
-          <Pressable onPress={getLocation}>
+          <Pressable onPress={getLocation} hitSlop={8}>
             <Icon
               name="locate-outline"
               size={18}
