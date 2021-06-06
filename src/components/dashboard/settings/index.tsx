@@ -85,7 +85,6 @@ const Settings = () => {
     // trigger UI InAppreview
     InAppReview.RequestInAppReview()
       .then(hasFlowFinishedSuccessfully => {
-        console.log('Rate us successful', hasFlowFinishedSuccessfully);
         ToastAndroid.show('Thank you so much!', ToastAndroid.SHORT);
       })
       .catch(error => {
