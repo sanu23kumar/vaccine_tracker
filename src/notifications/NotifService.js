@@ -26,9 +26,9 @@ export default class NotifService {
     PushNotification.createChannel(
       {
         channelId: 'slots-availability', // (required)
-        channelName: `Default channel`, // (required)
+        channelName: 'Slots Availability', // (required)
         channelDescription: 'A default channel', // (optional) default: undefined.
-        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+        soundName: 'slot_alert.wav', // (optional) See `soundName` parameter of `localNotification` function
         importance: Importance.HIGH, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
       },
@@ -38,7 +38,7 @@ export default class NotifService {
     PushNotification.createChannel(
       {
         channelId: 'firebase-channel', // (required)
-        channelName: `Firebase channel`, // (required)
+        channelName: 'Push Notifications', // (required)
         channelDescription: 'Firebase channel', // (optional) default: undefined.
         importance: Importance.DEFAULT, // (optional) default: 4. Int value of the Android notification importance
         vibrate: false, // (optional) default: true. Creates the default vibration patten if true.
@@ -79,9 +79,9 @@ export default class NotifService {
       title: title ?? 'Local Notification', // (optional)
       message: message ?? 'My Notification Message', // (required)
       smallIcon: 'ic_notification',
-      soundName: 'android.resource://com.vaccinetracker/raw/lot_alert.wav',
+      soundName: 'slot_alert.wav',
       userInfo: { screen: 'home' }, // (optional) default: {} (using null throws a JSON value '<null>' error)
-      number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      number: 1, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
     });
   }
 

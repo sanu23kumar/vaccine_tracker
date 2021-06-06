@@ -18,7 +18,7 @@ export const createLocalNotification = (
     message,
     smallIcon: 'ic_notification',
     userData: { filter },
-    soundName: 'android.resource://com.vaccinetracker/raw/slot_alert.wav',
+    soundName: 'slot_alert.wav',
     id: filter[FILTER_KEYS.NOTIFICATION_ID],
     ignoreInForeground: __DEV__ ? false : true,
   });
