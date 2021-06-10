@@ -255,7 +255,7 @@ const NewHelper = ({ filter, onSave, onDelete, filterAnim }: Props) => {
           setLocalFilterHelper={setLocalFilterHelper}
         />
         <FilterType
-          name={translations.FILTER_VACCINE_COVISHIELD_TEXT}
+          name={translations.FILTER_VACCINE_COVAXIN_TEXT}
           type={FILTER_KEYS.VACCINE}
           filter={VACCINE.COVAXIN}
           filterLocal={filterLocal}
