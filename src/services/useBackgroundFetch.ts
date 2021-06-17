@@ -1,100 +1,61 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import VIForegroundService from '@voximplant/react-native-foreground-service';
 import { useEffect } from 'react';
-import WorkManager from 'react-native-background-worker';
-import PushNotification from 'react-native-push-notification';
-import { findAvailableSlotsToNotify } from '.';
-import { STORE_KEY } from '../root';
-import { FILTER_KEYS, NotificationFilter } from './models/filters';
-import { STORE_FILTER_KEY } from './stores';
+import usePrevious from '../utils/usePrevious';
+import { InitialPreferences } from './models/user';
+import { usePreferencesStore } from './stores';
 
-export const createLocalNotification = (
-  title: string,
-  message: string,
-  filter: NotificationFilter,
-) => {
-  PushNotification.localNotification({
-    channelId: 'slots-availability',
-    title,
-    message,
-    smallIcon: 'ic_notification',
-    userData: { filter },
-    soundName: 'slot_alert.wav',
-    id: filter[FILTER_KEYS.NOTIFICATION_ID],
-    ignoreInForeground: __DEV__ ? false : true,
-  });
+const foregroundChannelConfig = {
+  id: 'foreground-service-channel',
+  name: 'Foreground Channel',
+  description: 'Fetches centres in the aread in the foreground',
+  enableVibration: false,
 };
 
-const fetchCenters = async (notifications: any[]) => {
-  console.log('Delivered notifications are', notifications);
-  const dataString = await AsyncStorage.getItem(STORE_KEY);
-  const asyncData = dataString && (await JSON.parse(dataString));
-  const filterData: NotificationFilter[] =
-    asyncData[STORE_FILTER_KEY].notifications;
+const notificationConfig = {
+  channelId: 'foreground-service-channel',
+  id: 999999,
+  title: 'VaxIN',
+  text: 'Looking for centers in your area',
+  icon: 'ic_notification',
+};
 
-  for (const filter of filterData) {
-    if (!filter.enabled) continue;
-    if (
-      notifications.findIndex(
-        notification =>
-          notification.identifier ===
-          filter[FILTER_KEYS.NOTIFICATION_ID].toString(),
-      ) > -1
-    ) {
-      console.log('Notification ', filter, ' already exists');
-      continue;
-    }
-    console.log(filter);
-    const {
-      firstHitDate,
-      availableSlots,
-      availableCenters,
-    } = await findAvailableSlotsToNotify(filter);
-    if (availableCenters > 0) {
-      createLocalNotification(
-        filter.notification_name ?? 'Update!',
-        availableCenters +
-          (availableCenters > 1 ? ' Centers' : ' Center') +
-          ' found on ' +
-          firstHitDate +
-          '\n' +
-          availableSlots +
-          ' slots, Book Now 🎉',
-        { ...filter, date: firstHitDate },
-      );
-    }
+const startForegroundService = async (
+  interval = InitialPreferences.interval,
+) => {
+  try {
+    await VIForegroundService.startService({
+      ...notificationConfig,
+      WORK_INTERVAL: interval,
+    });
+  } catch (e) {
+    console.error(e);
   }
 };
 
-const getDeliveredNotificationsAndFetchCenters = async () => {
-  PushNotification.getDeliveredNotifications(notifications =>
-    fetchCenters(notifications),
-  );
+const restartForegroundService = async (interval: number) => {
+  try {
+    await VIForegroundService.stopService();
+    await VIForegroundService.startService({
+      ...notificationConfig,
+      WORK_INTERVAL: interval,
+    });
+  } catch (e) {
+    console.error(e);
+  }
 };
-
-async function setUpdater() {
-  const updaterId = await WorkManager.setWorker(
-    /*periodic worker:*/ {
-      type: 'periodic',
-      name: 'vaccine_tracker',
-      notification: {
-        title: 'Fetching vaccination centers',
-        text: 'Don`t worry, we will keep you updated',
-      },
-      workflow: getDeliveredNotificationsAndFetchCenters,
-      foregroundBehaviour: 'foreground',
-      timeout: 5000,
-      constraints: {
-        network: 'connected',
-      },
-    },
-  );
-  return updaterId;
-}
-
 const useBackgroundFetch = () => {
+  const interval = usePreferencesStore()?.data?.preferences?.interval;
+
+  const oldInterval = usePrevious(interval);
+
   useEffect(() => {
-    setUpdater();
-  }, []);
+    VIForegroundService.createNotificationChannel(foregroundChannelConfig);
+    if (oldInterval === interval) {
+      startForegroundService(interval);
+    } else {
+      restartForegroundService(interval);
+    }
+  }, [interval]);
 };
 
 export default useBackgroundFetch;

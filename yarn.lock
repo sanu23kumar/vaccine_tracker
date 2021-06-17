@@ -1417,6 +1417,11 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
+"@voximplant/react-native-foreground-service@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@voximplant/react-native-foreground-service/-/react-native-foreground-service-2.0.0.tgz#06da5b121231a8ffcb13bc792ce67c37f1fbb2d8"
+  integrity sha512-V7hpxvYVsIvbpJaIlhjl4BUsWEzPYKIIfWZOYm0s93VEBmp548xx8f5hSeVuhaR6NqveibxVNr+J011ej/yc2g==
+
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz#c0b678fb32d60fc1219c784d6a826fe385aeb79a"

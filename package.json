@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android  --appId com.saras.vaxin",
     "ios": "react-native run-ios",
     "build: android": "cd android && ./gradlew bundleRelease",
     "start": "react-native start",
@@ -23,6 +23,7 @@
     "@react-navigation/stack": "^5.14.4",
     "@timwangdev/react-native-geocoder": "^1.0.0-alpha.5",
     "@types/react-native": "^0.64.4",
+    "@voximplant/react-native-foreground-service": "^2.0.0",
     "add": "^2.0.6",
     "potli": "^1.1.0",
     "react": "17.0.1",
