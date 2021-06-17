@@ -12,7 +12,7 @@ import useStyle from './styles';
 
 const adUnitId = __DEV__
   ? TestIds.INTERSTITIAL
-  : 'ca-app-pub-9968987511053896/3798853365';
+  : 'ca-app-pub-9968987511053896/2820344424';
 
 const VtWebView = ({ route }) => {
   const styles = useStyle();
