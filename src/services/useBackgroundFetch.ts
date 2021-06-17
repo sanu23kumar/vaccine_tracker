@@ -35,6 +35,10 @@ const startForegroundService = async (
 const restartForegroundService = async (interval: number) => {
   try {
     await VIForegroundService.stopService();
+  } catch (e) {
+    console.error(e);
+  }
+  try {
     await VIForegroundService.startService({
       ...notificationConfig,
       WORK_INTERVAL: interval,

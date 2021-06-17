@@ -51,6 +51,12 @@ const hi: TranslationModel = {
   THEME_LIGHT: 'लाइट',
   THEME_DARK: 'डार्क',
 
+  INTERVAL_TITLE: 'रीफ़ेच अंतराल(मिनटों में)',
+
+  ALARM_ENABLED_TITLE: 'अलार्म के साथ सूचित करें?',
+  ALARM_ENABLED: 'हाँ',
+  ALARM_DISABLED: 'नहीं',
+
   FEEDBACK: 'क्या आपको हमारा ऐप पसंद आया?',
   FEEDBACK_MOTIVATION_TEXT:
     'हमें 5 स्टार दें और इसे बेहतर बनाने में हमारी मदद करें!',

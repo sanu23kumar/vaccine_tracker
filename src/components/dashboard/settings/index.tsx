@@ -15,7 +15,10 @@ import strings from '../../../assets/strings';
 import useVtTheme from '../../../assets/theme/useVtTheme';
 import translations from '../../../assets/translations';
 import { getAllDistricts } from '../../../services';
-import { useDistrictsStore } from '../../../services/stores';
+import {
+  useDistrictsStore,
+  usePreferencesStore,
+} from '../../../services/stores';
 import VtHeader from '../../common/header';
 import { Separator } from '../home/FilterType';
 import useStyle from './styles';
@@ -25,6 +28,10 @@ const Settings = () => {
   const styles = useStyle();
   const { data: userLanguage, setData: setUserLanguage } = useStore('LANGUAGE');
   const { data: userTheme, setData: setUserTheme } = useStore('THEME');
+  const {
+    data: { preferences },
+    setData: setPreferences,
+  } = usePreferencesStore();
   const { colors } = useVtTheme();
   const { reset } = useNavigation();
   const [isRefreshingDistricts, setIsRefreshingDistricts] = useState(false);
@@ -78,6 +85,23 @@ const Settings = () => {
 
   const setHindi = () => languageHelper('hi');
   const setEnglish = () => languageHelper('en');
+
+  const setUserInterval = (interval: number) => {
+    setPreferences({ preferences: { ...preferences, interval } });
+  };
+
+  const setInterval10secs = () => setUserInterval(10000);
+  const setInterval5mins = () => setUserInterval(300000);
+  const setInterval15mins = () => setUserInterval(900000);
+  const setInterval60mins = () => setUserInterval(3600000);
+
+  const setAlarmEnabled = () => {
+    setPreferences({ preferences: { ...preferences, isAlarmEnabled: true } });
+  }
+
+  const setAlarmDisabled = () => {
+    setPreferences({ preferences: { ...preferences, isAlarmEnabled: false } });
+  }
 
   const onPressFeedback = () => {
     InAppReview.isAvailable();
@@ -200,6 +224,129 @@ const Settings = () => {
                 },
               ]}>
               {translations.THEME_DARK}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <View style={styles.sectionParent}>
+        <Text style={styles.languageText}>{translations.INTERVAL_TITLE}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          {__DEV__ ? (
+            <>
+              <Pressable onPress={setInterval10secs} hitSlop={8}>
+                <Text
+                  style={[
+                    styles.sectionText,
+                    {
+                      color:
+                        preferences.interval === 10000
+                          ? colors.PRIMARY
+                          : colors.TEXT,
+                      fontFamily:
+                        preferences.interval === 10000
+                          ? fonts.MEDIUM
+                          : fonts.REGULAR,
+                    },
+                  ]}>
+                  1/6
+                </Text>
+              </Pressable>
+              <Separator />
+            </>
+          ) : null}
+          <Pressable onPress={setInterval5mins} hitSlop={8}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    preferences.interval === 300000
+                      ? colors.PRIMARY
+                      : colors.TEXT,
+                  fontFamily:
+                    preferences.interval === 300000
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
+                },
+              ]}>
+              5
+            </Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={setInterval15mins} hitSlop={8}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    preferences.interval === 900000
+                      ? colors.PRIMARY
+                      : colors.TEXT,
+                  fontFamily:
+                    preferences.interval === 900000
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
+                },
+              ]}>
+              15
+            </Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={setInterval60mins} hitSlop={8}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                    preferences.interval === 3600000
+                      ? colors.PRIMARY
+                      : colors.TEXT,
+                  fontFamily:
+                    preferences.interval === 3600000
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
+                },
+              ]}>
+              60
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <View style={styles.sectionParent}>
+        <Text style={styles.languageText}>
+          {translations.ALARM_ENABLED_TITLE}
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Pressable onPress={setAlarmDisabled} hitSlop={8}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color: !preferences.isAlarmEnabled
+                    ? colors.PRIMARY
+                    : colors.TEXT,
+                  fontFamily:
+                    !preferences.isAlarmEnabled
+                      ? fonts.MEDIUM
+                      : fonts.REGULAR,
+                },
+              ]}>
+              {translations.ALARM_DISABLED}
+            </Text>
+          </Pressable>
+          <Separator />
+          <Pressable onPress={setAlarmEnabled} hitSlop={8}>
+            <Text
+              style={[
+                styles.sectionText,
+                {
+                  color:
+                  preferences.isAlarmEnabled ? colors.PRIMARY : colors.TEXT,
+                  fontFamily:
+                  preferences.isAlarmEnabled ? fonts.MEDIUM : fonts.REGULAR,
+                },
+              ]}>
+              {translations.ALARM_ENABLED}
             </Text>
           </Pressable>
         </View>

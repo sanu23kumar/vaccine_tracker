@@ -17,7 +17,7 @@ const createLocalNotification = (title, message, filter, isAlarmEnabled) => {
     id: filter[FILTER_KEYS.NOTIFICATION_ID],
     ignoreInForeground: __DEV__ ? false : true,
   });
-  if (true) {
+  if (isAlarmEnabled) {
     try {
       let date = new Date();
       date.setDate(date.getDate());
