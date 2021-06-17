@@ -19,11 +19,10 @@ import static com.voximplant.foregroundservice.Constants.NOTIFICATION_CONFIG;
 
 public class VIForegroundService extends Service {
     private Handler taskHandler = new android.os.Handler();
-    private int delay = 1000 * 60 * 15;
+    private double delay = 1000 * 60 * 15;
 
     private Runnable repetitiveTaskRunnable = new Runnable() {
         public void run() {
-            Log.d("FOREGROUND_CENTRES", "run: starting service");
             Intent service = new Intent(getApplicationContext(), ForegroundCentresService.class);
             Bundle bundle = new Bundle();
 
@@ -36,7 +35,7 @@ public class VIForegroundService extends Service {
     };
 
     void startHandler() {
-        taskHandler.postDelayed(repetitiveTaskRunnable, delay);
+        taskHandler.postDelayed(repetitiveTaskRunnable, (int) delay);
     }
 
     void stopHandler() {
@@ -61,7 +60,7 @@ public class VIForegroundService extends Service {
             if (action.equals(Constants.ACTION_FOREGROUND_SERVICE_START)) {
                 if (intent.getExtras() != null && intent.getExtras().containsKey(NOTIFICATION_CONFIG)) {
                     Bundle notificationConfig = intent.getExtras().getBundle(NOTIFICATION_CONFIG);
-                    delay = notificationConfig.getInt(INTERVAL, delay);
+                    delay = notificationConfig.getDouble(INTERVAL, delay);
                     startHandler();
                     if (notificationConfig != null && notificationConfig.containsKey("id")) {
                         Notification notification = NotificationHelper.getInstance(getApplicationContext())

@@ -23,7 +23,7 @@ export interface Preferences {
 }
 
 export const InitialPreferences = {
-  interval: 600000,
+  interval: __DEV__ ? 10000 : 600000,
   isAlarmEnabled: false,
 };
 
