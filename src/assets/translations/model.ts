@@ -55,6 +55,12 @@ export interface TranslationModel {
   THEME_LIGHT: string;
   THEME_DARK: string;
 
+  INTERVAL_TITLE: string;
+
+  ALARM_ENABLED_TITLE: string;
+  ALARM_ENABLED: string;
+  ALARM_DISABLED: string;
+
   FEEDBACK: string;
   FEEDBACK_MOTIVATION_TEXT: string;
 }

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : 'ca-app-pub-9968987511053896/7614438312';
+  : 'ca-app-pub-9968987511053896/3621170643';
 
 const FullBannerAd = ({ style, size = BannerAdSize.SMART_BANNER }) => {
   return (

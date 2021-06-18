@@ -50,6 +50,12 @@ const en: TranslationModel = {
   THEME_LIGHT: 'Light',
   THEME_DARK: 'Dark',
 
+  INTERVAL_TITLE: 'Refetch Interval(In minutes)',
+
+  ALARM_ENABLED_TITLE: 'Notify with an alarm?',
+  ALARM_ENABLED: 'Yes',
+  ALARM_DISABLED: 'No',
+
   FEEDBACK: 'Like our app?',
   FEEDBACK_MOTIVATION_TEXT: 'Give us 5 stars and help us improve it!',
 };

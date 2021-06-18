@@ -1417,6 +1417,11 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
+"@voximplant/react-native-foreground-service@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@voximplant/react-native-foreground-service/-/react-native-foreground-service-2.0.0.tgz#06da5b121231a8ffcb13bc792ce67c37f1fbb2d8"
+  integrity sha512-V7hpxvYVsIvbpJaIlhjl4BUsWEzPYKIIfWZOYm0s93VEBmp548xx8f5hSeVuhaR6NqveibxVNr+J011ej/yc2g==
+
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz#c0b678fb32d60fc1219c784d6a826fe385aeb79a"
@@ -5667,10 +5672,20 @@ react-localization@^1.0.17:
   dependencies:
     localized-strings "^0.2.0"
 
+react-native-alarm-clock@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-alarm-clock/-/react-native-alarm-clock-2.0.2.tgz#acd9871ec1d1ce508abc3bafead0b0b8a71a8769"
+  integrity sha512-Ianf/xYmnThRScl3Ew0N9AfOAmiRyB2DaXrOI4Mu4+0mmINtTccHs5N2UAyb5Z6c/RwPNrViRIFc1KvTA0b9hg==
+
 react-native-background-worker@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/react-native-background-worker/-/react-native-background-worker-0.0.5.tgz#7423f68f72bb329695b13f688c9dd31f77dd9de3"
   integrity sha512-wygg1Eb6oVZiOUivLPxwBWgk4eY9XwuZfR7LbkhATNkKmXvgB7cX5vGI6+2Zqmj4vQb/3gBIMi6/CoO8P2D3zw==
+
+react-native-calendar-events@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-calendar-events/-/react-native-calendar-events-2.2.0.tgz#6cb78bf712457ca9928dae95b428c91e7b895ae0"
+  integrity sha512-tNUbhT6Ief0JM4OQzQAaz1ri0+MCcAoHptBcEXCz2g7q3A05pg62PR2Dio4F9t2fCAD7Y2+QggdY1ycAsF3Tsg==
 
 react-native-calendars@^1.1262.0:
   version "1.1262.0"

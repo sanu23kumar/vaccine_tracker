@@ -7,6 +7,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:109367122400:android:f8b6e552219c78ac0e7385",
+        "android_client_info": {
+          "package_name": "com.saras.vaxin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109367122400-64bsvoe4v928qnt91rl402s97u9007di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzbBBWfdDiNiVAOYASB1Kr9YmObHPA15c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109367122400-64bsvoe4v928qnt91rl402s97u9007di.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:109367122400:android:de5010e054fa79390e7385",
         "android_client_info": {
           "package_name": "com.vaccinetracker"
@@ -49,7 +78,7 @@
           ]
         }
       },
-      "admob_app_id": "ca-app-pub-9968987511053896~1170479156"
+      "admob_app_id": "ca-app-pub-9968987511053896~8873497328"
     }
   ],
   "configuration_version": "1"

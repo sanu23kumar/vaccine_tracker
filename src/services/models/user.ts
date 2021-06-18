@@ -17,6 +17,16 @@ export const initialLocation: Location = {
   type: LOCATION.DISTRICT,
 };
 
+export interface Preferences {
+  interval: number;
+  isAlarmEnabled: boolean;
+}
+
+export const InitialPreferences = {
+  interval: __DEV__ ? 10000 : 900000,
+  isAlarmEnabled: false,
+};
+
 export interface UserModel {
   filter: NotificationFilter;
 }

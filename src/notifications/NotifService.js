@@ -33,7 +33,7 @@ export default class NotifService {
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
       },
       created =>
-        console.log(`createChannel 'default-channel-id' returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+        console.log(`createChannel 'Slots Availability' returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
     );
     PushNotification.createChannel(
       {
