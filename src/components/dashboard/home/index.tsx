@@ -212,15 +212,15 @@ const Home = () => {
           color={styles.selectedDayStyle.color}
           style={{ alignSelf: 'center', flex: 1 }}
         />
-      ) : centersForSelectedDate?.length < 1 ? (
-        <NoDataView />
-      ) : (
+      ) : centersForSelectedDate?.length > 0 ? (
         <List
           centersForSelectedDate={centersForSelectedDate}
           refetch={refetch}
           filterAnim={filterAnim}
           scrollY={scrollY}
         />
+      ) : (
+        <NoDataView />
       )}
       <Animated.View
         style={{
